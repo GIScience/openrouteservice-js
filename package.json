@@ -1,0 +1,42 @@
+{
+  "name": "openrouteservice-js",
+  "version": "0.0.1",
+  "description": "A Javascript Client for openrouteservice",
+  "author": "Openrouteservice Community",
+  "license": "Apache-2.0",
+  "main": "dist/ors-js-client.js",
+  "scripts": {
+    "watch": "watchify src/main-template.js -o dist/ors-js-client.js --debug --verbose",
+    "bundle": "browserify src/main-template.js -o dist/ors-js-client.js",
+    "bundleDebug": "browserify src/main-template.js --debug -o dist/ors-js-client.js",
+    "bundleProduction": "browserify -g uglifyify src/main-template.js | derequire > dist/ors-js-client.js",
+    "test": "JASMINE_CONFIG_PATH=spec/jasmine.json jasmine"
+  },
+  "browser": {
+    "joi": "joi-browser"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-swap"
+    ]
+  },
+  "dependencies": {
+    "bluebird": "^3.5.2",
+    "joi": "^13.6.0",
+    "joi-browser": "^13.4.0",
+    "superagent": "^4.0.0-beta.5"
+  },
+  "devDependencies": {
+    "browserify": "16.2.2",
+    "browserify-swap": "0.2.2",
+    "derequire": "^2.0.6",
+    "jasmine": "3.1.0",
+    "jshint": "2.9.5",
+    "uglifyify": "4.0.5",
+    "watchify": "3.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/GIScience/openrouteservice-js.git"
+  }
+}
