@@ -10,7 +10,7 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 - Time-distance matrix
 - Pois (points of interest)
 
-*Note:* In order to use this client, you have to register for a token at [openrputeservice](https://openrouteservice.org).
+*Note:* In order to use this client, you have to register for a token at [openrouteservice](https://openrouteservice.org).
 
 
 ## Installation
