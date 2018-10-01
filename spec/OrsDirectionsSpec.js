@@ -6,7 +6,7 @@ var orsDirections = new OrsDirections({
 
 describe("Simple Route", function() {
     it("Get results", function(done) {
-        console.log(true);
+        orsDirections.clearPoints();
         orsDirections.addWaypoint(new OrsInput("8.690958, 49.404663").coord);
         orsDirections.addWaypoint(new OrsInput("8.687868, 49.390139").coord);
 
