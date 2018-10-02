@@ -5,13 +5,31 @@
 This library lets you consume the openrouteservice API in *JavaScript* applications. It allows you to painlessly consume the following services:
 
 - Directions (routing)
-- Geocoding (powered by Pelias)
+- Geocoding | Reverse Geocoding | Structured Geocoding (powered by Pelias)
 - Isochrones (accessibilty)
 - Time-distance matrix
 - Pois (points of interest)
 
-*Note:* In order to use this client, you have to register for a token at [openrouteservice](https://openrouteservice.org).
+*Note:* In order to use this client, you have to register for a token at [openrouteservice](https://openrouteservice.org). To understand the features of openrouteservice, please don't forget to read the docs. For visualization purposes on the map please use [openrouteservice maps](https://maps.openrouteservice.org).
 
+## Documentation
+
+This library uses [Joi](https://github.com/hapijs/joi) for object validation. To understand the input of each API specifically, please use the schemas, e.g.:
+
+```javascript
+const Joi = require("joi");
+
+const directionsSchema = require("../schemas/OrsDirectionsSchema");
+const isochronesSchema = require("../schemas/OrsIsochronesSchema");
+const matrixSchema = require("../schemas/OrsMatrixSchema");
+const geocodeSchema = require("../schemas/geocode/OrsGeocodeSchema");
+const reverseGeocodeSchema = require("../schemas/geocode/OrsReverseGeocodeSchema");
+const structuredGeocodeSchema = require("../schemas/geocode/OrsStructuredGeocodeSchema");
+const poisSchema = require("../schemas/OrsPoisSchema");
+
+// describe the directions schema
+console.log(JSON.stringify(Joi.describe(directionsSchema), null, 2));
+```
 
 ## Installation
 
@@ -28,7 +46,9 @@ This will be saved to `path/to/dist/ors-js-client.js`.
 
 ## Integrate the APIs in your application
 
-You can either use our [bundled version](./dist/ors-js-client.js) which includes all APIs:
+### Example (browser)
+
+You can either use our [bundled version](./dist/ors-js-client.js) which includes all APIs
 
 ```javascript
 <script src="dist/ors-js-client.js"></script>
@@ -61,6 +81,8 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 </script>
 ```
 
+### Examples node.js
+
 or you can use only the pieces you need, e.g. get directions
 
 ```javascript
@@ -90,7 +112,6 @@ Directions.calculate({
 ```
 
 Or use the geocoding services:
-
 
 ```javascript
 const OrsGeocode = require("./OrsGeocode");
@@ -137,6 +158,55 @@ Geocode.structuredGeocode({
 })
   .then(function(response) {
     console.log("response", JSON.stringify(response));
+  })
+  .catch(function(err) {
+    var str = "An error occured: " + err;
+    console.log(str);
+  });
+```
+
+Query isochrones:
+
+```javascript
+const OrsIsochrones = require("./OrsIsochrones");
+
+const Isochrones = new OrsIsochrones({
+  api_key: "5b3ce3597851110001cf6248b03ee441340e480da73ff884be23d8b2"
+});
+
+Isochrones.calculate({
+  locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
+  profile: "driving-car",
+  range: 600,
+  mime_type: "application/json"
+})
+  .then(function(response) {
+    console.log("response", response);
+  })
+  .catch(function(err) {
+    var str = "An error occured: " + err;
+    console.log(str);
+  });
+```
+
+Or fetch a time-distance matrix:
+
+```javascript
+const OrsMatrix = require("./OrsMatrix");
+
+const Matrix = new OrsMatrix({
+  api_key: "5b3ce3597851110001cf6248b03ee441340e480da73ff884be23d8b2"
+});
+
+Matrix.calculate({
+  locations: [[8.690958, 49.404662], [8.687868, 49.390139], [8.687868, 49.390133]],
+  profile: "driving-car",
+  sources: ['all'],
+  destinations: ['all'],
+  mime_type: "application/json"
+})
+  .then(function(response) {
+    console.log("response", response);
   })
   .catch(function(err) {
     var str = "An error occured: " + err;
