@@ -88,7 +88,7 @@ OrsDirections.prototype.calculate = function(reqArgs) {
         // use old API via GET
         let url = that.args.host + '?'
         url += that.getParametersAsQueryString(that.args)
-        console.log(url)
+        //console.log(url)
         request
           .get(url)
           .accept(that.args.mime_type)
