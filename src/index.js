@@ -18,7 +18,7 @@ const Openrouteservice = {
 
 // define Openrouteservice for Node module pattern loaders, including Browserify
 if (typeof module === 'object' && typeof module.exports === 'object') {
-  module.exports.Openrouteservice = Openrouteservice
+  module.exports = Openrouteservice
 
   // define Openrouteservice as an AMD module
 } else if (typeof define === 'function' && define.amd) {

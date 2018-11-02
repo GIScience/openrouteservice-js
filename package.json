@@ -4,12 +4,12 @@
   "description": "A Javascript Client for openrouteservice",
   "author": "Openrouteservice Community",
   "license": "Apache-2.0",
-  "main": "dist/ors-js-client.js",
+  "main": "src/index.js",
   "scripts": {
-    "watch": "watchify src/main-template.js -o dist/ors-js-client.js --debug --verbose",
-    "bundle": "browserify src/main-template.js -o dist/ors-js-client.js",
-    "bundleDebug": "browserify src/main-template.js --debug -o dist/ors-js-client.js",
-    "bundleProduction": "browserify -g uglifyify src/main-template.js | derequire > dist/ors-js-client.js",
+    "watch": "watchify src/index.js -o dist/ors-js-client.js --debug --verbose",
+    "bundle": "browserify src/index.js -o dist/ors-js-client.js",
+    "bundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js",
+    "bundleProduction": "browserify -g uglifyify src/index.js | derequire > dist/ors-js-client.js",
     "test": "JASMINE_CONFIG_PATH=spec/jasmine.json jasmine"
   },
   "browser": {

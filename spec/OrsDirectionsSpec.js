@@ -1,7 +1,7 @@
 var OrsDirections = require("../src/OrsDirections");
 var OrsInput = require("../src/OrsInput");
 var orsDirections = new OrsDirections({
-    api_key: "5b3ce3597851110001cf6248b03ee441340e480da73ff884be23d8b2"
+    api_key: "5b3ce3597851110001cf6248e506c10eb14646ae9ed90fa9e22a8f72"
 });
 
 describe("Simple Route", function() {
