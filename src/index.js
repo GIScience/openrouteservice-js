@@ -5,6 +5,7 @@ const OrsIsochrones = require('./OrsIsochrones.js')
 const OrsMatrix = require('./OrsMatrix.js')
 const OrsDirections = require('./OrsDirections.js')
 const OrsPois = require('./OrsPois.js')
+const OrsElevation = require('./OrsElevation.js')
 
 const Openrouteservice = {
   Util: OrsUtil,
@@ -13,7 +14,8 @@ const Openrouteservice = {
   Isochrones: OrsIsochrones,
   Directions: OrsDirections,
   Matrix: OrsMatrix,
-  Pois: OrsPois
+  Pois: OrsPois,
+  Elevation: OrsElevation
 }
 
 // define Openrouteservice for Node module pattern loaders, including Browserify

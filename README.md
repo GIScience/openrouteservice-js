@@ -26,6 +26,7 @@ const geocodeSchema = require("../schemas/geocode/OrsGeocodeSchema");
 const reverseGeocodeSchema = require("../schemas/geocode/OrsReverseGeocodeSchema");
 const structuredGeocodeSchema = require("../schemas/geocode/OrsStructuredGeocodeSchema");
 const poisSchema = require("../schemas/OrsPoisSchema");
+const elevationSchema = require("../schemas/OrsElevationSchema");
 
 // describe the directions schema
 console.log(JSON.stringify(Joi.describe(directionsSchema), null, 2));
@@ -66,8 +67,7 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
       profile: "driving-car",
       extra_info: ["waytype", "steepness"],
       geometry_format: "encodedpolyline",
-      format: "json",
-      mime_type: "application/json",
+      format: "json"
     })
       .then(function(json) {
           // Add your own result handling here
@@ -98,8 +98,7 @@ Directions.calculate({
   profile: "driving-car",
   extra_info: ["waytype", "steepness"],
   geometry_format: "encodedpolyline",
-  format: "json",
-  mime_type: "application/json"
+  format: "json"
 })
   .then(function(json) {
     console.log(JSON.stringify(json));
@@ -124,8 +123,7 @@ Geocode.geocode({
   text: "Heidelberg",
   boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
   boundary_bbox: [[49.260929, 8.40063], [49.504102, 8.941707]],
-  boundary_country: ["DE"],
-  mime_type: "application/json"
+  boundary_country: ["DE"]
 })
   .then(function(response) {
     console.log("response", JSON.stringify(response));
@@ -139,8 +137,7 @@ Geocode.clear();
 
 Geocode.reverseGeocode({
   point: { lat_lng: [49.412388, 8.681247], radius: 50 },
-  boundary_country: ["DE"],
-  mime_type: "application/json"
+  boundary_country: ["DE"]
 })
   .then(function(response) {
     console.log("response", JSON.stringify(response));
@@ -153,8 +150,7 @@ Geocode.reverseGeocode({
 Geocode.clear();
 
 Geocode.structuredGeocode({
-  locality: "Heidelberg",
-  mime_type: "application/json"
+  locality: "Heidelberg"
 })
   .then(function(response) {
     console.log("response", JSON.stringify(response));
@@ -177,8 +173,7 @@ const Isochrones = new OrsIsochrones({
 Isochrones.calculate({
   locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
   profile: "driving-car",
-  range: 600,
-  mime_type: "application/json"
+  range: 600
 })
   .then(function(response) {
     console.log("response", response);
@@ -202,8 +197,7 @@ Matrix.calculate({
   locations: [[8.690958, 49.404662], [8.687868, 49.390139], [8.687868, 49.390133]],
   profile: "driving-car",
   sources: ['all'],
-  destinations: ['all'],
-  mime_type: "application/json"
+  destinations: ['all']
 })
   .then(function(response) {
     console.log("response", response);
@@ -211,6 +205,32 @@ Matrix.calculate({
   .catch(function(err) {
     var str = "An error occured: " + err;
     console.log(str);
+  });
+```
+
+Or return elevation data from a geojson line:
+
+```javascript
+const OrsElevation = require("./OrsElevation");
+
+const Elevation = new OrsElevation({
+  api_key: "5b3ce3597851110001cf6248b03ee441340e480da73ff884be23d8b2"
+});
+
+Elevation.lineElevation({
+  format_in: 'geojson',
+  format_out: 'geojson',
+  geometry: {
+    coordinates: [[13.349762, 38.11295], [12.638397, 37.645772]],
+    type: 'LineString'
+  }
+})
+  .then(function(response) {
+    console.log('response', JSON.stringify(response));
+  })
+  .catch(function(err) {
+    var str = 'An error occured: ' + err;
+    console.log(str)
   });
 ```
 
