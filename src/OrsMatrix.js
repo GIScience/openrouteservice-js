@@ -6,7 +6,7 @@ const orsUtil = new OrsUtil()
 
 const Joi = require('joi')
 
-const matrixSchema = require('../schemas/OrsmatrixSchema')
+const matrixSchema = require('../schemas/OrsMatrixSchema')
 
 const OrsMatrix = function(args) {
   this.args = {}
