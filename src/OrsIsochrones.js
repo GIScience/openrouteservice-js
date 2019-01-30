@@ -24,43 +24,30 @@ OrsIsochrones.prototype.addLocation = function(latlon) {
   this.args.locations.push(latlon)
 }
 
-OrsIsochrones.prototype.getParametersAsQueryString = function(args) {
-  let queryString = ''
-  for (const key in args) {
-    const val = args[key]
-    if (key === 'host') continue
-    else if (key === 'api_version') continue
-    else if (key === 'mime_type') continue
-    else queryString += this.flatParameter(key, val)
-  }
-  return queryString
-}
+OrsIsochrones.prototype.getBody = function(args) {
+  let options = {}
 
-OrsIsochrones.prototype.flatParameter = function(key, val) {
-  let str = val
-
-  if (orsUtil.isObject(val)) {
-    // arr = Object.keys(val);
-    // for (keyIndex in arr) {
-    //     var objKey = arr[keyIndex];
-    //     url += this.flatParameter(key + "." + objKey, val[objKey]);
-    // }
-    // return url;
-  } else if (orsUtil.isArray(val)) {
-    str = ''
-
-    let i, l
-    for (i = 0, l = val.length; i < l; i++) {
-      if (i > 0) str += '|'
-      if (key === 'coordinates' || key === 'locations') {
-        str += val[i][0] + ',' + val[i][1]
-      } else {
-        str += val[i]
-      }
+  if (args.restrictions) {
+    options.profile_params = {
+      restrictions: { ...args.restrictions }
     }
+    delete args.restrictions
+  }
+  if (args.avoidables) {
+    options.avoid_features = [...args.avoidables]
+    delete args.avoidables
   }
 
-  return encodeURIComponent(key) + '=' + encodeURIComponent(str) + '&'
+  if (args.avoid_polygons) {
+    options.avoid_polygons = { ...args.avoid_polygons }
+    delete args.avoid_polygons
+  }
+
+  if (Object.keys(options).length > 0) {
+    return { ...args, options: options }
+  } else {
+    return { ...args }
+  }
 }
 
 OrsIsochrones.prototype.calculate = function(reqArgs) {
@@ -73,14 +60,25 @@ OrsIsochrones.prototype.calculate = function(reqArgs) {
 
       const timeout = 10000
       that.args = value
-      if (that.args.api_version === 'v1') {
-        // use old API via GET
-        let url = that.args.host + '?'
-        url += that.getParametersAsQueryString(that.args)
-        console.log(url)
+      if (that.args.api_version === 'v2') {
+        const requestSettings = orsUtil.prepareRequest(that.args, 'isochrones')
+
+        const url = [
+          requestSettings.meta.host,
+          requestSettings.meta.apiVersion,
+          requestSettings.meta.service,
+          requestSettings.meta.profile,
+          requestSettings.meta.format
+        ].join('/')
+
+        const postBody = that.getBody(requestSettings.httpArgs)
+
         request
-          .get(url)
-          .accept(that.args.mime_type)
+          .post(url)
+          .send(postBody)
+          .set('Authorization', requestSettings.meta.apiKey)
+          .set('Content-Type', requestSettings.meta.mimeType)
+          .accept('application/geo+json')
           .timeout(timeout)
           .end(function(err, res) {
             //console.log(res.body, res.headers, res.status)
@@ -92,8 +90,6 @@ OrsIsochrones.prototype.calculate = function(reqArgs) {
               resolve(res.body)
             }
           })
-      } else if (that.args.api_version === 'v2') {
-        // use new API via POST
       }
     })
   })

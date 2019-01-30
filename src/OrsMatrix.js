@@ -28,45 +28,6 @@ OrsMatrix.prototype.addWaypoint = function(latlon) {
   this.args.coordinates.push(latlon)
 }
 
-OrsMatrix.prototype.getParametersAsQueryString = function(args) {
-  let queryString = ''
-  for (const key in args) {
-    const val = args[key]
-    if (key === 'host') continue
-    else if (key === 'api_version') continue
-    else if (key === 'mime_type') continue
-    else queryString += this.flatParameter(key, val)
-  }
-  return queryString
-}
-
-OrsMatrix.prototype.flatParameter = function(key, val) {
-  let str = val
-
-  if (orsUtil.isObject(val)) {
-    // arr = Object.keys(val);
-    // for (keyIndex in arr) {
-    //     var objKey = arr[keyIndex];
-    //     url += this.flatParameter(key + "." + objKey, val[objKey]);
-    // }
-    // return url;
-  } else if (orsUtil.isArray(val)) {
-    str = ''
-
-    let i, l
-    for (i = 0, l = val.length; i < l; i++) {
-      if (i > 0) str += '|'
-      if (key === 'coordinates') {
-        str += val[i][0] + ',' + val[i][1]
-      } else {
-        str += val[i]
-      }
-    }
-  }
-
-  return encodeURIComponent(key) + '=' + encodeURIComponent(str) + '&'
-}
-
 OrsMatrix.prototype.calculate = function(reqArgs) {
   orsUtil.copyProperties(reqArgs, this.args)
   const that = this
@@ -77,26 +38,33 @@ OrsMatrix.prototype.calculate = function(reqArgs) {
 
       const timeout = 10000
       that.args = value
-      if (that.args.api_version === 'v1') {
-        // use old API via GET
-        let url = that.args.host + '?'
-        url += that.getParametersAsQueryString(that.args)
+      if (that.args.api_version === 'v2') {
+        const requestSettings = orsUtil.prepareRequest(that.args, 'matrix')
+
+        const url = [
+          requestSettings.meta.host,
+          requestSettings.meta.apiVersion,
+          requestSettings.meta.service,
+          requestSettings.meta.profile,
+          requestSettings.meta.format
+        ].join('/')
+
         request
-          .get(url)
-          .accept(that.args.mime_type)
+          .post(url)
+          .send(requestSettings.httpArgs)
+          .set('Authorization', requestSettings.meta.apiKey)
+          .set('Content-Type', requestSettings.meta.mimeType)
+          .accept('application/json')
           .timeout(timeout)
           .end(function(err, res) {
             //console.log(res.body, res.headers, res.status)
             if (err || !res.ok) {
               console.log(err)
-              //reject(ghUtil.extractError(res, url));
               reject(new Error(err))
             } else if (res) {
               resolve(res.body)
             }
           })
-      } else if (that.args.api_version === 'v2') {
-        // use new API via POST
       }
     })
   })

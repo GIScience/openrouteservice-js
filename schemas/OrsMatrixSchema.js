@@ -38,7 +38,6 @@ const schema = Joi.object()
         'cycling-regular',
         'cycling-road',
         'cycling-mountain',
-        'cycling-tour',
         'cycling-electric',
         'wheelchair'
       ])
@@ -49,13 +48,17 @@ const schema = Joi.object()
     units: Joi.string()
       .valid(['m', 'km', 'mi'])
       .description('Specifies the units of response.'),
+    format: Joi.string()
+      .valid(['json'])
+      .default('json')
+      .description('Specifies which geometry format should be returned.'),
     metrics: Joi.array()
       .items(Joi.string().valid('duration', 'distance'))
       .description('Specifies a list of returned metrics.'),
     optimized: Joi.boolean().default(true),
     api_version: Joi.string()
-      .valid(['v1', 'v2'])
-      .default('v1')
+      .valid(['v2'])
+      .default('v2')
       .description('Determines the API version to be used.'),
     host: Joi.string()
       .default('https://api.openrouteservice.org/matrix')

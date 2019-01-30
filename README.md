@@ -94,12 +94,25 @@ const Directions = new OrsDirections({
 });
 
 Directions.calculate({
-  coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
-  profile: "driving-car",
-  extra_info: ["waytype", "steepness"],
-  geometry_format: "encodedpolyline",
-  format: "json"
-})
+    coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
+    profile: 'driving-hgv',
+    restrictions: { height: 10, weight: 5 },
+    extra_info: ['waytype', 'steepness'],
+    avoidables: ['highways', 'tollways', 'ferries', 'fords'],
+    avoid_polygons: {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [8.683533668518066, 49.41987949639816],
+          [8.680272102355957, 49.41812070066643],
+          [8.683919906616211, 49.4132348262363],
+          [8.689756393432617, 49.41806486484901],
+          [8.683533668518066, 49.41987949639816]
+        ]
+      ]
+    },
+    format: 'json'
+  })
   .then(function(json) {
     console.log(JSON.stringify(json));
   })
@@ -171,10 +184,28 @@ const Isochrones = new OrsIsochrones({
 });
 
 Isochrones.calculate({
-  locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
-  profile: "driving-car",
-  range: 600
-})
+    locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
+    profile: 'driving-car',
+    range: [600],
+    units: 'km',
+    range_type: 'distance',
+    attributes: ['area'],
+    smoothing: 0.9,
+    avoidables: ['highways'],
+    avoid_polygons: {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [8.683533668518066, 49.41987949639816],
+          [8.680272102355957, 49.41812070066643],
+          [8.683919906616211, 49.4132348262363],
+          [8.689756393432617, 49.41806486484901],
+          [8.683533668518066, 49.41987949639816]
+        ]
+      ]
+    },
+    area_units: 'km'
+  })
   .then(function(response) {
     console.log("response", response);
   })
