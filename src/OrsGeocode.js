@@ -84,8 +84,13 @@ OrsGeocode.prototype.lookupParameter = {
   },
   layers: function(key, val) {
     let urlParams = '&layers='
-    for (source in val) {
-      urlParams += source + ','
+    let counter = 0
+    for (key in val) {
+      if (counter > 0) {
+        urlParams += ','
+      }
+      urlParams += val[key]
+      counter++
     }
     urlParams
     return urlParams
