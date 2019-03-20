@@ -50,10 +50,6 @@ const schema = Joi.object()
         'Sort the results by distance or category, only works for pois request.'
       ),
     limit: Joi.number().description('Limits the number of results.'),
-    api_version: Joi.string()
-      .valid(['v1'])
-      .default('v1')
-      .description('Determines the API version to be used.'),
     host: Joi.string()
       .default('https://api.openrouteservice.org/pois')
       .description('Determines the API url.'),

@@ -48,4 +48,29 @@ OrsUtil.prototype.isString = function(value) {
   return typeof value === 'string'
 }
 
+OrsUtil.prototype.prepareRequest = function(args, service) {
+  const request = {
+    meta: {
+      host: args.host,
+      apiVersion: args.api_version,
+      profile: args.profile,
+      format: args.format,
+      service: service,
+      apiKey: args.api_key,
+      mimeType: args.mime_type
+    }
+  }
+
+  delete args.mime_type
+  delete args.host
+  delete args.api_version
+  delete args.profile
+  delete args.format
+  delete args.api_key
+
+  request.httpArgs = { ...args }
+
+  return request
+}
+
 module.exports = OrsUtil

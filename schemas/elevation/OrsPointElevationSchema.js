@@ -39,10 +39,6 @@ const schema = Joi.object()
       .valid(['srtm'])
       .default('srtm')
       .description('The dataset used to return elevation data.'),
-    api_version: Joi.string()
-      .valid(['v1'])
-      .default('v1')
-      .description('Determines the API version to be used.'),
     host: Joi.string()
       .default('https://api.openrouteservice.org/elevation/point')
       .description('Determines the API url.'),

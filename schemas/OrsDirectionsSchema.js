@@ -27,15 +27,66 @@ const schema = Joi.object()
         'cycling-regular',
         'cycling-road',
         'cycling-mountain',
-        'cycling-tour',
         'cycling-electric',
         'wheelchair'
       ])
-
       .default('driving-car')
       .description(
         'Specifies the mode of transport to use when calculating directions.'
       ),
+    restrictions: Joi.object()
+      .when('profile', {
+        is: Joi.string().regex(/^driving-hgv$/),
+        then: Joi.object().keys({
+          length: Joi.number().description('Length of the HGV vehicle'),
+          width: Joi.number().description('Width of the HGV vehicle'),
+          weight: Joi.number().description('Weight of the HGV vehicle'),
+          height: Joi.number().description('Height of the HGV vehicle'),
+          axleload: Joi.number().description('Axleload of the HGV vehicle'),
+          hazmat: Joi.boolean().description(
+            'Whether the HGV carries hazardous materials'
+          )
+        })
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^wheelchair$/),
+        then: Joi.object().keys({
+          surface_type: Joi.any().description('Surface type'),
+          track_type: Joi.any().description('Track type'),
+          smoothness_type: Joi.any().description('Smoothness type'),
+          maximum_sloped_curb: Joi.any().description('Maximum sloped curb'),
+          maximum_incline: Joi.any().description('Maximum incline')
+        })
+      }),
+    avoidables: Joi.array()
+      .when('profile', {
+        is: Joi.string().regex(/^driving.*/),
+        then: Joi.array()
+          .items(
+            Joi.string().valid(['highways', 'tollways', 'ferries', 'fords'])
+          )
+          .description('Valid avoidables for selected profile.')
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^foot.*/),
+        then: Joi.array()
+          .items(Joi.string().valid(['steps', 'ferries', 'fords']))
+          .description('Valid avoidables for selected profile.')
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^cycling.*/),
+        then: Joi.array()
+          .items(Joi.string().valid(['highways', 'tollways', 'ferries']))
+          .description('Valid avoidables for selected profile.')
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^wheelchair.*/),
+        then: Joi.array()
+          .items(Joi.string().valid(['steps', 'ferries']))
+          .description('Valid avoidables for selected profile.')
+      })
+      .description('List of supported avoidables for specific profile.'),
+    avoid_polygons: Joi.object(),
     preference: Joi.string()
       .valid(['fastest', 'shortest', 'recommended'])
       .default('fastest')
@@ -67,7 +118,6 @@ const schema = Joi.object()
       .description('Specifies whether geometry should be returned.'),
     geometry_format: Joi.string()
       .valid(['encodedpolyline', 'geojson', 'polyline'])
-      .default('encodedpolyline')
       .description('Specifies which geometry format should be returned.'),
     format: Joi.string()
       .valid(['json', 'geojson', 'gpx'])
@@ -106,11 +156,11 @@ const schema = Joi.object()
       'Refer to https://openrouteservice.org for detailed documentation. Construct your own dict() following the example of the minified options object. Will be converted to json automatically.'
     ),
     api_version: Joi.string()
-      .valid(['v1', 'v2'])
-      .default('v1')
+      .valid(['v2'])
+      .default('v2')
       .description('Determines the API version to be used.'),
     host: Joi.string()
-      .default('https://api.openrouteservice.org/directions')
+      .default('https://api.openrouteservice.org')
       .description('Determines the API url.'),
     mime_type: Joi.string()
       .valid(['application/json'])

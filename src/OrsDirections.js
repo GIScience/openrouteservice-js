@@ -34,47 +34,32 @@ OrsDirections.prototype.addWaypoint = function(latlon) {
   this.args.coordinates.push(latlon)
 }
 
-OrsDirections.prototype.getParametersAsQueryString = function(args) {
-  let queryString = ''
-  for (const key in args) {
-    const val = args[key]
-    if (key === 'host') continue
-    else if (key === 'api_version') continue
-    else if (key === 'mime_type') continue
-    else queryString += this.flatParameter(key, val)
-  }
-  return queryString
-}
-
-OrsDirections.prototype.flatParameter = function(key, val) {
-  let str = val
-
-  if (orsUtil.isObject(val)) {
-    // arr = Object.keys(val);
-    // for (keyIndex in arr) {
-    //     var objKey = arr[keyIndex];
-    //     url += this.flatParameter(key + "." + objKey, val[objKey]);
-    // }
-    // return url;
-  } else if (orsUtil.isArray(val)) {
-    str = ''
-
-    let i, l
-    for (i = 0, l = val.length; i < l; i++) {
-      if (i > 0) str += '|'
-      if (key === 'coordinates') {
-        str += val[i][0] + ',' + val[i][1]
-      } else {
-        str += val[i]
-      }
+OrsDirections.prototype.getBody = function(args) {
+  let options = {}
+  if (args.restrictions) {
+    options.profile_params = {
+      restrictions: { ...args.restrictions }
     }
+    delete args.restrictions
+  }
+  if (args.avoidables) {
+    options.avoid_features = [...args.avoidables]
+    delete args.avoidables
   }
 
-  return encodeURIComponent(key) + '=' + encodeURIComponent(str) + '&'
+  if (args.avoid_polygons) {
+    options.avoid_polygons = { ...args.avoid_polygons }
+    delete args.avoid_polygons
+  }
+
+  if (Object.keys(options).length > 0) {
+    return { ...args, options: options }
+  } else {
+    return { ...args }
+  }
 }
 
 OrsDirections.prototype.calculate = function(reqArgs) {
-  let url
   orsUtil.copyProperties(reqArgs, this.args)
   const that = this
 
@@ -84,28 +69,35 @@ OrsDirections.prototype.calculate = function(reqArgs) {
 
       const timeout = 10000
       that.args = value
-      if (that.args.api_version === 'v1') {
-        // use old API via GET
-        let url = that.args.host + '?'
-        url += that.getParametersAsQueryString(that.args)
-        //console.log(url)
-        request
-          .get(url)
-          .accept(that.args.mime_type)
-          .timeout(timeout)
-          .end(function(err, res) {
-            //console.log(res.body, res.headers, res.status)
-            if (err || !res.ok) {
-              console.log(err)
-              //reject(ghUtil.extractError(res, url));
-              reject(new Error(err))
-            } else if (res) {
-              resolve(res.body)
-            }
-          })
-      } else if (that.args.api_version === 'v2') {
-        // use new API via POST
-      }
+
+      const requestSettings = orsUtil.prepareRequest(that.args, 'directions')
+
+      const url = [
+        requestSettings.meta.host,
+        requestSettings.meta.apiVersion,
+        requestSettings.meta.service,
+        requestSettings.meta.profile,
+        requestSettings.meta.format
+      ].join('/')
+
+      const postBody = that.getBody(requestSettings.httpArgs)
+
+      request
+        .post(url)
+        .send(postBody)
+        .set('Authorization', requestSettings.meta.apiKey)
+        .accept(requestSettings.meta.mimeType)
+        .timeout(timeout)
+        .end(function(err, res) {
+          //console.log(res.body, res.headers, res.status)
+          if (err || !res.ok) {
+            console.log(err)
+            //reject(ghUtil.extractError(res, url));
+            reject(new Error(err))
+          } else if (res) {
+            resolve(res.body)
+          }
+        })
     })
   })
 }
