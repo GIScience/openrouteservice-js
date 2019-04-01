@@ -1,89 +1,90 @@
-const request = require('superagent')
-const Promise = require('bluebird')
+import request from 'superagent'
+import Promise from 'bluebird'
+import Joi from 'joi'
+import OrsUtil from './OrsUtil'
+import elevationLineSchema from '../schemas/elevation/OrsLineElevationSchema.js'
+import elevationPointSchemaSchema from '../schemas/elevation/OrsPointElevationSchema.js'
 
-const OrsUtil = require('./OrsUtil')
 const orsUtil = new OrsUtil()
 
-const Joi = require('joi')
-
-const elevationLineSchema = require('../schemas/elevation/OrsLineElevationSchema.js')
-const elevationPointSchemaSchema = require('../schemas/elevation/OrsPointElevationSchema.js')
-
-let OrsElevation = function(args) {
-  this.args = {}
-  if ('api_key' in args) {
-    this.args.api_key = args.api_key
-  } else {
-    console.log('Please add your openrouteservice api_key...')
-  }
-}
-
-OrsElevation.prototype.clear = function() {
-  for (let variable in this.args) {
-    if (variable !== 'api_key') delete this.args[variable]
-  }
-}
-
-OrsElevation.prototype.generatePayload = function(args) {
-  let payload = {}
-
-  for (const key in args) {
-    if (
-      key === 'host' ||
-      key === 'api_version' ||
-      key === 'mime_type' ||
-      key === 'api_key'
-    ) {
-      continue
+class OrsElevation {
+  constructor(args) {
+    this.args = {}
+    if ('api_key' in args) {
+      this.args.api_key = args.api_key
     } else {
-      payload[key] = args[key]
+      console.log('Please add your openrouteservice api_key...')
     }
   }
-  return payload
-}
 
-OrsElevation.prototype.elevationPromise = function(schema) {
-  const that = this
+  clear() {
+    for (let variable in this.args) {
+      if (variable !== 'api_key') delete this.args[variable]
+    }
+  }
 
-  return new Promise(function(resolve, reject) {
-    Joi.validate(that.args, schema, function(err, value) {
-      //console.log(true, err, value)
+  generatePayload(args) {
+    let payload = {}
 
-      if (err !== null) reject(new Error(err))
+    for (const key in args) {
+      if (
+        key === 'host' ||
+        key === 'api_version' ||
+        key === 'mime_type' ||
+        key === 'api_key'
+      ) {
+        continue
+      } else {
+        payload[key] = args[key]
+      }
+    }
+    return payload
+  }
 
-      const timeout = 5000
-      that.args = value
+  elevationPromise(schema) {
+    const that = this
 
-      const url = that.args.host + '?api_key=' + value.api_key
+    return new Promise(function(resolve, reject) {
+      Joi.validate(that.args, schema, function(err, value) {
+        //console.log(true, err, value)
 
-      const payload = that.generatePayload(that.args)
+        if (err !== null) reject(new Error(err))
 
-      request
-        .post(url)
-        .send(payload)
-        .accept(that.args.mime_type)
-        .timeout(timeout)
-        .end(function(err, res) {
-          //console.log(res.body, res.headers, res.status)
-          if (err || !res.ok) {
-            console.log(err)
-            reject(new Error(err))
-          } else if (res) {
-            resolve(res.body)
-          }
-        })
+        const timeout = 5000
+        that.args = value
+
+        const url = that.args.host
+
+        const payload = that.generatePayload(that.args)
+
+        request
+          .post(url)
+          .send(payload)
+          .accept(that.args.mime_type)
+          .set('Authorization', value.api_key)
+          .timeout(timeout)
+          .end(function(err, res) {
+            //console.log(res.body, res.headers, res.status)
+            if (err || !res.ok) {
+              console.log(err)
+              reject(new Error(err))
+            } else if (res) {
+              resolve(res.body)
+            }
+          })
+      })
     })
-  })
+  }
+
+  lineElevation(reqArgs) {
+    orsUtil.copyProperties(reqArgs, this.args)
+    return this.elevationPromise(elevationLineSchema)
+  }
+
+  pointElevation(reqArgs) {
+    orsUtil.copyProperties(reqArgs, this.args)
+    return this.elevationPromise(elevationPointSchemaSchema)
+  }
 }
 
-OrsElevation.prototype.lineElevation = function(reqArgs) {
-  orsUtil.copyProperties(reqArgs, this.args)
-  return this.elevationPromise(elevationLineSchema)
-}
-
-OrsElevation.prototype.pointElevation = function(reqArgs) {
-  orsUtil.copyProperties(reqArgs, this.args)
-  return this.elevationPromise(elevationPointSchemaSchema)
-}
-
-module.exports = OrsElevation
+export default OrsElevation

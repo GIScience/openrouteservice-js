@@ -1,82 +1,82 @@
-const request = require('superagent')
-const Promise = require('bluebird')
+import request from 'superagent'
+import Promise from 'bluebird'
+import Joi from 'joi'
+import OrsUtil from './OrsUtil'
+import poisSchema from '../schemas/OrsPoisSchema'
 
-const OrsUtil = require('./OrsUtil')
 const orsUtil = new OrsUtil()
 
-const Joi = require('joi')
-
-const poisSchema = require('../schemas/OrsPoisSchema')
-
-const OrsPois = function(args) {
-  this.args = {}
-  if ('api_key' in args) {
-    this.args.api_key = args.api_key
-  } else {
-    console.log('Please add your openrouteservice api_key...')
-  }
-}
-
-OrsPois.prototype.clear = function() {
-  for (let variable in this.args) {
-    if (variable !== 'api_key') delete this.args[variable]
-  }
-}
-
-OrsPois.prototype.generatePayload = function(args) {
-  let payload = {}
-
-  for (const key in args) {
-    if (
-      key === 'host' ||
-      key === 'api_version' ||
-      key === 'mime_type' ||
-      key === 'api_key'
-    ) {
-      continue
+class OrsPois {
+  constructor(args) {
+    this.args = {}
+    if ('api_key' in args) {
+      this.args.api_key = args.api_key
     } else {
-      payload[key] = args[key]
+      console.log('Please add your openrouteservice api_key...')
     }
   }
-  return payload
-}
 
-OrsPois.prototype.poisPromise = function(schema) {
-  const that = this
-  return new Promise(function(resolve, reject) {
-    Joi.validate(that.args, schema, function(err, value) {
-      if (err !== null) reject(new Error(err))
+  clear() {
+    for (let variable in this.args) {
+      if (variable !== 'api_key') delete this.args[variable]
+    }
+  }
 
-      const timeout = 5000
-      that.args = value
+  generatePayload(args) {
+    let payload = {}
 
-      const url = that.args.host + '?api_key=' + value.api_key
+    for (const key in args) {
+      if (
+        key === 'host' ||
+        key === 'api_version' ||
+        key === 'mime_type' ||
+        key === 'api_key'
+      ) {
+        continue
+      } else {
+        payload[key] = args[key]
+      }
+    }
+    return payload
+  }
 
-      const payload = that.generatePayload(that.args)
+  poisPromise(schema) {
+    const that = this
+    return new Promise(function(resolve, reject) {
+      Joi.validate(that.args, schema, function(err, value) {
+        if (err !== null) reject(new Error(err))
 
-      request
-        .post(url)
-        .send(payload)
-        .accept(that.args.mime_type)
-        .timeout(timeout)
-        .end(function(err, res) {
-          //console.log(res.body, res.headers, res.status)
-          if (err || !res.ok) {
-            console.log(err)
-            //reject(ghUtil.extractError(res, url));
-            reject(new Error(err))
-          } else if (res) {
-            resolve(res.body)
-          }
-        })
+        const timeout = 5000
+        that.args = value
+
+        const url = that.args.host + '?api_key=' + value.api_key
+
+        const payload = that.generatePayload(that.args)
+
+        request
+          .post(url)
+          .send(payload)
+          .accept(that.args.mime_type)
+          .timeout(timeout)
+          .end(function(err, res) {
+            //console.log(res.body, res.headers, res.status)
+            if (err || !res.ok) {
+              console.log(err)
+              //reject(ghUtil.extractError(res, url));
+              reject(new Error(err))
+            } else if (res) {
+              resolve(res.body)
+            }
+          })
+      })
     })
-  })
+  }
+
+  pois(reqArgs) {
+    orsUtil.copyProperties(reqArgs, this.args)
+
+    return this.poisPromise(poisSchema)
+  }
 }
 
-OrsPois.prototype.pois = function(reqArgs) {
-  orsUtil.copyProperties(reqArgs, this.args)
-
-  return this.poisPromise(poisSchema)
-}
-
-module.exports = OrsPois
+export default OrsPois

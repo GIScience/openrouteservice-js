@@ -1,6 +1,6 @@
-var OrsIsochrones = require('../src/OrsIsochrones')
-var OrsInput = require('../src/OrsInput')
-var orsIsochrones = new OrsIsochrones({
+import OrsIsochrones from '../src/OrsIsochrones'
+import OrsInput from '../src/OrsInput'
+const orsIsochrones = new OrsIsochrones({
   api_key: '5b3ce3597851110001cf6248e506c10eb14646ae9ed90fa9e22a8f72'
 })
 

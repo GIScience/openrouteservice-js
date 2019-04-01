@@ -1,15 +1,14 @@
 {
   "name": "openrouteservice-js",
-  "version": "0.0.6",
-  "description": "A Javascript Client for openrouteservice",
+  "version": "0.0.7",
+  "description": "A Javascript client for openrouteservice services.",
   "author": "Openrouteservice Community",
   "license": "Apache-2.0",
   "main": "src/index.js",
   "scripts": {
-    "watch": "watchify src/index.js -o dist/ors-js-client.js --debug --verbose",
-    "bundle": "browserify src/index.js -o dist/ors-js-client.js",
-    "bundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js",
-    "bundleProduction": "browserify -g uglifyify src/index.js | derequire > dist/ors-js-client.js",
+    "bundle": "browserify src/index.js -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
+    "bundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
+    "bundleProduction": "browserify -g uglifyify src/index.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties | derequire > dist/ors-js-client.js",
     "test": "JASMINE_CONFIG_PATH=spec/jasmine.json jasmine"
   },
   "browser": {
@@ -27,22 +26,28 @@
     "superagent": "^4.0.0-beta.5"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babelify": "^8.0.0",
     "browserify": "16.2.2",
     "browserify-swap": "0.2.2",
     "derequire": "^2.0.6",
-    "jasmine": "3.1.0",
-    "jshint": "2.9.5",
-    "uglifyify": "4.0.5",
-    "watchify": "3.11.0",
     "eslint": "4.x",
-    "prettier": "^1.14.3",
     "eslint-config-prettier": "^3.0.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-promise": "^4.0.0",
-    "eslint-plugin-standard": "^3.1.0"
+    "eslint-plugin-standard": "^3.1.0",
+    "jasmine": "3.1.0",
+    "jshint": "2.9.5",
+    "prettier": "^1.14.3",
+    "uglifyify": "4.0.5",
+    "watchify": "3.11.0"
   },
   "repository": {
     "type": "git",

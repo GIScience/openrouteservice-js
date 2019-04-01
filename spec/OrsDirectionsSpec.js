@@ -1,6 +1,6 @@
-var OrsDirections = require('../src/OrsDirections')
-var OrsInput = require('../src/OrsInput')
-var orsDirections = new OrsDirections({
+import OrsDirections from '../src/OrsDirections'
+import OrsInput from '../src/OrsInput'
+const orsDirections = new OrsDirections({
   api_key: '5b3ce3597851110001cf6248e506c10eb14646ae9ed90fa9e22a8f72'
 })
 

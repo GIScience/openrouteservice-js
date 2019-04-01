@@ -1,11 +1,11 @@
-const OrsUtil = require('./OrsUtil.js')
-const OrsInput = require('./OrsInput.js')
-const OrsGeocode = require('./OrsGeocode.js')
-const OrsIsochrones = require('./OrsIsochrones.js')
-const OrsMatrix = require('./OrsMatrix.js')
-const OrsDirections = require('./OrsDirections.js')
-const OrsPois = require('./OrsPois.js')
-const OrsElevation = require('./OrsElevation.js')
+import OrsUtil from './OrsUtil.js'
+import OrsInput from './OrsInput.js'
+import OrsGeocode from './OrsGeocode.js'
+import OrsIsochrones from './OrsIsochrones.js'
+import OrsMatrix from './OrsMatrix.js'
+import OrsDirections from './OrsDirections.js'
+import OrsPois from './OrsPois.js'
+import OrsElevation from './OrsElevation.js'
 
 const Openrouteservice = {
   Util: OrsUtil,
@@ -21,7 +21,6 @@ const Openrouteservice = {
 // define Openrouteservice for Node module pattern loaders, including Browserify
 if (typeof module === 'object' && typeof module.exports === 'object') {
   module.exports = Openrouteservice
-
   // define Openrouteservice as an AMD module
 } else if (typeof define === 'function' && define.amd) {
   define(Openrouteservice)

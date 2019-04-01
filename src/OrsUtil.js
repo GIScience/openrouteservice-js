@@ -1,76 +1,78 @@
-const OrsUtil = function() {}
+class OrsUtil {
+  constructor() {}
 
-OrsUtil.prototype.clone = function(obj) {
-  let newObj = {}
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      newObj[prop] = obj[prop]
+  clone(obj) {
+    let newObj = {}
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        newObj[prop] = obj[prop]
+      }
     }
+    return newObj
   }
-  return newObj
-}
 
-OrsUtil.prototype.copyProperties = function(args, argsInto) {
-  if (!args) return argsInto
+  copyProperties(args, argsInto) {
+    if (!args) return argsInto
 
-  for (var prop in args) {
-    if (args.hasOwnProperty(prop) && args[prop] !== undefined) {
-      argsInto[prop] = args[prop]
+    for (var prop in args) {
+      if (args.hasOwnProperty(prop) && args[prop] !== undefined) {
+        argsInto[prop] = args[prop]
+      }
     }
-  }
-  return argsInto
-}
-
-OrsUtil.prototype.extractError = function(res, url) {
-  let msg
-
-  if (res && res.body) {
-    msg = res.body
-    if (msg.message) msg = msg.message
-  } else {
-    msg = res
+    return argsInto
   }
 
-  return new Error(msg + ' - for url ' + url)
-}
+  extractError(res, url) {
+    let msg
 
-OrsUtil.prototype.isArray = function(value) {
-  let stringValue = Object.prototype.toString.call(value)
-  return stringValue.toLowerCase() === '[object array]'
-}
-
-OrsUtil.prototype.isObject = function(value) {
-  let stringValue = Object.prototype.toString.call(value)
-  return stringValue.toLowerCase() === '[object object]'
-}
-
-OrsUtil.prototype.isString = function(value) {
-  return typeof value === 'string'
-}
-
-OrsUtil.prototype.prepareRequest = function(args, service) {
-  const request = {
-    meta: {
-      host: args.host,
-      apiVersion: args.api_version,
-      profile: args.profile,
-      format: args.format,
-      service: service,
-      apiKey: args.api_key,
-      mimeType: args.mime_type
+    if (res && res.body) {
+      msg = res.body
+      if (msg.message) msg = msg.message
+    } else {
+      msg = res
     }
+
+    return new Error(msg + ' - for url ' + url)
   }
 
-  delete args.mime_type
-  delete args.host
-  delete args.api_version
-  delete args.profile
-  delete args.format
-  delete args.api_key
+  isArray(value) {
+    let stringValue = Object.prototype.toString.call(value)
+    return stringValue.toLowerCase() === '[object array]'
+  }
 
-  request.httpArgs = { ...args }
+  isObject(value) {
+    let stringValue = Object.prototype.toString.call(value)
+    return stringValue.toLowerCase() === '[object object]'
+  }
 
-  return request
+  isString(value) {
+    return typeof value === 'string'
+  }
+
+  prepareRequest(args, service) {
+    const request = {
+      meta: {
+        host: args.host,
+        apiVersion: args.api_version,
+        profile: args.profile,
+        format: args.format,
+        service: service,
+        apiKey: args.api_key,
+        mimeType: args.mime_type
+      }
+    }
+
+    delete args.mime_type
+    delete args.host
+    delete args.api_version
+    delete args.profile
+    delete args.format
+    delete args.api_key
+
+    request.httpArgs = { ...args }
+
+    return request
+  }
 }
 
-module.exports = OrsUtil
+export default OrsUtil

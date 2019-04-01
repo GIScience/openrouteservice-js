@@ -1,4 +1,4 @@
-const Joi = require('joi')
+import Joi from 'joi'
 
 const schema = Joi.object()
   .keys({
@@ -142,4 +142,4 @@ const schema = Joi.object()
   })
   .unknown(false)
 
-module.exports = schema
+export default schema
