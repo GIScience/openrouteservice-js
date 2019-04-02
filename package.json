@@ -1,14 +1,16 @@
 {
   "name": "openrouteservice-js",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A Javascript client for openrouteservice services.",
   "author": "Openrouteservice Community",
   "license": "Apache-2.0",
-  "main": "src/index.js",
+  "main": "./npm_distribution/index.js",
   "scripts": {
-    "bundle": "browserify src/index.js -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
-    "bundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
-    "bundleProduction": "browserify -g uglifyify src/index.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties | derequire > dist/ors-js-client.js",
+    "npmPublishBuild": "babel src --presets babel-preset-es2015 --out-dir npm_distribution",
+    "prepublish": "npm run npmPublishBuild",
+    "browserBundle": "browserify src/index.js -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
+    "browserBundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
+    "browserBundleProduction": "browserify -g uglifyify src/index.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties | derequire > dist/ors-js-client.js",
     "test": "JASMINE_CONFIG_PATH=spec/jasmine.json jasmine"
   },
   "browser": {
