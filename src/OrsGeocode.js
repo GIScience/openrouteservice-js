@@ -3,9 +3,9 @@ import Promise from 'bluebird'
 import Joi from 'joi'
 import OrsUtil from './OrsUtil'
 
-import geocodeSchema from '../schemas/geocode/OrsGeocodeSchema'
-import reverseGeocodeSchema from '../schemas/geocode/OrsReverseGeocodeSchema'
-import structuredGeocodeSchema from '../schemas/geocode/OrsStructuredGeocodeSchema'
+import geocodeSchema from './schemas/geocode/OrsGeocodeSchema'
+import reverseGeocodeSchema from './schemas/geocode/OrsReverseGeocodeSchema'
+import structuredGeocodeSchema from './schemas/geocode/OrsStructuredGeocodeSchema'
 
 const orsUtil = new OrsUtil()
 

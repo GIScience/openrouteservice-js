@@ -2,7 +2,7 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import Joi from 'joi'
 import OrsUtil from './OrsUtil'
-import poisSchema from '../schemas/OrsPoisSchema'
+import poisSchema from './schemas/OrsPoisSchema'
 
 const orsUtil = new OrsUtil()
 

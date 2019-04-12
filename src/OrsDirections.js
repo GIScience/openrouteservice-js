@@ -2,7 +2,7 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import Joi from 'joi'
 import OrsUtil from './OrsUtil'
-import directionsSchema from '../schemas/OrsDirectionsSchema'
+import directionsSchema from './schemas/OrsDirectionsSchema'
 
 const orsUtil = new OrsUtil()
 

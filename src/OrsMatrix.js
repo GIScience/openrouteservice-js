@@ -2,7 +2,7 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import Joi from 'joi'
 import OrsUtil from './OrsUtil'
-import matrixSchema from '../schemas/OrsMatrixSchema'
+import matrixSchema from './schemas/OrsMatrixSchema'
 
 const orsUtil = new OrsUtil()
 

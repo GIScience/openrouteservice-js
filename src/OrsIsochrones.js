@@ -3,7 +3,7 @@ import Promise from 'bluebird'
 import Joi from 'joi'
 import OrsUtil from './OrsUtil'
 
-import isochronesSchema from '../schemas/OrsIsochronesSchema'
+import isochronesSchema from './schemas/OrsIsochronesSchema'
 
 const orsUtil = new OrsUtil()
 
@@ -29,7 +29,7 @@ class OrsIsochrones {
 
     if (args.restrictions) {
       options.profile_params = {
-        restrictions: args.restrictions
+        restrictions: { ...args.restrictions }
       }
       delete args.restrictions
     }
@@ -39,7 +39,7 @@ class OrsIsochrones {
     }
 
     if (args.avoid_polygons) {
-      options.avoid_polygons = args.avoid_polygons
+      options.avoid_polygons = { ...args.avoid_polygons }
       delete args.avoid_polygons
     }
 

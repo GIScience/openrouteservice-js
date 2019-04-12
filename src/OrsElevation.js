@@ -2,8 +2,8 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import Joi from 'joi'
 import OrsUtil from './OrsUtil'
-import elevationLineSchema from '../schemas/elevation/OrsLineElevationSchema.js'
-import elevationPointSchemaSchema from '../schemas/elevation/OrsPointElevationSchema.js'
+import elevationLineSchema from './schemas/elevation/OrsLineElevationSchema.js'
+import elevationPointSchemaSchema from './schemas/elevation/OrsPointElevationSchema.js'
 
 const orsUtil = new OrsUtil()
 
