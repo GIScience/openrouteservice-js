@@ -8,7 +8,9 @@ const orsUtil = new OrsUtil()
 
 class OrsDirections {
   constructor(args) {
+    this.requestSettings = null
     this.args = {}
+    this.meta = null
     if ('api_key' in args) {
       this.args.api_key = args.api_key
     } else {
@@ -31,6 +33,7 @@ class OrsDirections {
       this.args.coordinates = []
     }
     this.args.coordinates.push(latlon)
+
   }
 
   getBody(args) {
@@ -61,31 +64,31 @@ class OrsDirections {
   calculate(reqArgs) {
     orsUtil.copyProperties(reqArgs, this.args)
     const that = this
-
     return new Promise(function(resolve, reject) {
       Joi.validate(that.args, directionsSchema, function(err, value) {
         if (err !== null) reject(new Error(err))
 
         const timeout = 10000
         that.args = value
-
-        const requestSettings = orsUtil.prepareRequest(that.args, 'directions')
-
+        // meta should be generated once that subsequent requests work
+        if (that.meta == null) {
+          that.meta = orsUtil.prepareMeta(that.args, 'directions')
+        }
+        that.httpArgs = orsUtil.prepareRequest(that.args)
         const url = [
-          requestSettings.meta.host,
-          requestSettings.meta.apiVersion,
-          requestSettings.meta.service,
-          requestSettings.meta.profile,
-          requestSettings.meta.format
+          that.meta.host,
+          that.meta.apiVersion,
+          that.meta.service,
+          that.meta.profile,
+          that.meta.format
         ].join('/')
 
-        const postBody = that.getBody(requestSettings.httpArgs)
-
+        const postBody = that.getBody(that.httpArgs)
         request
           .post(url)
           .send(postBody)
-          .set('Authorization', requestSettings.meta.apiKey)
-          .accept(requestSettings.meta.mimeType)
+          .set('Authorization', that.meta.apiKey)
+          .accept(that.meta.mimeType)
           .timeout(timeout)
           .end(function(err, res) {
             //console.log(res.body, res.headers, res.status)

@@ -1,6 +1,6 @@
 class OrsInput {
   constructor(input, input2) {
-    this.set(input, input2)
+    this.setCoord(input, input2)
   }
 
   round(val, precision) {

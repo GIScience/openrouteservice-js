@@ -8,6 +8,7 @@ const orsUtil = new OrsUtil()
 
 class OrsMatrix {
   constructor(args) {
+    this.meta = null
     this.args = {}
     if ('api_key' in args) {
       this.args.api_key = args.api_key
@@ -27,21 +28,23 @@ class OrsMatrix {
         const timeout = 10000
         that.args = value
         if (that.args.api_version === 'v2') {
-          const requestSettings = orsUtil.prepareRequest(that.args, 'matrix')
-
+          if (that.meta == null) {
+            that.meta = orsUtil.prepareMeta(that.args, 'matrix')
+          }
+          that.httpArgs = orsUtil.prepareRequest(that.args)
           const url = [
-            requestSettings.meta.host,
-            requestSettings.meta.apiVersion,
-            requestSettings.meta.service,
-            requestSettings.meta.profile,
-            requestSettings.meta.format
+            that.meta.host,
+            that.meta.apiVersion,
+            that.meta.service,
+            that.meta.profile,
+            that.meta.format
           ].join('/')
 
           request
             .post(url)
-            .send(requestSettings.httpArgs)
-            .set('Authorization', requestSettings.meta.apiKey)
-            .set('Content-Type', requestSettings.meta.mimeType)
+            .send(that.httpArgs)
+            .set('Authorization', that.meta.apiKey)
+            .set('Content-Type', that.meta.mimeType)
             .accept('application/json')
             .timeout(timeout)
             .end(function(err, res) {

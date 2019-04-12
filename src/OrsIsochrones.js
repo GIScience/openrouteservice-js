@@ -9,6 +9,7 @@ const orsUtil = new OrsUtil()
 
 class OrsIsochrones {
   constructor(args) {
+    this.meta = null
     this.args = {}
     if ('api_key' in args) {
       this.args.api_key = args.api_key
@@ -61,26 +62,26 @@ class OrsIsochrones {
         const timeout = 10000
         that.args = value
         if (that.args.api_version === 'v2') {
-          const requestSettings = orsUtil.prepareRequest(
-            that.args,
-            'isochrones'
-          )
-
+          // meta should be generated once that subsequent requests work
+          if (that.meta == null) {
+            that.meta = orsUtil.prepareMeta(that.args, 'isochrones')
+          }
+          that.httpArgs = orsUtil.prepareRequest(that.args)
           const url = [
-            requestSettings.meta.host,
-            requestSettings.meta.apiVersion,
-            requestSettings.meta.service,
-            requestSettings.meta.profile,
-            requestSettings.meta.format
+            that.meta.host,
+            that.meta.apiVersion,
+            that.meta.service,
+            that.meta.profile,
+            that.meta.format
           ].join('/')
 
-          const postBody = that.getBody(requestSettings.httpArgs)
+          const postBody = that.getBody(that.httpArgs)
 
           request
             .post(url)
             .send(postBody)
-            .set('Authorization', requestSettings.meta.apiKey)
-            .set('Content-Type', requestSettings.meta.mimeType)
+            .set('Authorization', that.meta.apiKey)
+            .set('Content-Type', that.meta.mimeType)
             .accept('application/geo+json')
             .timeout(timeout)
             .end(function(err, res) {

@@ -2,9 +2,7 @@ import Joi from 'joi'
 
 const schema = Joi.object()
   .keys({
-    api_key: Joi.string()
-      .required()
-      .description('Your openrouteservice API key'),
+    api_key: Joi.string().description('Your openrouteservice API key'),
     format_in: Joi.string()
       .valid(['geojson', 'encodedpolyline', 'polyline'])
       .description('The input format geometry.'),

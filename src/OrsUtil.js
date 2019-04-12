@@ -49,29 +49,26 @@ class OrsUtil {
     return typeof value === 'string'
   }
 
-  prepareRequest(args, service) {
-    const request = {
-      meta: {
-        host: args.host,
-        apiVersion: args.api_version,
-        profile: args.profile,
-        format: args.format,
-        service: service,
-        apiKey: args.api_key,
-        mimeType: args.mime_type
-      }
+  prepareMeta(args, service) {
+    return {
+      host: args.host,
+      apiVersion: args.api_version,
+      profile: args.profile,
+      format: args.format,
+      service: service,
+      apiKey: args.api_key,
+      mimeType: args.mime_type
     }
+  }
 
+  prepareRequest(args) {
     delete args.mime_type
     delete args.host
     delete args.api_version
     delete args.profile
     delete args.format
     delete args.api_key
-
-    request.httpArgs = { ...args }
-
-    return request
+    return { ...args }
   }
 }
 

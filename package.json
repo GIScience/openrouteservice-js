@@ -45,7 +45,7 @@
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-standard": "^3.1.0",
-    "jasmine": "3.1.0",
+    "jasmine-es6": "^0.4.3",
     "jshint": "2.9.5",
     "prettier": "^1.14.3",
     "uglifyify": "4.0.5",

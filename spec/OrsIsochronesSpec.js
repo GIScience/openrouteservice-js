@@ -1,7 +1,6 @@
 import OrsIsochrones from '../src/OrsIsochrones'
-import OrsInput from '../src/OrsInput'
 const orsIsochrones = new OrsIsochrones({
-  api_key: '5b3ce3597851110001cf6248e506c10eb14646ae9ed90fa9e22a8f72'
+  api_key: '58d904a497c67e00015b45fc9e365ccaee294bff98189d229ed874c2'
 })
 
 describe('Isochrone Test', function() {
@@ -10,8 +9,7 @@ describe('Isochrone Test', function() {
       .calculate({
         locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
         profile: 'driving-car',
-        range: 600,
-        mime_type: 'application/json'
+        range: [600]
       })
       .then(function(json) {
         expect(json.features.length).toEqual(2)
