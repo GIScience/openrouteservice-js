@@ -4,3 +4,5 @@ npm_distribution/
 *~
 /nbproject/
 .DS_Store
+test.html
+package-lock.json

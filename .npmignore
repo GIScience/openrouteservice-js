@@ -1,3 +1,9 @@
 src
 node_modules
+tim_tests
+dist
+general_test.js
+spec
+test.js
+test.html
 .DS_Store

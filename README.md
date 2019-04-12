@@ -9,6 +9,7 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 - Isochrones (accessibilty)
 - Time-distance matrix
 - Pois (points of interest)
+- Elevation (linestring or point)
 
 *Note:* In order to use this client, you have to register for a token at [openrouteservice](https://openrouteservice.org). To understand the features of openrouteservice, please don't forget to read the docs. For visualization purposes on the map please use [openrouteservice maps](https://maps.openrouteservice.org).
 
@@ -17,16 +18,18 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 This library uses [Joi](https://github.com/hapijs/joi) for object validation. To understand the input of each API specifically, please use the schemas, e.g.:
 
 ```javascript
-const Joi = require("joi");
+import Joi from "joi";
 
-const directionsSchema = require("../schemas/OrsDirectionsSchema");
-const isochronesSchema = require("../schemas/OrsIsochronesSchema");
-const matrixSchema = require("../schemas/OrsMatrixSchema");
-const geocodeSchema = require("../schemas/geocode/OrsGeocodeSchema");
-const reverseGeocodeSchema = require("../schemas/geocode/OrsReverseGeocodeSchema");
-const structuredGeocodeSchema = require("../schemas/geocode/OrsStructuredGeocodeSchema");
-const poisSchema = require("../schemas/OrsPoisSchema");
-const elevationSchema = require("../schemas/OrsElevationSchema");
+import directionsSchema from "./src/schemas/OrsDirectionsSchema";
+import isochronesSchema from "./src/schemas/OrsIsochronesSchema";
+import matrixSchema from "./src/schemas/OrsMatrixSchema";
+import geocodeSchema from "./src/schemas/geocode/OrsGeocodeSchema";
+import reverseGeocodeSchema from "./src/schemas/geocode/OrsReverseGeocodeSchema";
+import structuredGeocodeSchema from "./src/schemas/geocode/OrsStructuredGeocodeSchema";
+import poisSchema from "./src/schemas/OrsPoisSchema";
+import elevationLineSchema from "./src/schemas/elevation/OrsLineElevationSchema";
+import elevationPointSchema from "./src/schemas/elevation/OrsPointElevationSchema";
+
 
 // describe the directions schema
 console.log(JSON.stringify(Joi.describe(directionsSchema), null, 2));
@@ -39,11 +42,11 @@ Install the library with npm:
 ```npm install openrouteservice-js --save```
 
 
-## Build the distribution file
+## Or build the distribution file to use in your browser
 
 ```npm run bundleProduction```
 
-This will be saved to `path/to/dist/ors-js-client.js`.
+This will be saved to `openrouteservice-js/dist/ors-js-client.js`.
 
 ## Integrate the APIs in your application
 
@@ -81,15 +84,14 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 </script>
 ```
 
-### Examples node.js
+### Examples using the npm distribution
 
-or you can use only the pieces you need, e.g. get directions
 
 ```javascript
-const OrsDirections = require("./OrsDirections");
+var openrouteservice = require("openrouteservice-js");
 
 // add your api_key here
-const Directions = new OrsDirections({
+var Directions = new openrouteservice.Directions({
   api_key: "XY"
 });
 
@@ -126,10 +128,11 @@ Directions.calculate({
 Or use the geocoding services:
 
 ```javascript
-const OrsGeocode = require("./OrsGeocode");
+var openrouteservice = require("openrouteservice-js");
 
-const Geocode = new OrsGeocode({
-  api_key: "5b3ce3597851110001cf6248b03ee441340e480da73ff884be23d8b2"
+// add your api_key here
+var Geocode = new openrouteservice.Geocode({
+  api_key: "XY"
 });
 
 Geocode.geocode({
@@ -177,10 +180,11 @@ Geocode.structuredGeocode({
 Query isochrones:
 
 ```javascript
-const OrsIsochrones = require("./OrsIsochrones");
+var openrouteservice = require("openrouteservice-js");
 
-const Isochrones = new OrsIsochrones({
-  api_key: "5b3ce3597851110001cf6248b03ee441340e480da73ff884be23d8b2"
+// add your api_key here
+var Isochrones = new openrouteservice.Isochrones({
+  api_key: "XY"
 });
 
 Isochrones.calculate({
@@ -218,10 +222,11 @@ Isochrones.calculate({
 Or fetch a time-distance matrix:
 
 ```javascript
-const OrsMatrix = require("./OrsMatrix");
+var openrouteservice = require("openrouteservice-js");
 
-const Matrix = new OrsMatrix({
-  api_key: "5b3ce3597851110001cf6248b03ee441340e480da73ff884be23d8b2"
+// add your api_key here
+var Isochrones = new openrouteservice.Matrix({
+  api_key: "XY"
 });
 
 Matrix.calculate({
@@ -242,10 +247,11 @@ Matrix.calculate({
 Or return elevation data from a geojson line:
 
 ```javascript
-const OrsElevation = require("./OrsElevation");
+var openrouteservice = require("openrouteservice-js");
 
-const Elevation = new OrsElevation({
-  api_key: "5b3ce3597851110001cf6248b03ee441340e480da73ff884be23d8b2"
+// add your api_key here
+var Elevation = new openrouteservice.Elevation({
+  api_key: "XY"
 });
 
 Elevation.lineElevation({
