@@ -161,7 +161,7 @@ const schema = Joi.object()
       .default('https://api.openrouteservice.org')
       .description('Determines the API url.'),
     mime_type: Joi.string()
-      .valid(['application/json'])
+      .valid(['application/json','application/geo+json'])
       .default('application/json')
       .description('Determines the mime type of request.')
   })
