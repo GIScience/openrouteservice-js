@@ -7,7 +7,7 @@
   "main": "./npm_distribution/index.js",
   "scripts": {
     "npmPublishBuild": "babel src --presets babel-preset-es2015 --out-dir npm_distribution",
-    "prepublish": "npm run npmPublishBuild",
+    "prepublishOnly": "npm run npmPublishBuild",
     "browserBundle": "browserify src/index.js -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
     "browserBundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
     "browserBundleProduction": "browserify -g uglifyify src/index.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties | derequire > dist/ors-js-client.js",
@@ -28,6 +28,7 @@
     "superagent": "^4.0.0-beta.5"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
