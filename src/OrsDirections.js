@@ -93,7 +93,6 @@ class OrsDirections {
           .end(function(err, res) {
             //console.log(res.body, res.headers, res.status)
             if (err || !res.ok) {
-              console.log(err)
               //reject(ghUtil.extractError(res, url));
               reject(new Error(err))
             } else if (res) {
