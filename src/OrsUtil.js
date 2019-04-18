@@ -49,13 +49,13 @@ class OrsUtil {
     return typeof value === 'string'
   }
 
-  prepareMeta(args, service) {
+  prepareMeta(args) {
     return {
       host: args.host,
       apiVersion: args.api_version,
       profile: args.profile,
       format: args.format,
-      service: service,
+      service: args.service,
       apiKey: args.api_key,
       mimeType: args.mime_type
     }
@@ -67,6 +67,7 @@ class OrsUtil {
     delete args.api_version
     delete args.profile
     delete args.format
+    delete args.service
     delete args.api_key
     return { ...args }
   }

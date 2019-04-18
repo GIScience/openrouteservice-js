@@ -52,6 +52,18 @@ const schema = Joi.object()
           maximum_sloped_curb: Joi.any().description('Maximum sloped curb'),
           maximum_incline: Joi.any().description('Maximum incline')
         })
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^driving-car$/),
+        then: Joi.object().keys({})
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^cycling.*/),
+        then: Joi.object().keys({})
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^foot.*/),
+        then: Joi.object().keys({})
       }),
     avoid_polygons: Joi.object(),
     avoidables: Joi.array()
@@ -126,6 +138,9 @@ const schema = Joi.object()
     options: Joi.object().description(
       'Refer to https://openrouteservice.org for detailed documentation. Construct your own dict() following the example of the minified options object. Will be converted to json automatically.'
     ),
+    service: Joi.string()
+      .default('isochrones')
+      .description('Determines the service endpoint to be used.'),
     api_version: Joi.string()
       .valid(['v2'])
       .default('v2')

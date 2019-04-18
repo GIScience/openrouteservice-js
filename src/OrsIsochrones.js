@@ -64,7 +64,7 @@ class OrsIsochrones {
         if (that.args.api_version === 'v2') {
           // meta should be generated once that subsequent requests work
           if (that.meta == null) {
-            that.meta = orsUtil.prepareMeta(that.args, 'isochrones')
+            that.meta = orsUtil.prepareMeta(that.args)
           }
           that.httpArgs = orsUtil.prepareRequest(that.args)
           const url = [

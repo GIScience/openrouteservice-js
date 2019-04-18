@@ -29,7 +29,7 @@ class OrsMatrix {
         that.args = value
         if (that.args.api_version === 'v2') {
           if (that.meta == null) {
-            that.meta = orsUtil.prepareMeta(that.args, 'matrix')
+            that.meta = orsUtil.prepareMeta(that.args)
           }
           that.httpArgs = orsUtil.prepareRequest(that.args)
           const url = [
@@ -39,7 +39,6 @@ class OrsMatrix {
             that.meta.profile,
             that.meta.format
           ].join('/')
-
           request
             .post(url)
             .send(that.httpArgs)
@@ -50,7 +49,6 @@ class OrsMatrix {
             .end(function(err, res) {
               //console.log(res.body, res.headers, res.status)
               if (err || !res.ok) {
-                console.log(err)
                 reject(new Error(err))
               } else if (res) {
                 resolve(res.body)

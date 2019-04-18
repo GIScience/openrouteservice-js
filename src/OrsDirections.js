@@ -33,17 +33,24 @@ class OrsDirections {
       this.args.coordinates = []
     }
     this.args.coordinates.push(latlon)
-
   }
 
   getBody(args) {
     let options = {}
+
+    if (this.meta.profile == 'driving-hgv') {
+      options.vehicle_type = 'hgv'
+    } else if (this.meta.profile == 'wheelchair') {
+      options.vehicle_type = 'wheelchair'
+    }
+
     if (args.restrictions) {
       options.profile_params = {
         restrictions: { ...args.restrictions }
       }
       delete args.restrictions
     }
+
     if (args.avoidables) {
       options.avoid_features = [...args.avoidables]
       delete args.avoidables
@@ -72,7 +79,7 @@ class OrsDirections {
         that.args = value
         // meta should be generated once that subsequent requests work
         if (that.meta == null) {
-          that.meta = orsUtil.prepareMeta(that.args, 'directions')
+          that.meta = orsUtil.prepareMeta(that.args)
         }
         that.httpArgs = orsUtil.prepareRequest(that.args)
         const url = [

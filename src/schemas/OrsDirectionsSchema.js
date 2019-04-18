@@ -55,6 +55,18 @@ const schema = Joi.object()
           maximum_sloped_curb: Joi.any().description('Maximum sloped curb'),
           maximum_incline: Joi.any().description('Maximum incline')
         })
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^driving-car$/),
+        then: Joi.object().keys({})
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^cycling.*/),
+        then: Joi.object().keys({})
+      })
+      .when('profile', {
+        is: Joi.string().regex(/^foot.*/),
+        then: Joi.object().keys({})
       }),
     avoidables: Joi.array()
       .when('profile', {
@@ -153,6 +165,9 @@ const schema = Joi.object()
     options: Joi.object().description(
       'Refer to https://openrouteservice.org for detailed documentation. Construct your own dict() following the example of the minified options object. Will be converted to json automatically.'
     ),
+    service: Joi.string()
+      .default('directions')
+      .description('Determines the service endpoint to be used.'),
     api_version: Joi.string()
       .valid(['v2'])
       .default('v2')
@@ -161,7 +176,7 @@ const schema = Joi.object()
       .default('https://api.openrouteservice.org')
       .description('Determines the API url.'),
     mime_type: Joi.string()
-      .valid(['application/json','application/geo+json'])
+      .valid(['application/json', 'application/geo+json'])
       .default('application/json')
       .description('Determines the mime type of request.')
   })

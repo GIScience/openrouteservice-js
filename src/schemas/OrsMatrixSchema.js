@@ -54,6 +54,9 @@ const schema = Joi.object()
       .items(Joi.string().valid('duration', 'distance'))
       .description('Specifies a list of returned metrics.'),
     optimized: Joi.boolean().default(true),
+    service: Joi.string()
+      .default('matrix')
+      .description('Determines the service endpoint to be used.'),
     api_version: Joi.string()
       .valid(['v2'])
       .default('v2')
