@@ -38,7 +38,7 @@ const schema = Joi.object()
           'macrocounty',
           'region',
           'macroregion',
-          'county',
+          'country',
           'coarse'
         )
       )
