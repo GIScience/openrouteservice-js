@@ -95,7 +95,7 @@ class OrsDirections {
           .post(url)
           .send(postBody)
           .set('Authorization', that.meta.apiKey)
-          .accept(that.meta.mimeType)
+          //.accept(that.meta.mimeType)
           .timeout(timeout)
           .end(function(err, res) {
             //console.log(res.body, res.headers, res.status)
