@@ -225,7 +225,7 @@ Or fetch a time-distance matrix:
 var openrouteservice = require("openrouteservice-js");
 
 // add your api_key here
-var Isochrones = new openrouteservice.Matrix({
+var Matrix = new openrouteservice.Matrix({
   api_key: "XY"
 });
 
