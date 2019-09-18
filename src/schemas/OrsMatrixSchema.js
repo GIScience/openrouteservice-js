@@ -16,17 +16,15 @@ const schema = Joi.object()
         'a single location, or a list of locations, where a location is a list or tuple of lng,lat values'
       ),
     sources: Joi.array()
-      .items(Joi.string().default('all'))
       .description(
         "A list of indices that refer to the list of locations (starting with 0) or 'all'"
       )
-      .default('all'),
+      .default(['all']),
     destinations: Joi.array()
-      .items(Joi.string().default('all'))
       .description(
         "A list of indices that refer to the list of locations (starting with 0) or 'all'"
       )
-      .default('all'),
+      .default(['all']),
     profile: Joi.string()
       .valid([
         'driving-car',
