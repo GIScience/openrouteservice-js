@@ -62,7 +62,7 @@ const schema = Joi.object()
       .default('v2')
       .description('Determines the API version to be used.'),
     host: Joi.string()
-      .default('https://api.openrouteservice.org/matrix')
+      .default('https://api.openrouteservice.org')
       .description('Determines the API url.'),
     mime_type: Joi.string()
       .valid(['application/json'])
