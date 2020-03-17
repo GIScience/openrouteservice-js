@@ -15,32 +15,20 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 
 ## Documentation
 
-This library uses [Joi](https://github.com/hapijs/joi) for object validation. To understand the input of each API specifically, please use the schemas, e.g.:
+This library the ORS API for request validation. To understand the input of each API specifically, please the interactive [API Playground](https://openrouteservice.org/dev/#/api-docs) that provides an interactive documentation. This library supports the following services:
 
-```javascript
-import Joi from "joi";
-
-import directionsSchema from "./src/schemas/OrsDirectionsSchema";
-import isochronesSchema from "./src/schemas/OrsIsochronesSchema";
-import matrixSchema from "./src/schemas/OrsMatrixSchema";
-import geocodeSchema from "./src/schemas/geocode/OrsGeocodeSchema";
-import reverseGeocodeSchema from "./src/schemas/geocode/OrsReverseGeocodeSchema";
-import structuredGeocodeSchema from "./src/schemas/geocode/OrsStructuredGeocodeSchema";
-import poisSchema from "./src/schemas/OrsPoisSchema";
-import elevationLineSchema from "./src/schemas/elevation/OrsLineElevationSchema";
-import elevationPointSchema from "./src/schemas/elevation/OrsPointElevationSchema";
-
-
-// describe the directions schema
-console.log(JSON.stringify(Joi.describe(directionsSchema), null, 2));
-```
+- Directions (routing)
+- Geocoding | Reverse Geocoding | Structured Geocoding (powered by Pelias)
+- Isochrones (accessibilty)
+- Time-distance matrix
+- Pois (points of interest)
+- Elevation (linestring or point)
 
 ## Installation
 
 Install the library with npm:
 
 ```npm install openrouteservice-js --save```
-
 
 ## Or build the distribution file to use in your browser
 
@@ -85,7 +73,6 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 ```
 
 ### Examples using the npm distribution
-
 
 ```javascript
 var openrouteservice = require("openrouteservice-js");

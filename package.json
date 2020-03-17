@@ -1,6 +1,6 @@
 {
   "name": "openrouteservice-js",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A Javascript client for openrouteservice services.",
   "author": "Openrouteservice Community",
   "license": "Apache-2.0",
@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "bluebird": "^3.5.2",
+    "http-server": "^0.12.1",
     "joi": "^13.6.0",
     "joi-browser": "^13.4.0",
     "superagent": "^4.0.0-beta.5"

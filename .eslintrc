@@ -6,6 +6,7 @@
     "quotes": ["error", "single"],
     "no-debugger": "off",
     "no-console": "warn",
+    "no-multi-spaces": "warn",
     "space-before-function-paren": [
       "error",
       {

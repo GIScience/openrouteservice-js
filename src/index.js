@@ -22,7 +22,9 @@ const Openrouteservice = {
 if (typeof module === 'object' && typeof module.exports === 'object') {
   module.exports = Openrouteservice
   // define Openrouteservice as an AMD module
+  // eslint-disable-next-line no-undef
 } else if (typeof define === 'function' && define.amd) {
+  // eslint-disable-next-line no-undef
   define(Openrouteservice)
 }
 

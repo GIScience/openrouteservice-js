@@ -1,8 +1,6 @@
 import request from 'superagent'
 import Promise from 'bluebird'
-import Joi from 'joi'
 import OrsUtil from './OrsUtil'
-import poisSchema from './schemas/OrsPoisSchema'
 
 const orsUtil = new OrsUtil()
 
@@ -12,7 +10,8 @@ class OrsPois {
     if ('api_key' in args) {
       this.args.api_key = args.api_key
     } else {
-      console.log('Please add your openrouteservice api_key...')
+      // eslint-disable-next-line no-console
+      console.error('Please add your openrouteservice api_key...')
     }
   }
 
@@ -40,42 +39,42 @@ class OrsPois {
     return payload
   }
 
-  poisPromise(schema) {
+  poisPromise() {
+    if (!this.args.service) {
+      this.args.service = 'pois'
+    }
+    if (!this.args.host) {
+      this.args.host = 'https://api.openrouteservice.org'
+    }
     const that = this
     return new Promise(function(resolve, reject) {
-      Joi.validate(that.args, schema, function(err, value) {
-        if (err !== null) reject(new Error(err))
+      const timeout = 5000
 
-        const timeout = 5000
-        that.args = value
+      let url = orsUtil.prepareUrl(that.args)
 
-        const url = that.args.host + '?api_key=' + value.api_key
+      const payload = that.generatePayload(that.args)
 
-        const payload = that.generatePayload(that.args)
-
-        request
-          .post(url)
-          .send(payload)
-          .accept(that.args.mime_type)
-          .timeout(timeout)
-          .end(function(err, res) {
-            //console.log(res.body, res.headers, res.status)
-            if (err || !res.ok) {
-              console.log(err)
-              //reject(ghUtil.extractError(res, url));
-              reject(new Error(err))
-            } else if (res) {
-              resolve(res.body)
-            }
-          })
-      })
+      request
+        .post(url)
+        .send(payload)
+        // .accept(that.args.mime_type)
+        .timeout(timeout)
+        .end(function(err, res) {
+          if (err || !res.ok) {
+            // eslint-disable-next-line no-console
+            console.error(err)
+            reject(new Error(err))
+          } else if (res) {
+            resolve(res.body)
+          }
+        })
     })
   }
 
   pois(reqArgs) {
     orsUtil.copyProperties(reqArgs, this.args)
 
-    return this.poisPromise(poisSchema)
+    return this.poisPromise()
   }
 }
 
