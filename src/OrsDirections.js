@@ -97,7 +97,6 @@ class OrsDirections {
         //.accept(that.meta.mimeType)
         .timeout(timeout)
         .end(function(err, res) {
-          //console.log(res.body, res.headers, res.status)
           if (err || !res.ok) {
             reject(err)
           } else if (res) {

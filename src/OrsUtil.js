@@ -87,10 +87,10 @@ class OrsUtil {
     let counter = 0
     for (let key in urlPathParts) {
       if (urlPathParts[key]) {
-        urlPath += urlPathParts[key]
         if (counter > 0 && counter) {
           urlPath += '/'
         }
+        urlPath += urlPathParts[key]
       }
       counter++
     }

@@ -65,7 +65,7 @@ class OrsPois {
       request
         .post(url)
         .send(payload)
-        .set('Authorization', that.args.apiKey)
+        .set('Authorization', that.args.api_key)
         // .accept(that.args.mime_type)
         .timeout(timeout)
         .end(function(err, res) {
