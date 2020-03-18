@@ -40,9 +40,13 @@ class OrsPois {
   }
 
   poisPromise() {
+    // the service arg is used to build the target url
     if (!this.args.service) {
       this.args.service = 'pois'
     }
+    // the request arg is required by the API as part of the body
+    this.args.request = this.args.service || 'pois'
+
     if (!this.args.host) {
       this.args.host = 'https://api.openrouteservice.org'
     }
@@ -52,18 +56,23 @@ class OrsPois {
 
       let url = orsUtil.prepareUrl(that.args)
 
+      if (that.args.service) {
+        delete that.args.service
+      }
+
       const payload = that.generatePayload(that.args)
 
       request
         .post(url)
         .send(payload)
+        .set('Authorization', that.args.apiKey)
         // .accept(that.args.mime_type)
         .timeout(timeout)
         .end(function(err, res) {
           if (err || !res.ok) {
             // eslint-disable-next-line no-console
             console.error(err)
-            reject(new Error(err))
+            reject(err)
           } else if (res) {
             resolve(res.body)
           }
