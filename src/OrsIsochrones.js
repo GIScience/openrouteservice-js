@@ -1,9 +1,6 @@
 import request from 'superagent'
 import Promise from 'bluebird'
-import Joi from 'joi'
 import OrsUtil from './OrsUtil'
-
-import isochronesSchema from './schemas/OrsIsochronesSchema'
 
 const orsUtil = new OrsUtil()
 
@@ -14,6 +11,7 @@ class OrsIsochrones {
     if ('api_key' in args) {
       this.args.api_key = args.api_key
     } else {
+      // eslint-disable-next-line no-console
       console.log('Please add your openrouteservice api_key..')
     }
   }
@@ -52,50 +50,51 @@ class OrsIsochrones {
   }
 
   calculate(reqArgs) {
+    if (!reqArgs.service) {
+      reqArgs.service = 'isochrones'
+    }
+    if (!reqArgs.host) {
+      reqArgs.host = 'https://api.openrouteservice.org'
+    }
+    if (!reqArgs.api_version) {
+      reqArgs.api_version = 'v2'
+    }
+
     orsUtil.copyProperties(reqArgs, this.args)
     const that = this
 
     return new Promise(function(resolve, reject) {
-      Joi.validate(that.args, isochronesSchema, function(err, value) {
-        if (err !== null) reject(new Error(err))
-
-        const timeout = 10000
-        that.args = value
-        if (that.args.api_version === 'v2') {
-          // meta should be generated once that subsequent requests work
-          if (that.meta == null) {
-            that.meta = orsUtil.prepareMeta(that.args)
-          }
-          that.httpArgs = orsUtil.prepareRequest(that.args)
-          const url = [
-            that.meta.host,
-            that.meta.apiVersion,
-            that.meta.service,
-            that.meta.profile,
-            that.meta.format
-          ].join('/')
-
-          const postBody = that.getBody(that.httpArgs)
-
-          request
-            .post(url)
-            .send(postBody)
-            .set('Authorization', that.meta.apiKey)
-            .set('Content-Type', that.meta.mimeType)
-            .accept('application/geo+json')
-            .timeout(timeout)
-            .end(function(err, res) {
-              //console.log(res.body, res.headers, res.status)
-              if (err || !res.ok) {
-                console.log(err)
-                //reject(ghUtil.extractError(res, url));
-                reject(new Error(err))
-              } else if (res) {
-                resolve(res.body)
-              }
-            })
+      const timeout = 10000
+      if (that.args.api_version === 'v2') {
+        // meta should be generated once that subsequent requests work
+        if (that.meta == null) {
+          that.meta = orsUtil.prepareMeta(that.args)
         }
-      })
+        that.httpArgs = orsUtil.prepareRequest(that.args)
+        let url = orsUtil.prepareUrl(that.meta)
+
+        const postBody = that.getBody(that.httpArgs)
+
+        request
+          .post(url)
+          .send(postBody)
+          .set('Authorization', that.meta.apiKey)
+          // .set('Content-Type', that.meta.mimeType)
+          // .accept('application/geo+json')
+          .timeout(timeout)
+          .end(function(err, res) {
+            if (err || !res.ok) {
+              // eslint-disable-next-line no-console
+              console.error(err)
+              reject(err)
+            } else if (res) {
+              resolve(res.body)
+            }
+          })
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('Please use ORS API v2')
+      }
     })
   }
 }

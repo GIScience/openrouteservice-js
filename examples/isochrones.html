@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>ORS-js lib examples</title>
+    <script src="../dist/ors-js-client.js"></script>
+  </head>
+  <body>
+    <h1>ORS-js lib examples</h1>
+    <section >
+      <h2>Isochrones</h2>
+      <div id="isochrones">
+        <script>
+          window.onload = function() {
+            var apiKey = location.search.split('api_key=')[1];
+
+            var node = document.getElementById("isochrones");
+            if (!apiKey || apiKey === 'put_your_key_here') {
+              node.innerHTML = "<p>Please provide an API key via <b>?api_key=mykey</b> query parameter </p>";
+            } else {
+              // add your api_key here
+              var Isochrones = new Openrouteservice.Isochrones({
+                api_key: apiKey
+              });
+
+              Isochrones.calculate({
+                  profile: 'driving-car',
+                  locations:[[8.681495,49.41461],[8.686507,49.41943]],
+                  range:[300,200],
+                  area_units: 'km'
+                })
+                .then(function(json) {
+                  let response = JSON.stringify(json, null, "\t")
+                  console.log(response);
+                  response = response.replace(/(\n)/g, '<br>');
+                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+                })
+                .catch(function(err) {
+                  let response = JSON.stringify(err, null, "\t")
+                  console.log(response);
+                  response = response.replace(/(\n)/g, '<br>');
+                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+                });
+            };
+          }
+        </script>
+      </div>
+    </section>
+    </div>
+  </body>
+</html>

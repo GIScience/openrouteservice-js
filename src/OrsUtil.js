@@ -71,6 +71,40 @@ class OrsUtil {
     delete args.api_key
     return { ...args }
   }
+
+  prepareUrl(args) {
+    let url = args.host || ''
+
+    // make path
+    let urlPathParts = [
+      args.apiVersion,
+      args.service,
+      args.profile,
+      args.format
+    ]
+
+    let urlPath = '/'
+    let counter = 0
+    for (let key in urlPathParts) {
+      if (urlPathParts[key]) {
+        if (counter > 0 && counter) {
+          urlPath += '/'
+        }
+        urlPath += urlPathParts[key]
+      }
+      counter++
+    }
+
+    // Remove double slashs from path
+    let cleanUrlPath = urlPath.replace(/\/\//g, '/')
+    url += cleanUrlPath
+
+    // The end of the url can not be a slash
+    if (url.slice(-1) === '/') {
+      url = url.slice(0, -1)
+    }
+    return url
+  }
 }
 
 export default OrsUtil

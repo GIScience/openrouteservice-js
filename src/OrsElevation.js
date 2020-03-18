@@ -1,9 +1,6 @@
 import request from 'superagent'
 import Promise from 'bluebird'
-import Joi from 'joi'
 import OrsUtil from './OrsUtil'
-import elevationLineSchema from './schemas/elevation/OrsLineElevationSchema.js'
-import elevationPointSchemaSchema from './schemas/elevation/OrsPointElevationSchema.js'
 
 const orsUtil = new OrsUtil()
 
@@ -13,7 +10,8 @@ class OrsElevation {
     if ('api_key' in args) {
       this.args.api_key = args.api_key
     } else {
-      console.log('Please add your openrouteservice api_key...')
+      // eslint-disable-next-line no-console
+      console.error('Please add your openrouteservice api_key...')
     }
   }
 
@@ -41,49 +39,53 @@ class OrsElevation {
     return payload
   }
 
-  elevationPromise(schema) {
+  elevationPromise() {
     const that = this
 
     return new Promise(function(resolve, reject) {
-      Joi.validate(that.args, schema, function(err, value) {
-        //console.log(true, err, value)
+      const timeout = 5000
 
-        if (err !== null) reject(new Error(err))
+      if (!that.args.host) {
+        that.args.host = 'https://api.openrouteservice.org'
+      }
 
-        const timeout = 5000
-        that.args = value
+      let url = orsUtil.prepareUrl(that.args)
 
-        const url = that.args.host
+      const payload = that.generatePayload(that.args)
 
-        const payload = that.generatePayload(that.args)
-
-        request
-          .post(url)
-          .send(payload)
-          .accept(that.args.mime_type)
-          .set('Authorization', value.api_key)
-          .timeout(timeout)
-          .end(function(err, res) {
-            //console.log(res.body, res.headers, res.status)
-            if (err || !res.ok) {
-              console.log(err)
-              reject(new Error(err))
-            } else if (res) {
-              resolve(res.body)
-            }
-          })
-      })
+      request
+        .post(url)
+        .send(payload)
+        .accept(that.args.mime_type)
+        .set('Authorization', that.args.api_key)
+        .timeout(timeout)
+        .end(function(err, res) {
+          //console.log(res.body, res.headers, res.status)
+          if (err || !res.ok) {
+            // eslint-disable-next-line no-console
+            console.error(err)
+            reject(new Error(err))
+          } else if (res) {
+            resolve(res.body)
+          }
+        })
     })
   }
 
   lineElevation(reqArgs) {
+    if (!reqArgs.service) {
+      reqArgs.service = 'elevation/line'
+    }
     orsUtil.copyProperties(reqArgs, this.args)
-    return this.elevationPromise(elevationLineSchema)
+    return this.elevationPromise()
   }
 
   pointElevation(reqArgs) {
+    if (!reqArgs.service) {
+      reqArgs.service = 'elevation/point'
+    }
     orsUtil.copyProperties(reqArgs, this.args)
-    return this.elevationPromise(elevationPointSchemaSchema)
+    return this.elevationPromise()
   }
 }
 

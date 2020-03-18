@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>ORS-js lib examples</title>
+    <script src="../dist/ors-js-client.js"></script>
+  </head>
+  <body>
+    <h1>ORS-js lib examples</h1>
+    <section >
+      <h2>POIs</h2>
+      <div id="pois">
+        <script>
+          window.onload = function() {
+            var apiKey = location.search.split('api_key=')[1];
+
+            var node = document.getElementById("pois");
+            if (!apiKey || apiKey === 'put_your_key_here') {
+              node.innerHTML = "<p>Please provide an API key via <b>?api_key=mykey</b> query parameter </p>";
+            } else {
+              // add your api_key here
+              var Pois = new Openrouteservice.Pois({
+                api_key: apiKey
+              });
+
+              Pois.pois({
+                geometry: {
+                  bbox:[[8.8034,53.0756],[8.7834,53.0456]],
+                  geojson:{
+                    type:"Point",
+                    coordinates:[8.8034,53.0756]
+                  },
+                  buffer:250
+                }
+              })
+                .then(function(json) {
+                  let response = JSON.stringify(json, null, "\t")
+                  console.log(response);
+                  response = response.replace(/(\n)/g, '<br>');
+                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+                })
+                .catch(function(err) {
+                  let response = JSON.stringify(err, null, "\t")
+                  console.log(response);
+                  response = response.replace(/(\n)/g, '<br>');
+                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+                });
+              };
+          }
+        </script>
+      </div>
+    </section>
+    </div>
+  </body>
+</html>

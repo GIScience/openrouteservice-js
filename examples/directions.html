@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>ORS-js lib examples</title>
+    <script src="../dist/ors-js-client.js"></script>
+  </head>
+  <body>
+    <h1>ORS-js lib examples</h1>
+    <section >
+      <h2>Driving car directions</h2>
+      <div id="driving-car-directions">
+        <script>
+          window.onload = function() {
+            var apiKey = location.search.split('api_key=')[1];
+
+            if (!apiKey || apiKey === 'put_your_key_here') {
+              var node = document.getElementById("driving-car-directions");
+              node.innerHTML = "<p>Please provide an API key via <b>?api_key=mykey</b> query parameter </p>";
+            } else {
+              let orsDirections = new Openrouteservice.Directions({
+                api_key: apiKey
+              });
+
+              var node = document.getElementById("driving-car-directions");
+
+              orsDirections.calculate({
+                coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
+                profile: "driving-car",
+                extra_info: ["waytype", "steepness"],
+                format: "json",
+                api_version: 'v2',
+              })
+                .then(function(json) {
+                    // Add your own result handling here
+                    let response = JSON.stringify(json, null, "\t")
+                    console.log(response);
+                    response = response.replace(/(\n)/g, '<br>');
+                    response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+                    node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+                })
+                .catch(function(err) {
+                    let response = JSON.stringify(err, null, "\t")
+                    console.error(response);
+                    response = response.replace(/(\n)/g, '<br>');
+                    response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+                    node.innerHTML = "<h3>Error</h3><p>" + response + "</p>";
+                });
+            }
+
+          };
+
+        </script>
+      </div>
+
+    </section>
+    </div>
+  </body>
+</html>

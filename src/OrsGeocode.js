@@ -1,11 +1,6 @@
 import request from 'superagent'
 import Promise from 'bluebird'
-import Joi from 'joi'
 import OrsUtil from './OrsUtil'
-
-import geocodeSchema from './schemas/geocode/OrsGeocodeSchema'
-import reverseGeocodeSchema from './schemas/geocode/OrsReverseGeocodeSchema'
-import structuredGeocodeSchema from './schemas/geocode/OrsStructuredGeocodeSchema'
 
 const orsUtil = new OrsUtil()
 
@@ -15,7 +10,8 @@ class OrsGeocode {
     if ('api_key' in args) {
       this.args.api_key = args.api_key
     } else {
-      console.log('Please add your openrouteservice api_key...')
+      // eslint-disable-next-line no-console
+      console.error('Please add your openrouteservice api_key...')
     }
 
     this.lookupParameter = {
@@ -121,6 +117,7 @@ class OrsGeocode {
     for (const key in args) {
       const val = args[key]
       if (key === 'host') continue
+      if (key === 'service') continue
       else if (key === 'api_version') continue
       else if (key === 'mime_type') continue
       else queryString += this.lookupParameter[key](key, val)
@@ -128,53 +125,58 @@ class OrsGeocode {
     return queryString
   }
 
-  geocodePromise(schema) {
+  geocodePromise() {
+    if (!this.args.host) {
+      this.args.host = 'https://api.openrouteservice.org'
+    }
     const that = this
     return new Promise(function(resolve, reject) {
-      Joi.validate(that.args, schema, function(err, value) {
-        console.log(true, err, value)
+      const timeout = 5000
 
-        if (err !== null) reject(new Error(err))
+      // Use old API via GET
+      let url = orsUtil.prepareUrl(that.args)
 
-        const timeout = 5000
-        that.args = value
+      // Add url query string from args
+      url += '?' + that.getParametersAsQueryString(that.args)
 
-        // use old API via GET
-        let url = that.args.host + '?'
-
-        url += that.getParametersAsQueryString(that.args)
-
-        request
-          .get(url)
-          .accept(that.args.mime_type)
-          .timeout(timeout)
-          .end(function(err, res) {
-            //console.log(res.body, res.headers, res.status)
-            if (err || !res.ok) {
-              console.log(err)
-              //reject(ghUtil.extractError(res, url));
-              reject(new Error(err))
-            } else if (res) {
-              resolve(res.body)
-            }
-          })
-      })
+      request
+        .get(url)
+        .accept(that.args.mime_type)
+        .timeout(timeout)
+        .end(function(err, res) {
+          if (err || !res.ok) {
+            // eslint-disable-next-line no-console
+            console.error(err)
+            reject(new Error(err))
+          } else if (res) {
+            resolve(res.body)
+          }
+        })
     })
   }
 
   geocode(reqArgs) {
+    if (!reqArgs.service) {
+      reqArgs.service = 'geocode/search'
+    }
     orsUtil.copyProperties(reqArgs, this.args)
-    return this.geocodePromise(geocodeSchema)
+    return this.geocodePromise()
   }
 
   reverseGeocode(reqArgs) {
+    if (!reqArgs.service) {
+      reqArgs.service = 'geocode/reverse'
+    }
     orsUtil.copyProperties(reqArgs, this.args)
-    return this.geocodePromise(reverseGeocodeSchema)
+    return this.geocodePromise()
   }
 
   structuredGeocode(reqArgs) {
+    if (!reqArgs.service) {
+      reqArgs.service = 'geocode/search/structured'
+    }
     orsUtil.copyProperties(reqArgs, this.args)
-    return this.geocodePromise(structuredGeocodeSchema)
+    return this.geocodePromise()
   }
 }
 
