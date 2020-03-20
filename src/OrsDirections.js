@@ -35,6 +35,9 @@ class OrsDirections {
   }
 
   getBody(args) {
+    if (args.options && typeof args.options !== 'object') {
+      args.options = JSON.parse(args.options)
+    }
     let options = {}
 
     if (this.meta.profile == 'driving-hgv') {

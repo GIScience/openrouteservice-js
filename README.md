@@ -11,7 +11,7 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 - Pois (points of interest)
 - Elevation (linestring or point)
 
-See the examples in the [examples folder](examples/index.html)
+See the examples in the [examples folder](examples)
 
 *Note:* In order to use this client, you have to register for a token at [openrouteservice](https://openrouteservice.org). To understand the features of openrouteservice, please don't forget to read the docs. For visualization purposes on the map please use [openrouteservice maps](https://maps.openrouteservice.org).
 
