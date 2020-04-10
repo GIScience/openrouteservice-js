@@ -34,7 +34,7 @@ Install the library with npm:
 
 ## Or build the distribution file to use in your browser
 
-```npm run bundleProduction```
+```npm run browserBundleProduction```
 
 This will be saved to `openrouteservice-js/dist/ors-js-client.js`.
 
