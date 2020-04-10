@@ -103,7 +103,7 @@ class OrsDirections {
           if (err || !res.ok) {
             reject(err)
           } else if (res) {
-            resolve(res.body)
+            resolve(res.body || res.text)
           }
         })
     })
