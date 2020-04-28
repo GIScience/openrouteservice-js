@@ -42,8 +42,6 @@ class OrsDirections {
 
     if (this.meta.profile == 'driving-hgv') {
       options.vehicle_type = 'hgv'
-    } else if (this.meta.profile == 'wheelchair') {
-      options.vehicle_type = 'wheelchair'
     }
 
     if (args.restrictions) {
