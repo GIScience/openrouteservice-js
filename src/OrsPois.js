@@ -45,7 +45,7 @@ class OrsPois {
       this.args.service = 'pois'
     }
     // the request arg is required by the API as part of the body
-    this.args.request = this.args.service || 'pois'
+    this.args.request = this.args.request || 'pois'
 
     if (!this.args.host) {
       this.args.host = 'https://api.openrouteservice.org'
@@ -55,6 +55,9 @@ class OrsPois {
       const timeout = 5000
 
       let url = orsUtil.prepareUrl(that.args)
+
+      url += url.indexOf('?') > -1 ? '&' : '?'
+      url += `api_key=${that.args.api_key}`
 
       if (that.args.service) {
         delete that.args.service
