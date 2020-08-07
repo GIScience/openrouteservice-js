@@ -1,6 +1,7 @@
 import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
+import Constants from './constants'
 
 const orsUtil = new OrsUtil()
 
@@ -9,17 +10,24 @@ class OrsDirections {
     this.requestSettings = null
     this.args = {}
     this.meta = null
-    if ('api_key' in args) {
-      this.args.api_key = args.api_key
+    if (Constants.propNames.apiKey in args) {
+      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
       // eslint-disable-next-line no-console
-      console.error('Please add your openrouteservice api_key..')
+      console.error(Constants.missingAPIKeyMsg)
+    }
+
+    if (Constants.propNames.host in args) {
+      this.args[Constants.propNames.host] = args[Constants.propNames.host]
+    }
+    if (Constants.propNames.service in args) {
+      this.args[Constants.propNames.service] = args[Constants.propNames.service]
     }
   }
 
   clear() {
     for (let variable in this.args) {
-      if (variable !== 'api_key') delete this.args[variable]
+      if (variable !== Constants.apiKeyPropName) delete this.args[variable]
     }
   }
 
@@ -69,14 +77,9 @@ class OrsDirections {
   }
 
   calculate(reqArgs) {
-    if (!this.args.service) {
-      this.args.service = 'directions'
-    }
-    if (!this.args.host) {
-      this.args.host = 'https://api.openrouteservice.org'
-    }
-    if (!this.args.api_version) {
-      this.args.api_version = 'v2'
+    orsUtil.setRequestDefaults(this.args, reqArgs, true)
+    if (!this.args[Constants.propNames.service]) {
+      this.args[Constants.propNames.service] = 'directions'
     }
     orsUtil.copyProperties(reqArgs, this.args)
 
@@ -91,10 +94,11 @@ class OrsDirections {
       let url = orsUtil.prepareUrl(that.meta)
 
       const postBody = that.getBody(that.httpArgs)
+      let authorization = that.meta[Constants.propNames.apiKey]
       request
         .post(url)
         .send(postBody)
-        .set('Authorization', that.meta.apiKey)
+        .set('Authorization', authorization)
         //.accept(that.meta.mimeType)
         .timeout(timeout)
         .end(function(err, res) {

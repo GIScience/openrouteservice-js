@@ -1,6 +1,7 @@
 import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
+import Constants from './constants'
 
 const orsUtil = new OrsUtil()
 
@@ -8,23 +9,19 @@ class OrsMatrix {
   constructor(args) {
     this.meta = null
     this.args = {}
-    if ('api_key' in args) {
-      this.args.api_key = args.api_key
+    if (Constants.propNames.apiKey in args) {
+      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
       // eslint-disable-next-line no-console
-      console.log('Please add your openrouteservice api_key..')
+      console.log(Constants.missingAPIKeyMsg)
     }
   }
 
   calculate(reqArgs) {
-    if (!reqArgs.service) {
-      reqArgs.service = 'matrix'
-    }
-    if (!reqArgs.host) {
-      reqArgs.host = 'https://api.openrouteservice.org'
-    }
-    if (!reqArgs.api_version) {
-      reqArgs.api_version = 'v2'
+    orsUtil.setRequestDefaults(this.args, reqArgs, true)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+      this.args[Constants.propNames.service] = 'matrix'
     }
 
     orsUtil.copyProperties(reqArgs, this.args)
@@ -33,18 +30,20 @@ class OrsMatrix {
     return new Promise(function(resolve, reject) {
       const timeout = 10000
 
-      if (that.args.api_version === 'v2') {
+      // eslint-disable-next-line prettier/prettier
+      if (that.args[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
         if (that.meta == null) {
           that.meta = orsUtil.prepareMeta(that.args)
         }
         that.httpArgs = orsUtil.prepareRequest(that.args)
 
         let url = orsUtil.prepareUrl(that.meta)
+        let authorization = that.meta[Constants.propNames.apiKey]
 
         request
           .post(url)
           .send(that.httpArgs)
-          .set('Authorization', that.meta.apiKey)
+          .set('Authorization', authorization)
           // .set('Content-Type', that.meta.mimeType)
           // .accept('application/json')
           .timeout(timeout)
@@ -57,7 +56,7 @@ class OrsMatrix {
           })
       } else {
         // eslint-disable-next-line no-console
-        console.error('Please use ORS API v2')
+        console.error(Constants.useAPIV2Msg)
       }
     })
   }

@@ -23,8 +23,7 @@
 
               Elevation.lineElevation({
                 format_in:"encodedpolyline",
-                geometry:"u`rgFswjpAKD",
-                api_version: 'v2'
+                geometry:"u`rgFswjpAKD"
               })
                 .then(function(json) {
                   let response = JSON.stringify(json, null, "\t")
@@ -34,8 +33,8 @@
                   node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
                 })
                 .catch(function(err) {
-                  let response = JSON.stringify(err, null, "\t")
-                  console.log(response);
+                  let response = err.message
+                  console.log(err.stack);
                   response = response.replace(/(\n)/g, '<br>');
                   response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
                   node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";

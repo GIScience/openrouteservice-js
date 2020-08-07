@@ -1,6 +1,7 @@
 import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
+import Constants from './constants'
 
 const orsUtil = new OrsUtil()
 
@@ -8,11 +9,18 @@ class OrsIsochrones {
   constructor(args) {
     this.meta = null
     this.args = {}
-    if ('api_key' in args) {
-      this.args.api_key = args.api_key
+    if (Constants.propNames.apiKey in args) {
+      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
       // eslint-disable-next-line no-console
-      console.log('Please add your openrouteservice api_key..')
+      console.log(Constants.missingAPIKeyMsg)
+    }
+
+    if (Constants.propNames.host in args) {
+      this.args[Constants.propNames.host] = args[Constants.propNames.host]
+    }
+    if (Constants.propNames.service in args) {
+      this.args[Constants.propNames.service] = args[Constants.propNames.service]
     }
   }
 
@@ -50,14 +58,10 @@ class OrsIsochrones {
   }
 
   calculate(reqArgs) {
-    if (!reqArgs.service) {
+    orsUtil.setRequestDefaults(this.args, reqArgs, true)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'isochrones'
-    }
-    if (!reqArgs.host) {
-      reqArgs.host = 'https://api.openrouteservice.org'
-    }
-    if (!reqArgs.api_version) {
-      reqArgs.api_version = 'v2'
     }
 
     orsUtil.copyProperties(reqArgs, this.args)
@@ -65,7 +69,8 @@ class OrsIsochrones {
 
     return new Promise(function(resolve, reject) {
       const timeout = 10000
-      if (that.args.api_version === 'v2') {
+      // eslint-disable-next-line prettier/prettier
+      if (that.args[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
         // meta should be generated once that subsequent requests work
         if (that.meta == null) {
           that.meta = orsUtil.prepareMeta(that.args)
@@ -74,11 +79,12 @@ class OrsIsochrones {
         let url = orsUtil.prepareUrl(that.meta)
 
         const postBody = that.getBody(that.httpArgs)
+        let authorization = that.meta[Constants.propNames.apiKey]
 
         request
           .post(url)
           .send(postBody)
-          .set('Authorization', that.meta.apiKey)
+          .set('Authorization', authorization)
           // .set('Content-Type', that.meta.mimeType)
           // .accept('application/geo+json')
           .timeout(timeout)
@@ -93,7 +99,7 @@ class OrsIsochrones {
           })
       } else {
         // eslint-disable-next-line no-console
-        console.error('Please use ORS API v2')
+        console.error(Constants.useAPIV2Msg)
       }
     })
   }

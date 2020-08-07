@@ -1,17 +1,24 @@
 import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
+import Constants from './constants'
 
 const orsUtil = new OrsUtil()
 
 class OrsGeocode {
   constructor(args) {
     this.args = {}
-    if ('api_key' in args) {
+    if (Constants.apiKeyPropName in args) {
       this.args.api_key = args.api_key
     } else {
       // eslint-disable-next-line no-console
-      console.error('Please add your openrouteservice api_key...')
+      console.error(Constants.missingAPIKeyMsg)
+    }
+    if (Constants.propNames.host in args) {
+      this.args[Constants.propNames.host] = args[Constants.propNames.host]
+    }
+    if (Constants.propNames.service in args) {
+      this.args[Constants.propNames.service] = args[Constants.propNames.service]
     }
 
     this.lookupParameter = {
@@ -108,7 +115,7 @@ class OrsGeocode {
 
   clear() {
     for (let variable in this.args) {
-      if (variable !== 'api_key') delete this.args[variable]
+      if (variable !== Constants.apiKeyPropName) delete this.args[variable]
     }
   }
 
@@ -116,19 +123,14 @@ class OrsGeocode {
     let queryString = ''
     for (const key in args) {
       const val = args[key]
-      if (key === 'host') continue
-      if (key === 'service') continue
-      else if (key === 'api_version') continue
-      else if (key === 'mime_type') continue
-      else queryString += this.lookupParameter[key](key, val)
+      if (Constants.baseUrlConstituents.indexOf(key) > -1) {
+        continue
+      } else queryString += this.lookupParameter[key](key, val)
     }
     return queryString
   }
 
   geocodePromise() {
-    if (!this.args.host) {
-      this.args.host = 'https://api.openrouteservice.org'
-    }
     const that = this
     return new Promise(function(resolve, reject) {
       const timeout = 5000
@@ -141,7 +143,7 @@ class OrsGeocode {
 
       request
         .get(url)
-        .accept(that.args.mime_type)
+        .accept(that.args[Constants.propNames.mimeType])
         .timeout(timeout)
         .end(function(err, res) {
           if (err || !res.ok) {
@@ -156,7 +158,9 @@ class OrsGeocode {
   }
 
   geocode(reqArgs) {
-    if (!reqArgs.service) {
+    orsUtil.setRequestDefaults(this.args, reqArgs)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search'
     }
     orsUtil.copyProperties(reqArgs, this.args)
@@ -164,7 +168,9 @@ class OrsGeocode {
   }
 
   reverseGeocode(reqArgs) {
-    if (!reqArgs.service) {
+    orsUtil.setRequestDefaults(this.args, reqArgs)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/reverse'
     }
     orsUtil.copyProperties(reqArgs, this.args)
@@ -172,7 +178,9 @@ class OrsGeocode {
   }
 
   structuredGeocode(reqArgs) {
-    if (!reqArgs.service) {
+    orsUtil.setRequestDefaults(this.args, reqArgs)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search/structured'
     }
     orsUtil.copyProperties(reqArgs, this.args)

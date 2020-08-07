@@ -1,3 +1,4 @@
+import Constants from './constants'
 class OrsUtil {
   constructor() {}
 
@@ -51,37 +52,57 @@ class OrsUtil {
 
   prepareMeta(args) {
     return {
-      host: args.host,
-      apiVersion: args.api_version,
-      profile: args.profile,
-      format: args.format,
-      service: args.service,
-      apiKey: args.api_key,
-      mimeType: args.mime_type
+      host: args[Constants.propNames.host],
+      api_version: args[Constants.propNames.apiVersion],
+      profile: args[Constants.propNames.profile],
+      format: args[Constants.propNames.format],
+      service: args[Constants.propNames.service],
+      api_key: args[Constants.propNames.apiKey],
+      mime_type: args[Constants.propNames.mimeType]
     }
   }
 
   prepareRequest(args) {
-    delete args.mime_type
-    delete args.host
-    delete args.api_version
-    delete args.profile
-    delete args.format
-    delete args.service
-    delete args.api_key
+    delete args[Constants.propNames.mimeType]
+    delete args[Constants.propNames.host]
+    delete args[Constants.propNames.apiVersion]
+    delete args[Constants.propNames.service]
+    delete args[Constants.propNames.apiKey]
+    delete args[Constants.propNames.profile]
+    delete args[Constants.propNames.format]
     return { ...args }
   }
 
+  /**
+   * Prepare the request url based on url constituents
+   * @param {Objet} args
+   */
   prepareUrl(args) {
-    let url = args.host || ''
+    let url = ''
 
     // make path
-    let urlPathParts = [
-      args.apiVersion,
-      args.service,
-      args.profile,
-      args.format
-    ]
+    let urlPathParts = []
+
+    // If the service already defines the path
+    // to the request service we have to add
+    // only yhe profile and the format to the url
+    // eslint-disable-next-line prettier/prettier
+    if (args[Constants.propNames.service] && args[Constants.propNames.service].indexOf('http') === 0) {
+      url = args[Constants.propNames.service]
+      urlPathParts = [
+        args[Constants.propNames.profile],
+        args[Constants.propNames.format]
+      ]
+    } else {
+      // if not, build the url from scratch
+      url = args[Constants.propNames.host]
+      urlPathParts = [
+        args[Constants.propNames.apiVersion],
+        args[Constants.propNames.service],
+        args[Constants.propNames.profile],
+        args[Constants.propNames.format]
+      ]
+    }
 
     let urlPath = '/'
     let counter = 0
@@ -104,6 +125,34 @@ class OrsUtil {
       url = url.slice(0, -1)
     }
     return url
+  }
+
+  /**
+   * Set defaults for a request comparing and posibly overwritting instance args
+   * @param {Object} instanceArgs
+   * @param {Object} requestArgs
+   * @param {Boolean} setAPIVersion
+   */
+  setRequestDefaults(instanceArgs, requestArgs, setAPIVersion = false) {
+    if (requestArgs[Constants.propNames.service]) {
+      // eslint-disable-next-line prettier/prettier
+      instanceArgs[Constants.propNames.service] = requestArgs[Constants.propNames.service]
+    }
+    if (requestArgs[Constants.propNames.host]) {
+      // eslint-disable-next-line prettier/prettier
+      instanceArgs[Constants.propNames.host] = requestArgs[Constants.propNames.host]
+    }
+    if (!instanceArgs[Constants.propNames.host]) {
+      instanceArgs[Constants.propNames.host] = Constants.defaultHost
+    }
+    if (setAPIVersion === true) {
+      if (!requestArgs[Constants.propNames.apiVersion]) {
+        requestArgs.api_version = Constants.defaultAPIVersion
+      }
+      if (!requestArgs[Constants.propNames.apiVersion]) {
+        requestArgs.api_version = Constants.defaultAPIVersion
+      }
+    }
   }
 }
 
