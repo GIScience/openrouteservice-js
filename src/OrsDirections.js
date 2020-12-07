@@ -52,7 +52,7 @@ class OrsDirections {
       if (args.options && args.options.vehicle_type) {
         options.vehicle_type = args.options.vehicle_type
         // round trip does not support vehicle type
-      } else if (!args.options.round_trip) {
+      } else if (!args.options || !args.options.round_trip) {
         options.vehicle_type = 'hgv'
       }
     }
