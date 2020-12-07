@@ -51,7 +51,8 @@ class OrsDirections {
     if (this.meta.profile === 'driving-hgv') {
       if (args.options && args.options.vehicle_type) {
         options.vehicle_type = args.options.vehicle_type
-      } else {
+        // round trip does not support vehicle type
+      } else if (!args.options.round_trip) {
         options.vehicle_type = 'hgv'
       }
     }
