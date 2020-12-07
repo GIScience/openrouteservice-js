@@ -63,7 +63,6 @@ class OrsGeocode {
         for (let source in val) {
           urlParams += source + ','
         }
-        urlParams
         return urlParams
       },
       layers: function(key, val) {
@@ -76,7 +75,6 @@ class OrsGeocode {
           urlParams += val[key]
           counter++
         }
-        urlParams
         return urlParams
       },
       boundary_country: function(key, val) {

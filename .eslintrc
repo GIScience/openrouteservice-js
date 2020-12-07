@@ -5,7 +5,9 @@
     "prettier/prettier": "error",
     "quotes": ["error", "single"],
     "no-debugger": "off",
+    "curly": "warn",
     "no-console": "warn",
+    "no-prototype-builtins": "warn",
     "no-multi-spaces": "warn",
     "space-before-function-paren": [
       "error",

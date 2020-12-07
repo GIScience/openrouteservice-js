@@ -52,7 +52,7 @@ class OrsElevation {
         .set('Authorization', authorization)
         .timeout(timeout)
         .end(function(err, res) {
-          //console.log(res.body, res.headers, res.status)
+          // console.log(res.body, res.headers, res.status)
           if (err || !res.ok) {
             // eslint-disable-next-line no-console
             console.error(err)

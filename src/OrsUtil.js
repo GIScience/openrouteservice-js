@@ -1,10 +1,9 @@
 import Constants from './constants'
 class OrsUtil {
-  constructor() {}
-
   clone(obj) {
     let newObj = {}
     for (var prop in obj) {
+      // eslint-disable-next-line no-prototype-builtins
       if (obj.hasOwnProperty(prop)) {
         newObj[prop] = obj[prop]
       }
@@ -16,6 +15,7 @@ class OrsUtil {
     if (!args) return argsInto
 
     for (var prop in args) {
+      // eslint-disable-next-line no-prototype-builtins
       if (args.hasOwnProperty(prop) && args[prop] !== undefined) {
         argsInto[prop] = args[prop]
       }

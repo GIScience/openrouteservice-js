@@ -48,8 +48,12 @@ class OrsDirections {
     }
     let options = {}
 
-    if (this.meta.profile == 'driving-hgv') {
-      options.vehicle_type = 'hgv'
+    if (this.meta.profile === 'driving-hgv') {
+      if (args.options && args.options.vehicle_type) {
+        options.vehicle_type = args.options.vehicle_type
+      } else {
+        options.vehicle_type = 'hgv'
+      }
     }
 
     if (args.restrictions) {
@@ -99,7 +103,7 @@ class OrsDirections {
         .post(url)
         .send(postBody)
         .set('Authorization', authorization)
-        //.accept(that.meta.mimeType)
+        // .accept(that.meta.mimeType)
         .timeout(timeout)
         .end(function(err, res) {
           if (err || !res.ok) {
