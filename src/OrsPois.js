@@ -1,23 +1,30 @@
 import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
+import Constants from './constants'
 
 const orsUtil = new OrsUtil()
 
 class OrsPois {
   constructor(args) {
     this.args = {}
-    if ('api_key' in args) {
-      this.args.api_key = args.api_key
+    if (Constants.propNames.apiKey in args) {
+      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
       // eslint-disable-next-line no-console
-      console.error('Please add your openrouteservice api_key...')
+      console.error(Constants.missingAPIKeyMsg)
+    }
+    if (Constants.propNames.host in args) {
+      this.args[Constants.propNames.host] = args[Constants.propNames.host]
+    }
+    if (Constants.propNames.service in args) {
+      this.args[Constants.propNames.service] = args[Constants.propNames.service]
     }
   }
 
   clear() {
     for (let variable in this.args) {
-      if (variable !== 'api_key') delete this.args[variable]
+      if (variable !== Constants.propNames.apiKey) delete this.args[variable]
     }
   }
 
@@ -25,12 +32,7 @@ class OrsPois {
     let payload = {}
 
     for (const key in args) {
-      if (
-        key === 'host' ||
-        key === 'api_version' ||
-        key === 'mime_type' ||
-        key === 'api_key'
-      ) {
+      if (Constants.baseUrlConstituents.indexOf(key) > -1) {
         continue
       } else {
         payload[key] = args[key]
@@ -41,26 +43,26 @@ class OrsPois {
 
   poisPromise() {
     // the service arg is used to build the target url
-    if (!this.args.service) {
-      this.args.service = 'pois'
+    if (!this.args[Constants.propNames.service]) {
+      this.args[Constants.propNames.service] = 'pois'
     }
     // the request arg is required by the API as part of the body
-    this.args.request = this.args.service || 'pois'
+    this.args.request = this.args.request || 'pois'
 
-    if (!this.args.host) {
-      this.args.host = 'https://api.openrouteservice.org'
-    }
     const that = this
     return new Promise(function(resolve, reject) {
       const timeout = 5000
 
       let url = orsUtil.prepareUrl(that.args)
 
-      if (that.args.service) {
-        delete that.args.service
+      url += url.indexOf('?') > -1 ? '&' : '?'
+
+      if (that.args[Constants.propNames.service]) {
+        delete that.args[Constants.propNames.service]
       }
 
       const payload = that.generatePayload(that.args)
+      let authorization = that.args[Constants.propNames.apiKey]
 
       let orsRequest = request
         .post(url)
@@ -68,17 +70,18 @@ class OrsPois {
         .set('Authorization', authorization)
         .timeout(timeout)
 
-        for (let key in that.customHeaders) {
-          orsRequest.set(key, that.customHeaders[key])
+      for (let key in that.customHeaders) {
+        orsRequest.set(key, that.customHeaders[key])
+      }
+      orsRequest.end(function(err, res) {
+        if (err || !res.ok) {
+          // eslint-disable-next-line no-console
+          console.error(err)
+          reject(err)
+        } else if (res) {
+          resolve(res.body || res.text)
         }
-        orsRequest.end(function(err, res) {
-          if (err || !res.ok) {
-            console.error(err)
-            reject(err)
-          } else if (res) {
-            resolve(res.body || res.text)
-          }
-        })
+      })
     })
   }
 

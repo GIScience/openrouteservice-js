@@ -18,7 +18,7 @@ const Openrouteservice = {
   Elevation: OrsElevation
 }
 
-// define Openrouteservice for Node module pattern loaders, including Browserify
+// Define Openrouteservice for Node module pattern loaders, including Browserify
 if (typeof module === 'object' && typeof module.exports === 'object') {
   module.exports = Openrouteservice
   // define Openrouteservice as an AMD module
@@ -31,3 +31,5 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
 if (typeof window !== 'undefined') {
   window.Openrouteservice = Openrouteservice
 }
+
+export default Openrouteservice

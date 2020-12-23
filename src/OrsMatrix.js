@@ -1,6 +1,7 @@
 import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
+import Constants from './constants'
 
 const orsUtil = new OrsUtil()
 
@@ -8,11 +9,11 @@ class OrsMatrix {
   constructor(args) {
     this.meta = null
     this.args = {}
-    if ('api_key' in args) {
-      this.args.api_key = args.api_key
+    if (Constants.propNames.apiKey in args) {
+      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
       // eslint-disable-next-line no-console
-      console.log('Please add your openrouteservice api_key..')
+      console.log(Constants.missingAPIKeyMsg)
     }
   }
 
@@ -35,34 +36,37 @@ class OrsMatrix {
     return new Promise(function(resolve, reject) {
       const timeout = 10000
 
-      if (that.args.api_version === 'v2') {
+      // eslint-disable-next-line prettier/prettier
+      if (that.args[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
         if (that.meta == null) {
           that.meta = orsUtil.prepareMeta(that.args)
         }
         that.httpArgs = orsUtil.prepareRequest(that.args)
 
         let url = orsUtil.prepareUrl(that.meta)
+        let authorization = that.meta[Constants.propNames.apiKey]
 
         let orsRequest = request
           .post(url)
           .send(that.httpArgs)
           .set('Authorization', authorization)
           .timeout(timeout)
-          
-          for (let key in that.customHeaders) {
-            orsRequest.set(key, that.customHeaders[key])
+
+        for (let key in that.customHeaders) {
+          orsRequest.set(key, that.customHeaders[key])
+        }
+        orsRequest.end(function(err, res) {
+          if (err || !res.ok) {
+            // eslint-disable-next-line no-console
+            console.error(err)
+            reject(err)
+          } else if (res) {
+            resolve(res.body || res.text)
           }
-          orsRequest.end(function(err, res) {
-            if (err || !res.ok) {
-              console.error(err)
-              reject(err)
-            } else if (res) {
-              resolve(res.body || res.text)
-            }
-          })
+        })
       } else {
         // eslint-disable-next-line no-console
-        console.error('Please use ORS API v2')
+        console.error(Constants.useAPIV2Msg)
       }
     })
   }

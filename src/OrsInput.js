@@ -42,8 +42,9 @@ class OrsInput {
   }
 
   toString() {
-    if (this.lat !== undefined && this.lng !== undefined)
+    if (this.lat !== undefined && this.lng !== undefined) {
       return this.lat + ',' + this.lng
+    }
     return undefined
   }
 }

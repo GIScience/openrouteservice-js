@@ -1,6 +1,7 @@
 import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
+import Constants from './constants'
 
 const orsUtil = new OrsUtil()
 
@@ -9,17 +10,24 @@ class OrsDirections {
     this.requestSettings = null
     this.args = {}
     this.meta = null
-    if ('api_key' in args) {
-      this.args.api_key = args.api_key
+    if (Constants.propNames.apiKey in args) {
+      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
       // eslint-disable-next-line no-console
-      console.error('Please add your openrouteservice api_key..')
+      console.error(Constants.missingAPIKeyMsg)
+    }
+
+    if (Constants.propNames.host in args) {
+      this.args[Constants.propNames.host] = args[Constants.propNames.host]
+    }
+    if (Constants.propNames.service in args) {
+      this.args[Constants.propNames.service] = args[Constants.propNames.service]
     }
   }
 
   clear() {
     for (let variable in this.args) {
-      if (variable !== 'api_key') delete this.args[variable]
+      if (variable !== Constants.apiKeyPropName) delete this.args[variable]
     }
   }
 
@@ -40,10 +48,13 @@ class OrsDirections {
     }
     let options = {}
 
-    if (this.meta.profile == 'driving-hgv') {
-      options.vehicle_type = 'hgv'
-    } else if (this.meta.profile == 'wheelchair') {
-      options.vehicle_type = 'wheelchair'
+    if (this.meta.profile === 'driving-hgv') {
+      if (args.options && args.options.vehicle_type) {
+        options.vehicle_type = args.options.vehicle_type
+        // round trip does not support vehicle type
+      } else if (!args.options || !args.options.round_trip) {
+        options.vehicle_type = 'hgv'
+      }
     }
 
     if (args.restrictions) {
@@ -77,7 +88,6 @@ class OrsDirections {
       this.customHeaders = reqArgs.customHeaders
       delete reqArgs.customHeaders
     }
-
     orsUtil.setRequestDefaults(this.args, reqArgs, true)
     if (!this.args[Constants.propNames.service]) {
       this.args[Constants.propNames.service] = 'directions'
@@ -108,6 +118,7 @@ class OrsDirections {
       }
       orsRequest.end(function(err, res) {
         if (err || !res.ok) {
+          // eslint-disable-next-line no-console
           console.error(err)
           reject(err)
         } else if (res) {
