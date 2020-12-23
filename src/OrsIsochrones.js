@@ -36,7 +36,9 @@ class OrsIsochrones {
 
     if (args.restrictions) {
       options.profile_params = {
-        restrictions: { ...args.restrictions }
+        restrictions: {
+          ...args.restrictions
+        }
       }
       delete args.restrictions
     }
@@ -46,18 +48,31 @@ class OrsIsochrones {
     }
 
     if (args.avoid_polygons) {
-      options.avoid_polygons = { ...args.avoid_polygons }
+      options.avoid_polygons = {
+        ...args.avoid_polygons
+      }
       delete args.avoid_polygons
     }
 
     if (Object.keys(options).length > 0) {
-      return { ...args, options: options }
+      return {
+        ...args,
+        options: options
+      }
     } else {
-      return { ...args }
+      return {
+        ...args
+      }
     }
   }
 
   calculate(reqArgs) {
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
+    }
     orsUtil.setRequestDefaults(this.args, reqArgs, true)
     // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
@@ -81,22 +96,24 @@ class OrsIsochrones {
         const postBody = that.getBody(that.httpArgs)
         let authorization = that.meta[Constants.propNames.apiKey]
 
-        request
+        let orsRequest = request
           .post(url)
           .send(postBody)
           .set('Authorization', authorization)
-          // .set('Content-Type', that.meta.mimeType)
-          // .accept('application/geo+json')
           .timeout(timeout)
-          .end(function(err, res) {
-            if (err || !res.ok) {
-              // eslint-disable-next-line no-console
-              console.error(err)
-              reject(err)
-            } else if (res) {
-              resolve(res.body)
-            }
-          })
+
+        for (let key in that.customHeaders) {
+          orsRequest.set(key, that.customHeaders[key])
+        }
+        orsRequest.end(function(err, res) {
+          if (err || !res.ok) {
+            // eslint-disable-next-line no-console
+            console.error(err)
+            reject(err)
+          } else if (res) {
+            resolve(res.body || res.text)
+          }
+        })
       } else {
         // eslint-disable-next-line no-console
         console.error(Constants.useAPIV2Msg)

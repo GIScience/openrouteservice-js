@@ -45,26 +45,35 @@ class OrsElevation {
 
       const payload = that.generatePayload(that.args)
       let authorization = that.args[Constants.propNames.apiKey]
-      request
+      let orsRequest = request
         .post(url)
         .send(payload)
         .accept(that.args[Constants.propNames.mimeType])
         .set('Authorization', authorization)
         .timeout(timeout)
-        .end(function(err, res) {
-          // console.log(res.body, res.headers, res.status)
-          if (err || !res.ok) {
-            // eslint-disable-next-line no-console
-            console.error(err)
-            reject(new Error(err))
-          } else if (res) {
-            resolve(res.body)
-          }
-        })
+      // .accept(that.meta.mimeType)
+
+      for (let key in that.customHeaders) {
+        orsRequest.set(key, that.customHeaders[key])
+      }
+      orsRequest.end(function(err, res) {
+        if (err || !res.ok) {
+          // eslint-disable-next-line no-console
+          console.error(err)
+          reject(err)
+        } else if (res) {
+          resolve(res.body || res.text)
+        }
+      })
     })
   }
 
   lineElevation(reqArgs) {
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
+    }
     orsUtil.setRequestDefaults(this.args, reqArgs)
     // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
@@ -75,6 +84,13 @@ class OrsElevation {
   }
 
   pointElevation(reqArgs) {
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
+    }
+
     orsUtil.setRequestDefaults(this.args, reqArgs)
     // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
