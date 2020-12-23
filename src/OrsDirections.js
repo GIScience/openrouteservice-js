@@ -71,14 +71,16 @@ class OrsDirections {
   }
 
   calculate(reqArgs) {
-    if (!this.args.service) {
-      this.args.service = 'directions'
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
     }
-    if (!this.args.host) {
-      this.args.host = 'https://api.openrouteservice.org'
-    }
-    if (!this.args.api_version) {
-      this.args.api_version = 'v2'
+
+    orsUtil.setRequestDefaults(this.args, reqArgs, true)
+    if (!this.args[Constants.propNames.service]) {
+      this.args[Constants.propNames.service] = 'directions'
     }
     orsUtil.copyProperties(reqArgs, this.args)
 
@@ -93,19 +95,25 @@ class OrsDirections {
       let url = orsUtil.prepareUrl(that.meta)
 
       const postBody = that.getBody(that.httpArgs)
-      request
+      let authorization = that.meta[Constants.propNames.apiKey]
+      let orsRequest = request
         .post(url)
         .send(postBody)
-        .set('Authorization', that.meta.apiKey)
-        //.accept(that.meta.mimeType)
+        .set('Authorization', authorization)
         .timeout(timeout)
-        .end(function(err, res) {
-          if (err || !res.ok) {
-            reject(err)
-          } else if (res) {
-            resolve(res.body || res.text)
-          }
-        })
+      // .accept(that.meta.mimeType)
+
+      for (let key in that.customHeaders) {
+        orsRequest.set(key, that.customHeaders[key])
+      }
+      orsRequest.end(function(err, res) {
+        if (err || !res.ok) {
+          console.error(err)
+          reject(err)
+        } else if (res) {
+          resolve(res.body || res.text)
+        }
+      })
     })
   }
 }

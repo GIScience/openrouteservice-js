@@ -52,37 +52,57 @@ class OrsElevation {
       let url = orsUtil.prepareUrl(that.args)
 
       const payload = that.generatePayload(that.args)
-
-      request
+      let authorization = that.args[Constants.propNames.apiKey]
+      let orsRequest = request
         .post(url)
         .send(payload)
         .accept(that.args.mime_type)
         .set('Authorization', that.args.api_key)
         .timeout(timeout)
-        .end(function(err, res) {
-          //console.log(res.body, res.headers, res.status)
-          if (err || !res.ok) {
-            // eslint-disable-next-line no-console
-            console.error(err)
-            reject(new Error(err))
-          } else if (res) {
-            resolve(res.body)
-          }
-        })
+      // .accept(that.meta.mimeType)
+
+      for (let key in that.customHeaders) {
+        orsRequest.set(key, that.customHeaders[key])
+      }
+      orsRequest.end(function(err, res) {
+        if (err || !res.ok) {
+          console.error(err)
+          reject(err)
+        } else if (res) {
+          resolve(res.body || res.text)
+        }
+      })
     })
   }
 
   lineElevation(reqArgs) {
-    if (!reqArgs.service) {
-      reqArgs.service = 'elevation/line'
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
+    }
+    orsUtil.setRequestDefaults(this.args, reqArgs)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+      reqArgs[[Constants.propNames.service]] = 'elevation/line'
     }
     orsUtil.copyProperties(reqArgs, this.args)
     return this.elevationPromise()
   }
 
   pointElevation(reqArgs) {
-    if (!reqArgs.service) {
-      reqArgs.service = 'elevation/point'
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
+    }
+
+    orsUtil.setRequestDefaults(this.args, reqArgs)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+      reqArgs[[Constants.propNames.service]] = 'elevation/point'
     }
     orsUtil.copyProperties(reqArgs, this.args)
     return this.elevationPromise()

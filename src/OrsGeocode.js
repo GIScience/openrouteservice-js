@@ -139,24 +139,36 @@ class OrsGeocode {
       // Add url query string from args
       url += '?' + that.getParametersAsQueryString(that.args)
 
-      request
-        .get(url)
-        .accept(that.args.mime_type)
-        .timeout(timeout)
-        .end(function(err, res) {
-          if (err || !res.ok) {
-            // eslint-disable-next-line no-console
-            console.error(err)
-            reject(new Error(err))
-          } else if (res) {
-            resolve(res.body)
-          }
-        })
+      let orsRequest = request
+      .get(url)
+      .accept(that.args[Constants.propNames.mimeType])
+      .timeout(timeout)
+
+      for (let key in that.customHeaders) {
+        orsRequest.set(key, that.customHeaders[key])
+      }
+      orsRequest.end(function(err, res) {
+        if (err || !res.ok) {
+          console.error(err)
+          reject(err)
+        } else if (res) {
+          resolve(res.body || res.text)
+        }
+      })
     })
   }
 
   geocode(reqArgs) {
-    if (!reqArgs.service) {
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
+    }
+
+    orsUtil.setRequestDefaults(this.args, reqArgs)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search'
     }
     orsUtil.copyProperties(reqArgs, this.args)
@@ -164,7 +176,16 @@ class OrsGeocode {
   }
 
   reverseGeocode(reqArgs) {
-    if (!reqArgs.service) {
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
+    }
+
+    orsUtil.setRequestDefaults(this.args, reqArgs)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/reverse'
     }
     orsUtil.copyProperties(reqArgs, this.args)
@@ -172,7 +193,16 @@ class OrsGeocode {
   }
 
   structuredGeocode(reqArgs) {
-    if (!reqArgs.service) {
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
+    }
+
+    orsUtil.setRequestDefaults(this.args, reqArgs)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search/structured'
     }
     orsUtil.copyProperties(reqArgs, this.args)

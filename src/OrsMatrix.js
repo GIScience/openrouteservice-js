@@ -17,14 +17,16 @@ class OrsMatrix {
   }
 
   calculate(reqArgs) {
-    if (!reqArgs.service) {
-      reqArgs.service = 'matrix'
+    // Get custom header and remove from args
+    this.customHeaders = []
+    if (reqArgs.customHeaders) {
+      this.customHeaders = reqArgs.customHeaders
+      delete reqArgs.customHeaders
     }
-    if (!reqArgs.host) {
-      reqArgs.host = 'https://api.openrouteservice.org'
-    }
-    if (!reqArgs.api_version) {
-      reqArgs.api_version = 'v2'
+    orsUtil.setRequestDefaults(this.args, reqArgs, true)
+    // eslint-disable-next-line prettier/prettier
+    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+      this.args[Constants.propNames.service] = 'matrix'
     }
 
     orsUtil.copyProperties(reqArgs, this.args)
@@ -41,18 +43,21 @@ class OrsMatrix {
 
         let url = orsUtil.prepareUrl(that.meta)
 
-        request
+        let orsRequest = request
           .post(url)
           .send(that.httpArgs)
-          .set('Authorization', that.meta.apiKey)
-          // .set('Content-Type', that.meta.mimeType)
-          // .accept('application/json')
+          .set('Authorization', authorization)
           .timeout(timeout)
-          .end(function(err, res) {
+          
+          for (let key in that.customHeaders) {
+            orsRequest.set(key, that.customHeaders[key])
+          }
+          orsRequest.end(function(err, res) {
             if (err || !res.ok) {
+              console.error(err)
               reject(err)
             } else if (res) {
-              resolve(res.body)
+              resolve(res.body || res.text)
             }
           })
       } else {
