@@ -57,6 +57,10 @@ class OrsDirections {
       }
     }
 
+    if (args.options.avoid_polygons) {
+      options.avoid_polygons = args.options.avoid_polygons
+    }
+
     if (args.restrictions) {
       options.profile_params = {
         restrictions: { ...args.restrictions }
