@@ -57,10 +57,6 @@ class OrsDirections {
       }
     }
 
-    if (args.options.avoid_polygons) {
-      options.avoid_polygons = args.options.avoid_polygons
-    }
-
     if (args.restrictions) {
       options.profile_params = {
         restrictions: { ...args.restrictions }
@@ -73,7 +69,9 @@ class OrsDirections {
       delete args.avoidables
     }
 
-    if (args.avoid_polygons) {
+    if (args.options && args.options.avoid_polygons) {
+      options.avoid_polygons = args.options.avoid_polygons
+    } else if (args.avoid_polygons) {
       options.avoid_polygons = { ...args.avoid_polygons }
       delete args.avoid_polygons
     }
