@@ -46,41 +46,23 @@ class OrsDirections {
     if (args.options && typeof args.options !== 'object') {
       args.options = JSON.parse(args.options)
     }
-    let options = {}
 
-    if (this.meta.profile === 'driving-hgv') {
-      if (args.options && args.options.vehicle_type) {
-        options.vehicle_type = args.options.vehicle_type
-        // round trip does not support vehicle type
-      } else if (!args.options || !args.options.round_trip) {
-        options.vehicle_type = 'hgv'
-      }
+    if (args.options && args.options.vehicle_type === 'driving-hgv') {
+      args.options.vehicle_type = 'hgv'
     }
 
     if (args.restrictions) {
-      options.profile_params = {
+      args.options.profile_params = {
         restrictions: { ...args.restrictions }
       }
-      delete args.restrictions
+      delete args.options.restrictions
     }
 
     if (args.avoidables) {
-      options.avoid_features = [...args.avoidables]
+      args.options.avoid_features = [...args.avoidables]
       delete args.avoidables
     }
-
-    if (args.options && args.options.avoid_polygons) {
-      options.avoid_polygons = args.options.avoid_polygons
-    } else if (args.avoid_polygons) {
-      options.avoid_polygons = { ...args.avoid_polygons }
-      delete args.avoid_polygons
-    }
-
-    if (Object.keys(options).length > 0) {
-      return { ...args, options: options }
-    } else {
-      return { ...args }
-    }
+    return args
   }
 
   calculate(reqArgs) {
