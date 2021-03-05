@@ -47,7 +47,9 @@ class OrsDirections {
       args.options = JSON.parse(args.options)
     }
 
-    if (args.options && args.options.vehicle_type === 'driving-hgv') {
+    // Set the default vehicle type when profile is 'driving-hgv' if it is missing
+    // eslint-disable-next-line prettier/prettier
+    if (this.meta && this.meta.profile === 'driving-hgv' && (!args.options || !args.options.vehicle_type)) {
       args.options.vehicle_type = 'hgv'
     }
 
