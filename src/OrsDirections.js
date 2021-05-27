@@ -82,7 +82,7 @@ class OrsDirections {
 
     const that = this
     return new Promise(function(resolve, reject) {
-      const timeout = 10000
+      const timeout = that.args[Constants.propNames.timeout] || 10000
       // meta should be generated once that subsequent requests work
       if (that.meta == null) {
         that.meta = orsUtil.prepareMeta(that.args)

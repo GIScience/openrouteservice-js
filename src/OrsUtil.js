@@ -70,6 +70,7 @@ class OrsUtil {
     delete args[Constants.propNames.apiKey]
     delete args[Constants.propNames.profile]
     delete args[Constants.propNames.format]
+    delete args[Constants.propNames.timeout]
     return { ...args }
   }
 

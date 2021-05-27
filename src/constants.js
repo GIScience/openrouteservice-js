@@ -13,7 +13,8 @@ const constants = {
     apiVersion: 'api_version',
     mimeType: 'mime_type',
     profile: 'profile',
-    format: 'format'
+    format: 'format',
+    timeout: 'timeout'
   }
 }
 

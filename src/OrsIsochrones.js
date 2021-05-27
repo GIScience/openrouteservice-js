@@ -83,7 +83,7 @@ class OrsIsochrones {
     const that = this
 
     return new Promise(function(resolve, reject) {
-      const timeout = 10000
+      const timeout = that.args[Constants.propNames.timeout] || 10000
       // eslint-disable-next-line prettier/prettier
       if (that.args[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
         // meta should be generated once that subsequent requests work
