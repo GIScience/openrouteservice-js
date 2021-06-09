@@ -131,7 +131,7 @@ class OrsGeocode {
   geocodePromise() {
     const that = this
     return new Promise(function(resolve, reject) {
-      const timeout = 5000
+      const timeout = that.args[Constants.propNames.timeout] || 5000
 
       // Use old API via GET
       let url = orsUtil.prepareUrl(that.args)

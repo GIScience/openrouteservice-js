@@ -39,7 +39,7 @@ class OrsElevation {
     const that = this
 
     return new Promise(function(resolve, reject) {
-      const timeout = 5000
+      const timeout = that.args[Constants.propNames.timeout] || 5000
 
       let url = orsUtil.prepareUrl(that.args)
 

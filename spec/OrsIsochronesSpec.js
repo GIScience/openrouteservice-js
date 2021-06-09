@@ -1,7 +1,5 @@
 import OrsIsochrones from '../src/OrsIsochrones'
-const orsIsochrones = new OrsIsochrones({
-  api_key: '58d904a497c67e00015b45fc9e365ccaee294bff98189d229ed874c2'
-})
+const orsIsochrones = new OrsIsochrones({ api_key: '5b3ce3597851110001cf62484c2b303725d843b5b765b5e83e8e3c30'})
 
 describe('Isochrone Test', function() {
   it('Get results', function(done) {
