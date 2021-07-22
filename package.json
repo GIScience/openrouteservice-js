@@ -41,6 +41,7 @@
     "browserify": "16.2.2",
     "browserify-swap": "0.2.2",
     "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.2.0",
     "derequire": "^2.0.6",
     "eslint": "4.x",
     "eslint-config-prettier": "^3.0.1",
@@ -60,5 +61,10 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/GIScience/openrouteservice-js.git"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
