@@ -48,10 +48,8 @@ class OrsElevation {
       let orsRequest = request
         .post(url)
         .send(payload)
-        .accept(that.args[Constants.propNames.mimeType])
         .set('Authorization', authorization)
         .timeout(timeout)
-      // .accept(that.meta.mimeType)
 
       for (let key in that.customHeaders) {
         orsRequest.set(key, that.customHeaders[key])

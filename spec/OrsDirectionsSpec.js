@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 import OrsDirections from '../src/OrsDirections'
 import OrsInput from '../src/OrsInput'
-const orsDirections = new OrsDirections({ api_key: '5b3ce3597851110001cf62484c2b303725d843b5b765b5e83e8e3c30'})
+const orsDirections = new OrsDirections({ api_key: process.env.ORSKEY })
 
 describe('Simple Route', function() {
   it('Get results', function(done) {

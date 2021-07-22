@@ -1,10 +1,11 @@
+/* eslint-disable no-undef */
 import OrsGeocode from '../src/OrsGeocode'
-const orsGeocode = new OrsGeocode({ api_key: '5b3ce3597851110001cf62484c2b303725d843b5b765b5e83e8e3c30'})
+const orsGeocode = new OrsGeocode({ api_key: process.env.ORSKEY })
 
 describe('Geocode Test', function() {
   it('Get results', function(done) {
     orsGeocode
-      .geocode({ text: "Namibian Brewery"})
+      .geocode({ text: 'Namibian Brewery' })
       .then(function(json) {
         expect(json.features.length).toEqual(10)
         expect(json.type).toEqual('FeatureCollection')
@@ -15,7 +16,7 @@ describe('Geocode Test', function() {
         done()
       })
       .catch(function(json) {
-        done.fail("Shouldn't fail" + json)
+        done.fail('Should not fail' + json)
       })
   })
 })

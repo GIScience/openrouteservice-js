@@ -6,3 +6,4 @@ npm_distribution/
 .DS_Store
 test.html
 package-lock.json
+spec/test-env.js

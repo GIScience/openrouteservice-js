@@ -1,11 +1,15 @@
+/* eslint-disable no-undef */
 import OrsIsochrones from '../src/OrsIsochrones'
-const orsIsochrones = new OrsIsochrones({ api_key: '5b3ce3597851110001cf62484c2b303725d843b5b765b5e83e8e3c30'})
+const orsIsochrones = new OrsIsochrones({ api_key: process.env.ORSKEY })
 
 describe('Isochrone Test', function() {
   it('Get results', function(done) {
     orsIsochrones
       .calculate({
-        locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
+        locations: [
+          [8.690958, 49.404662],
+          [8.687868, 49.390139]
+        ],
         profile: 'driving-car',
         range: [600]
       })
@@ -21,7 +25,7 @@ describe('Isochrone Test', function() {
         done()
       })
       .catch(function(json) {
-        done.fail("Shouldn't fail" + json)
+        done.fail('Should not fail' + json)
       })
   })
 })

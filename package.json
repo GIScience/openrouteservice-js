@@ -11,7 +11,7 @@
     "browserBundle": "browserify src/index.js -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
     "browserBundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
     "browserBundleProduction": "browserify -g uglifyify src/index.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties | derequire > dist/ors-js-client.js",
-    "test": "JASMINE_CONFIG_PATH=spec/jasmine.json jasmine"
+    "test": "babel-node spec/run.js"
   },
   "browser": {
     "joi": "joi-browser"
@@ -47,7 +47,7 @@
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-standard": "^3.1.0",
-    "jasmine-es6": "^0.4.3",
+    "jasmine": "^3.8.0",
     "jshint": "2.9.5",
     "prettier": "^1.14.3",
     "uglifyify": "4.0.5",

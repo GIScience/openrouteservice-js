@@ -32,7 +32,11 @@ class OrsPois {
     let payload = {}
 
     for (const key in args) {
-      if (Constants.baseUrlConstituents.indexOf(key) > -1) {
+      if (
+        Constants.baseUrlConstituents.indexOf(key) > -1 ||
+        key === Constants.propNames.apiKey ||
+        key === Constants.propNames.timeout
+      ) {
         continue
       } else {
         payload[key] = args[key]
