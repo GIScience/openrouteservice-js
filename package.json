@@ -11,7 +11,8 @@
     "browserBundle": "browserify src/index.js -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
     "browserBundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
     "browserBundleProduction": "browserify -g uglifyify src/index.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties | derequire > dist/ors-js-client.js",
-    "test": "babel-node spec/run.js"
+    "test": "babel-node spec/run.js",
+    "commit" : "git-cz"
   },
   "browser": {
     "joi": "joi-browser"
@@ -38,6 +39,7 @@
     "babelify": "^8.0.0",
     "browserify": "16.2.2",
     "browserify-swap": "0.2.2",
+    "commitizen": "^4.2.4",
     "derequire": "^2.0.6",
     "eslint": "4.x",
     "eslint-config-prettier": "^3.0.1",
