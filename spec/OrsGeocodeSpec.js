@@ -5,7 +5,23 @@ const orsGeocode = new OrsGeocode({ api_key: process.env.ORSKEY })
 describe('Geocode Test', function() {
   it('Get results', function(done) {
     orsGeocode
-      .geocode({ text: 'Namibian Brewery' })
+      .geocode({
+        text: 'Namibian Brewery',
+        focus_point: [-20.45902199292039, 16.64960861206055],
+        layers: [
+          'country',
+          'region',
+          'macrocounty',
+          'borough',
+          'macroregion',
+          'county',
+          'neighbourhood',
+          'borough',
+          'street',
+          'address',
+          'coarse'
+        ]
+      })
       .then(function(json) {
         expect(json.features.length).toEqual(10)
         expect(json.type).toEqual('FeatureCollection')
@@ -16,6 +32,8 @@ describe('Geocode Test', function() {
         done()
       })
       .catch(function(json) {
+        // eslint-disable-next-line no-console
+        console.log(json)
         done.fail('Should not fail' + json)
       })
   })

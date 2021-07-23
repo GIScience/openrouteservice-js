@@ -11,7 +11,8 @@
     "browserBundle": "browserify src/index.js -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
     "browserBundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties",
     "browserBundleProduction": "browserify -g uglifyify src/index.js -t babelify --presets @babel/preset-env  --plugins  transform-class-properties | derequire > dist/ors-js-client.js",
-    "test": "babel-node spec/run.js",
+    "test": "nyc --reporter=lcov --reporter=text-summary babel-node spec/run.js",
+    "test-report": "nyc babel-node spec/run.js",
     "commit": "git-cz",
     "release": "standard-version"
   },
@@ -26,6 +27,8 @@
   "dependencies": {
     "bluebird": "^3.5.2",
     "http-server": "^0.12.1",
+    "istanbul": "^0.4.5",
+    "jasmine-node": "^3.0.0",
     "joi": "^13.6.0",
     "joi-browser": "^13.4.0",
     "superagent": "^4.0.0-beta.5"
@@ -53,6 +56,7 @@
     "eslint-plugin-standard": "^3.1.0",
     "jasmine": "^3.8.0",
     "jshint": "2.9.5",
+    "nyc": "^15.1.0",
     "prettier": "^1.14.3",
     "standard-version": "^9.3.1",
     "uglifyify": "4.0.5",

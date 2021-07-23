@@ -7,3 +7,5 @@ npm_distribution/
 test.html
 package-lock.json
 spec/test-env.js
+coverage/lcov-report
+.nyc_output
