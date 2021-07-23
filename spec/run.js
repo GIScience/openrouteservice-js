@@ -4,6 +4,9 @@
 // Jasmine tutorial:
 // https://www.freecodecamp.org/news/jasmine-unit-testing-tutorial-4e757c2cbf42/
 
+// Setup Istanbul with Jasmine:
+// https://bryce.fisher-fleig.org/setting-up-istanbul-with-jasmine/
+
 import Jasmine from 'jasmine'
 
 try {
@@ -29,4 +32,5 @@ if (ORSKEY && ORSKEY !== 'put-an-ors-key-here' && ORSKEY != '') {
     '\x1b[33m%s\x1b[0m',
     'A valid ORSKEY was not set via spec/test-env.js file nor via environment variable. The tests were aborted.'
   )
+  process.exit(1)
 }

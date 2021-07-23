@@ -1,6 +1,6 @@
 # The JavaScript API to consume openrouteservice(s) painlessly!
 
-[![Build Status](https://travis-ci.com/GIScience/openrouteservice-js.svg?branch=master)](https://travis-ci.com/GIScience/openrouteservice-js)
+[![Build and test](https://github.com/GIScience/openrouteservice-js/actions/workflows/github-actions-build-and-test.yml/badge.svg)](https://github.com/GIScience/openrouteservice-js/actions/workflows/github-actions-build-and-test.yml)
 
 This library lets you consume the openrouteservice API in *JavaScript* applications. It allows you to painlessly consume the following services:
 
