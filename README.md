@@ -259,3 +259,16 @@ Elevation.lineElevation({
 In order to run the tests locally, it is necessary to create a `spec/test-env.js` by using/copying the `spec/test-env-template.js` and to set a valid ORS key in the just created file.
 
 You can run all tests via `npm test`. If you only want to run a single spec file, you can use the `--spec` option, e.g., `npm test --spec spec/OrsDirectionsSpec.js`.
+
+## Commits and versioning
+
+- This app uses the `commitizen` plugin to generate standardized commit types/messages. After applying any change in a feature branch, use `git add .` and then `npm run commit` (instead of `git commit ...`)
+- The plugin `standard-version` is used to generate changelog entries, version tag and to bump the app version in package.json.
+
+Deployment flow:
+
+- Apply the changes in a feature branch and test it locally
+- Once the feature is ready, merge it to `develop`, deploy it to the testing environment
+- Checkout in `master`, merge from develop and use `npm run release` to generate a release. This will generate a new release commit as well as a git tag and an entry in [CHANGELOG.md](CHANGELOG.md).
+
+*For more details about `commitizen` and `standard-version` see [this article](https://medium.com/tunaiku-tech/automate-javascript-project-versioning-with-commitizen-and-standard-version-6a967afae7)*
