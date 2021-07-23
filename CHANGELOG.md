@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.24](https://github.com/GIScience/openrouteservice-js/compare/v0.1.23...v0.1.24) (2021-07-23)
+
+
+### Tests
+
+* add test report generation via instanbuljs ([48f1057](https://github.com/GIScience/openrouteservice-js/commit/48f10573cb99b649ffbde777aefbafdd027efc4b))
+
 ### [0.1.23](https://github.com/GIScience/openrouteservice-js/compare/v0.1.22...v0.1.23) (2021-07-23)
 
 
