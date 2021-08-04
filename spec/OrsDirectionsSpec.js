@@ -44,6 +44,7 @@ describe('Simple Route', function() {
           .calculate({
             profile: 'driving-car',
             preference: 'shortest',
+            avoidables: ['tollways', 'ferries', 'fords'],
             format: 'json'
           })
           .then(function(json2) {

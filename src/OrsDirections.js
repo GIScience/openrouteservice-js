@@ -50,10 +50,12 @@ class OrsDirections {
     // Set the default vehicle type when profile is 'driving-hgv' if it is missing
     // eslint-disable-next-line prettier/prettier
     if (this.meta && this.meta.profile === 'driving-hgv' && (!args.options || !args.options.vehicle_type)) {
+      args.options = args.options || {}
       args.options.vehicle_type = 'hgv'
     }
 
     if (args.restrictions) {
+      args.options = args.options || {}
       args.options.profile_params = {
         restrictions: { ...args.restrictions }
       }
@@ -61,6 +63,7 @@ class OrsDirections {
     }
 
     if (args.avoidables) {
+      args.options = args.options || {}
       args.options.avoid_features = [...args.avoidables]
       delete args.avoidables
     }
