@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.25](https://github.com/GIScience/openrouteservice-js/compare/v0.1.24...v0.1.25) (2021-08-04)
+
+
+### Bug Fixes
+
+* **orsdirections.js:** process avoidables and restrictions correctly ([406cad9](https://github.com/GIScience/openrouteservice-js/commit/406cad99ec6f78d9b149a2f50388483c61b78b54)), closes [#35](https://github.com/GIScience/openrouteservice-js/issues/35)
+
 ### [0.1.24](https://github.com/GIScience/openrouteservice-js/compare/v0.1.23...v0.1.24) (2021-07-23)
 
 
