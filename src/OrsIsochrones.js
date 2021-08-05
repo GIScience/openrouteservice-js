@@ -14,6 +14,7 @@ class OrsIsochrones {
     } else {
       // eslint-disable-next-line no-console
       console.log(Constants.missingAPIKeyMsg)
+      throw new Error(Constants.missingAPIKeyMsg)
     }
 
     if (Constants.propNames.host in args) {
