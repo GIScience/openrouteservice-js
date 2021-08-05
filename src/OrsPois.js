@@ -13,6 +13,7 @@ class OrsPois {
     } else {
       // eslint-disable-next-line no-console
       console.error(Constants.missingAPIKeyMsg)
+      throw new Error(Constants.missingAPIKeyMsg)
     }
     if (Constants.propNames.host in args) {
       this.args[Constants.propNames.host] = args[Constants.propNames.host]

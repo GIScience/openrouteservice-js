@@ -13,6 +13,7 @@ class OrsElevation {
     } else {
       // eslint-disable-next-line no-console
       console.error(Constants.missingAPIKeyMsg)
+      throw new Error(Constants.missingAPIKeyMsg)
     }
   }
 
@@ -75,7 +76,7 @@ class OrsElevation {
     orsUtil.setRequestDefaults(this.args, reqArgs)
     // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs[[Constants.propNames.service]] = 'elevation/line'
+      reqArgs[Constants.propNames.service] = 'elevation/line'
     }
     orsUtil.copyProperties(reqArgs, this.args)
     return this.elevationPromise()
@@ -92,7 +93,7 @@ class OrsElevation {
     orsUtil.setRequestDefaults(this.args, reqArgs)
     // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs[[Constants.propNames.service]] = 'elevation/point'
+      reqArgs[Constants.propNames.service] = 'elevation/point'
     }
 
     orsUtil.copyProperties(reqArgs, this.args)

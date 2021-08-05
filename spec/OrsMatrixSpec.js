@@ -1,5 +1,20 @@
 /* eslint-disable no-undef */
 import OrsMatrix from '../src/OrsMatrix'
+import Constants from '../src/constants'
+
+describe('No api key OrsMatrix Test', function() {
+  it('Instantiate with no key results', function(done) {
+    try {
+      expect(function() {
+        new OrsMatrix({})
+      }).toThrow(new Error(Constants.missingAPIKeyMsg))
+      done()
+    } catch (error) {
+      done.fail('No api key OrsMatrix Test ' + error)
+    }
+  })
+})
+
 const orsMatrix = new OrsMatrix({ api_key: process.env.ORSKEY })
 
 describe('Matrix Test', function() {
