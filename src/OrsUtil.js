@@ -1,16 +1,5 @@
 import Constants from './constants'
 class OrsUtil {
-  clone(obj) {
-    let newObj = {}
-    for (var prop in obj) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (obj.hasOwnProperty(prop)) {
-        newObj[prop] = obj[prop]
-      }
-    }
-    return newObj
-  }
-
   copyProperties(args, argsInto) {
     if (!args) return argsInto
 
@@ -21,33 +10,6 @@ class OrsUtil {
       }
     }
     return argsInto
-  }
-
-  extractError(res, url) {
-    let msg
-
-    if (res && res.body) {
-      msg = res.body
-      if (msg.message) msg = msg.message
-    } else {
-      msg = res
-    }
-
-    return new Error(msg + ' - for url ' + url)
-  }
-
-  isArray(value) {
-    let stringValue = Object.prototype.toString.call(value)
-    return stringValue.toLowerCase() === '[object array]'
-  }
-
-  isObject(value) {
-    let stringValue = Object.prototype.toString.call(value)
-    return stringValue.toLowerCase() === '[object object]'
-  }
-
-  isString(value) {
-    return typeof value === 'string'
   }
 
   prepareMeta(args) {
