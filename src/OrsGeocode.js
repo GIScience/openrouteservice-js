@@ -13,6 +13,7 @@ class OrsGeocode {
     } else {
       // eslint-disable-next-line no-console
       console.error(Constants.missingAPIKeyMsg)
+      throw new Error(Constants.missingAPIKeyMsg)
     }
     if (Constants.propNames.host in args) {
       this.args[Constants.propNames.host] = args[Constants.propNames.host]
@@ -44,11 +45,12 @@ class OrsGeocode {
         return urlParams
       },
       point: function(key, val) {
-        let urlParams = ''
-        urlParams += '&' + 'point.lon' + '=' + val.lat_lng[1]
-        urlParams += '&' + 'point.lat' + '=' + val.lat_lng[0]
-        urlParams += '&' + 'boundary.circle.radius' + '=' + val.radius
-        return urlParams
+        if (val && Array.isArray(val.lat_lng)) {
+          let urlParams = ''
+          urlParams += '&' + 'focus.point.lon' + '=' + val.lat_lng[1]
+          urlParams += '&' + 'focus.point.lat' + '=' + val.lat_lng[0]
+          return urlParams
+        }
       },
       boundary_circle: function(key, val) {
         let urlParams = ''
@@ -60,10 +62,15 @@ class OrsGeocode {
       },
       sources: function(key, val) {
         let urlParams = '&sources='
-        for (let source in val) {
-          urlParams += source + ','
+        if (val) {
+          for (let key in val) {
+            if (Number(key) > 0) {
+              urlParams += ','
+            }
+            urlParams += val[key]
+          }
+          return urlParams
         }
-        return urlParams
       },
       layers: function(key, val) {
         let urlParams = '&layers='
@@ -123,7 +130,9 @@ class OrsGeocode {
       const val = args[key]
       if (Constants.baseUrlConstituents.indexOf(key) > -1) {
         continue
-      } else queryString += this.lookupParameter[key](key, val)
+      } else {
+        queryString += this.lookupParameter[key](key, val)
+      }
     }
     return queryString
   }
@@ -159,6 +168,7 @@ class OrsGeocode {
   geocode(reqArgs) {
     // Get custom header and remove from args
     this.customHeaders = []
+    this.args = { api_key: this.args.api_key }
     if (reqArgs.customHeaders) {
       this.customHeaders = reqArgs.customHeaders
       delete reqArgs.customHeaders
