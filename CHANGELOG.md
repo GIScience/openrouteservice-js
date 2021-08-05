@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.26](https://github.com/GIScience/openrouteservice-js/compare/v0.1.25...v0.1.26) (2021-08-05)
+
+
+### Features
+
+* add throw error to services' constructor when no api key is passed ([795f7ad](https://github.com/GIScience/openrouteservice-js/commit/795f7ad9e7d4af86fea189f7bc43d137364ad6b0))
+
+
+### Bug Fixes
+
+* **orsgeocode.js:** source and point shorthand parser ([3d969a3](https://github.com/GIScience/openrouteservice-js/commit/3d969a3bc30d365ac86f4adde3c9888518e7072d))
+
+
+### Code Refactoring
+
+* **orsinput.js:** remove non used methods ([5534d1a](https://github.com/GIScience/openrouteservice-js/commit/5534d1a3c1800f0d5f6661f7a0ee20df3678a145))
+* **orsutil.js:** remove non used methods ([86847dd](https://github.com/GIScience/openrouteservice-js/commit/86847dd1c70f35cb50ca0fab8b353d16812836f0))
+
+
+### Tests
+
+* coverage of at least 80% for all services/classes ([db2a262](https://github.com/GIScience/openrouteservice-js/commit/db2a2621e1e7dcc218ada6730883c09cb8aa2291))
+
 ### [0.1.25](https://github.com/GIScience/openrouteservice-js/compare/v0.1.24...v0.1.25) (2021-08-04)
 
 
