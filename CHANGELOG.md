@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.27](https://github.com/GIScience/openrouteservice-js/compare/v0.1.26...v0.1.27) (2021-08-10)
+
+
+### Bug Fixes
+
+* **orsgeocode:** remove focus preprend from point parameter parser ([5940258](https://github.com/GIScience/openrouteservice-js/commit/5940258c65be4826197ddfb86bfdfc67691f3112))
+
 ### [0.1.26](https://github.com/GIScience/openrouteservice-js/compare/v0.1.25...v0.1.26) (2021-08-05)
 
 
