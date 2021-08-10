@@ -157,3 +157,26 @@ describe('Geocode without result Test', function() {
       })
   })
 })
+
+describe('Reverse Geocode result Test', function() {
+  it('Get results', function(done) {
+    orsGeocode
+      .reverseGeocode({
+        point: {
+          lat_lng: [48.858268, 2.294471],
+          radius: 1
+        },
+        size: 8
+      })
+      .then(function(json) {
+        expect(json.features.length).toEqual(8)
+        expect(json.type).toEqual('FeatureCollection')
+        done()
+      })
+      .catch(function(json) {
+        // eslint-disable-next-line no-console
+        console.log(json)
+        done.fail('Reverse Geocode result Test ' + json)
+      })
+  })
+})

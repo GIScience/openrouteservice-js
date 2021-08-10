@@ -47,8 +47,8 @@ class OrsGeocode {
       point: function(key, val) {
         if (val && Array.isArray(val.lat_lng)) {
           let urlParams = ''
-          urlParams += '&' + 'focus.point.lon' + '=' + val.lat_lng[1]
-          urlParams += '&' + 'focus.point.lat' + '=' + val.lat_lng[0]
+          urlParams += '&' + 'point.lon' + '=' + val.lat_lng[1]
+          urlParams += '&' + 'point.lat' + '=' + val.lat_lng[0]
           return urlParams
         }
       },
