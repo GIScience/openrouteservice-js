@@ -168,7 +168,6 @@ class OrsGeocode {
   geocode(reqArgs) {
     // Get custom header and remove from args
     this.customHeaders = []
-    this.args = { api_key: this.args.api_key }
     if (reqArgs.customHeaders) {
       this.customHeaders = reqArgs.customHeaders
       delete reqArgs.customHeaders
