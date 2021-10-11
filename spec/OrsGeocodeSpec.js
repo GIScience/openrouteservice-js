@@ -19,6 +19,7 @@ const orsGeocode = new OrsGeocode({ api_key: process.env.ORSKEY })
 
 describe('Geocode Test', function() {
   it('Get results', function(done) {
+    orsGeocode.clear()
     orsGeocode
       .geocode({
         text: 'Namibian Brewery',
@@ -38,7 +39,7 @@ describe('Geocode Test', function() {
         ]
       })
       .then(function(json) {
-        expect(json.features.length).toEqual(10)
+        expect(json.features.length).toBeGreaterThan(5)
         expect(json.type).toEqual('FeatureCollection')
         expect(json.features[0].type).toEqual('Feature')
         expect(json.features[1].type).toEqual('Feature')
@@ -106,6 +107,7 @@ describe('Geocode with boundaries Test', function() {
 
 describe('Geocode structure address Test', function() {
   it('Get results', function(done) {
+    orsGeocode.clear()
     orsGeocode
       .geocode({
         text: 'Namibian Brewery',
@@ -133,6 +135,7 @@ describe('Geocode structure address Test', function() {
 
 describe('Geocode without result Test', function() {
   it('Get results', function(done) {
+    orsGeocode.clear()
     orsGeocode
       .geocode({
         text: 'xzxzxzxtakywqa',
@@ -160,6 +163,7 @@ describe('Geocode without result Test', function() {
 
 describe('Reverse Geocode result Test', function() {
   it('Get results', function(done) {
+    orsGeocode.clear()
     orsGeocode
       .reverseGeocode({
         point: {
@@ -169,7 +173,7 @@ describe('Reverse Geocode result Test', function() {
         size: 8
       })
       .then(function(json) {
-        expect(json.features.length).toEqual(8)
+        expect(json.features.length).toBeGreaterThan(5)
         expect(json.type).toEqual('FeatureCollection')
         done()
       })
@@ -178,5 +182,61 @@ describe('Reverse Geocode result Test', function() {
         console.log(json)
         done.fail('Reverse Geocode result Test ' + json)
       })
+  })
+})
+
+describe('Custom options', function() {
+  // it does not matter if the host is valid or exist
+  let customHost = 'https://invalid-custom-host'
+  // it does not matter if the service is valid or exist
+  let customService = 'custom-geocode/search'
+
+  const customOrsGeocode = new OrsGeocode({
+    api_key: process.env.ORSKEY,
+    host: customHost,
+    service: customService
+  })
+  it('should keep host and service in geocode', function(done) {
+    try {
+      // we are not interested in the geocode result
+      // we just want to check if the custom host and services
+      // are kept as the custom ones when the geocode service is run
+      customOrsGeocode
+        .geocode({})
+        .then(() => {
+          expect(customOrsGeocode.args.service).toEqual(customService)
+          expect(customOrsGeocode.args.host).toEqual(customHost)
+          done()
+        })
+        .catch(() => {
+          expect(customOrsGeocode.args.service).toEqual(customService)
+          expect(customOrsGeocode.args.host).toEqual(customHost)
+          done()
+        })
+    } catch (error) {
+      done.fail(error)
+    }
+  })
+
+  it('should keep host and service in reverseGeocode', function(done) {
+    try {
+      // we are not interested in the geocode result
+      // we just want to check if the custom host and services
+      // are kept as the custom ones when the geocode service is run
+      customOrsGeocode
+        .reverseGeocode({})
+        .then(() => {
+          expect(customOrsGeocode.args.service).toEqual(customService)
+          expect(customOrsGeocode.args.host).toEqual(customHost)
+          done()
+        })
+        .catch(() => {
+          expect(customOrsGeocode.args.service).toEqual(customService)
+          expect(customOrsGeocode.args.host).toEqual(customHost)
+          done()
+        })
+    } catch (error) {
+      done.fail(error)
+    }
   })
 })

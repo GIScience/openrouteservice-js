@@ -26,7 +26,7 @@ describe('POI Test', function() {
             [8.8034, 53.0756],
             [8.7834, 53.0456]
           ],
-          geojson:{
+          geojson: {
             type: 'Point',
             coordinates: [8.8034, 53.0756]
           },
@@ -34,6 +34,8 @@ describe('POI Test', function() {
         }
       })
       .then(function(json) {
+        expect(json).toBeInstanceOf(Array)
+        expect(json.length).toBeGreaterThan(0)
         expect(json[0].features.length).toBeGreaterThan(2)
         expect(json[0].type).toEqual('FeatureCollection')
         expect(json[0].features[0].type).toEqual('Feature')
