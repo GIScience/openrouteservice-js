@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.28](https://github.com/GIScience/openrouteservice-js/compare/v0.1.27...v0.1.28) (2021-10-11)
+
+
+### Bug Fixes
+
+* **orsgeocode:** remove api key setting on geocode method ([744563b](https://github.com/GIScience/openrouteservice-js/commit/744563b7766e7b4d5547f7905b98059366740115))
+
+
+### Tests
+
+* add keep custom host and service test case ([2705a3e](https://github.com/GIScience/openrouteservice-js/commit/2705a3e9339354ef571b1daa953dcfbc58b850c7))
+
 ### [0.1.27](https://github.com/GIScience/openrouteservice-js/compare/v0.1.26...v0.1.27) (2021-08-10)
 
 
