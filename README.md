@@ -79,7 +79,7 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 var openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
-var Directions = new openrouteservice.Directions({ api_key: "XYZ");
+var Directions = new openrouteservice.Directions({ api_key: "XYZ"});
 
 Directions.calculate({
     coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
