@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.30](https://github.com/GIScience/openrouteservice-js/compare/v0.1.29...v0.1.30) (2021-11-25)
+
+
+### Others
+
+* update critical packages ([6f66b3e](https://github.com/GIScience/openrouteservice-js/commit/6f66b3ecd8274430c028e969d8247572e1d19ab0))
+
+
+### Tests
+
+* fix ors poi tests ([1ef00d0](https://github.com/GIScience/openrouteservice-js/commit/1ef00d0fa31560ef72d19901df77461edbf40b9b))
+
 ### [0.1.29](https://github.com/GIScience/openrouteservice-js/compare/v0.1.28...v0.1.29) (2021-10-11)
 
 ### [0.1.28](https://github.com/GIScience/openrouteservice-js/compare/v0.1.27...v0.1.28) (2021-10-11)
