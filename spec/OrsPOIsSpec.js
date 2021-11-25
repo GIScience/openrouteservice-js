@@ -33,13 +33,12 @@ describe('POI Test', function() {
           buffer: 250
         }
       })
-      .then(function(json) {
-        expect(json).toBeInstanceOf(Array)
-        expect(json.length).toBeGreaterThan(0)
-        expect(json[0].features.length).toBeGreaterThan(2)
-        expect(json[0].type).toEqual('FeatureCollection')
-        expect(json[0].features[0].type).toEqual('Feature')
-        expect(json[0].features[0].geometry.type).toEqual('Point')
+      .then(function(response) {
+        expect(response).toBeInstanceOf(Object)
+        expect(response.features.length).toBeGreaterThan(2)
+        expect(response.type).toEqual('FeatureCollection')
+        expect(response.features[0].type).toEqual('Feature')
+        expect(response.features[0].geometry.type).toEqual('Point')
         done()
       })
       .catch(function(json) {
