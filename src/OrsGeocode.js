@@ -27,7 +27,7 @@ class OrsGeocode {
         return key + '=' + val
       },
       text: function(key, val) {
-        return '&' + key + '=' + val
+        return '&' + key + '=' + encodeURIComponent(val)
       },
       focus_point: function(key, val) {
         let urlParams = ''

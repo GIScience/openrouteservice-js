@@ -18,7 +18,7 @@ describe('No api key Geocode Test', function() {
 const orsGeocode = new OrsGeocode({ api_key: process.env.ORSKEY })
 
 describe('Geocode Test', function() {
-  it('Get results', function(done) {
+  it('Should get geocode results', function(done) {
     orsGeocode.clear()
     orsGeocode
       .geocode({
@@ -53,10 +53,44 @@ describe('Geocode Test', function() {
         done.fail('Should not fail Geocode Test ' + json)
       })
   })
-})
 
-describe('Clear Geocode args Test', function() {
-  it('Get results', function(done) {
+  it('Should get geocode results with special char', function(done) {
+    orsGeocode.clear()
+    orsGeocode
+      .geocode({
+        text: 'hauptstraße',
+        focus_point: [-20.45902199292039, 16.64960861206055],
+        layers: [
+          'country',
+          'region',
+          'macrocounty',
+          'borough',
+          'macroregion',
+          'county',
+          'neighbourhood',
+          'borough',
+          'street',
+          'address',
+          'coarse'
+        ]
+      })
+      .then(function(json) {
+        expect(json.features.length).toBeGreaterThan(5)
+        expect(json.type).toEqual('FeatureCollection')
+        expect(json.features[0].type).toEqual('Feature')
+        expect(json.features[1].type).toEqual('Feature')
+        expect(json.features[0].geometry.type).toEqual('Point')
+        expect(json.features[1].geometry.type).toEqual('Point')
+        done()
+      })
+      .catch(function(json) {
+        // eslint-disable-next-line no-console
+        console.log(json)
+        done.fail('Should not fail Geocode Test ' + json)
+      })
+  })
+
+  it('Should clear Geocode args', function(done) {
     orsGeocode.clear()
     try {
       expect(orsGeocode.args.text).toBeUndefined()
@@ -67,10 +101,7 @@ describe('Clear Geocode args Test', function() {
       done.fail('Should not fail Clear Geocode args Test ' + orsGeocode.args)
     }
   })
-})
-
-describe('Geocode with boundaries Test', function() {
-  it('Get results', function(done) {
+  it('Should geocode with boundaries', function(done) {
     new OrsGeocode({
       api_key: process.env.ORSKEY,
       host: Constants.defaultHost,
@@ -103,10 +134,7 @@ describe('Geocode with boundaries Test', function() {
         done.fail('Should not fail boundaries Test ' + json)
       })
   })
-})
-
-describe('Geocode structure address Test', function() {
-  it('Get results', function(done) {
+  it('Should geocode structured address', function(done) {
     orsGeocode.clear()
     orsGeocode
       .geocode({
@@ -131,10 +159,8 @@ describe('Geocode structure address Test', function() {
         done.fail('Should not fail address Test ' + json)
       })
   })
-})
 
-describe('Geocode without result Test', function() {
-  it('Get results', function(done) {
+  it('Should geocode without result', function(done) {
     orsGeocode.clear()
     orsGeocode
       .geocode({
@@ -159,10 +185,7 @@ describe('Geocode without result Test', function() {
         done.fail('Geocode without result Test ' + json)
       })
   })
-})
-
-describe('Reverse Geocode result Test', function() {
-  it('Get results', function(done) {
+  it('Should reverse Geocode result', function(done) {
     orsGeocode.clear()
     orsGeocode
       .reverseGeocode({
@@ -185,7 +208,7 @@ describe('Reverse Geocode result Test', function() {
   })
 })
 
-describe('Custom options', function() {
+describe('Geocode with custom options', function() {
   // it does not matter if the host is valid or exist
   let customHost = 'https://invalid-custom-host'
   // it does not matter if the service is valid or exist
