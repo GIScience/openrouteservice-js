@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.31](https://github.com/GIScience/openrouteservice-js/compare/v0.1.30...v0.1.31) (2021-12-17)
+
+
+### Bug Fixes
+
+* **orsgeocode.js:** add support for geocode with special char in text ([a0b264c](https://github.com/GIScience/openrouteservice-js/commit/a0b264c9a2b49fbd50a486703f2935cda106c9ce))
+
 ### [0.1.30](https://github.com/GIScience/openrouteservice-js/compare/v0.1.29...v0.1.30) (2021-11-25)
 
 
