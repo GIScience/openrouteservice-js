@@ -10,6 +10,7 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 - Time-distance matrix
 - Pois (points of interest)
 - Elevation (linestring or point)
+- Optimization
 
 See the examples in the [examples folder](examples)
 
@@ -25,6 +26,7 @@ This library uses the ORS API for request validation. To understand the input of
 - Time-distance matrix
 - Pois (points of interest)
 - Elevation (linestring or point)
+- Optimization
 
 ## Installation
 
@@ -79,7 +81,7 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 var openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
-var Directions = new openrouteservice.Directions({ api_key: "XYZ");
+var Directions = new openrouteservice.Directions({ api_key: "XYZ"});
 
 Directions.calculate({
     coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
@@ -243,6 +245,52 @@ Elevation.lineElevation({
     coordinates: [[13.349762, 38.11295], [12.638397, 37.645772]],
     type: 'LineString'
   }
+})
+.then(function(response) {
+  // Add your own result handling here
+  console.log('response', JSON.stringify(response));
+})
+.catch(function(err) {
+  var str = 'An error occurred: ' + err;
+  console.log(str)
+});
+```
+
+Or consume Optimization API to solve [vehicle routing problems](https://en.wikipedia.org/wiki/Vehicle_routing_problem)
+
+```javascript
+var openrouteservice = require("openrouteservice-js");
+
+// Add your api_key here
+var Optimization = new openrouteservice.Optimization({api_key: "XYZ"});
+
+Optimization.optimize({
+  jobs: [
+    {
+      id: 1,
+      service: 300,
+      amount: [1],
+      location: [2.03655, 48.61128],
+      skills: [1]
+    },
+    {
+      id: 2,
+      service: 300,
+      amount: [1],
+      location: [2.03655, 48.61128],
+      skills: [2]
+    },
+  ],
+  vehicles: [
+    {
+      id: 1,
+      profile: 'driving-car',
+      start: [2.35044, 48.71764],
+      end: [2.35044, 48.71764],
+      capacity: [3],
+      skills: [1, 2],
+    }
+  ],
 })
 .then(function(response) {
   // Add your own result handling here
