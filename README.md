@@ -11,6 +11,7 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 - Time-distance matrix
 - POIs (points of interest)
 - Elevation (linestring or point)
+- Optimization
 
 See the examples in the [examples folder](examples)
 
@@ -238,6 +239,52 @@ Elevation.lineElevation({
   const str = 'An error occurred: ' + err
   console.log(str)
 })
+```
+### Optimization example
+Or consume Optimization API to solve [vehicle routing problems](https://en.wikipedia.org/wiki/Vehicle_routing_problem)
+
+```javascript
+var openrouteservice = require("openrouteservice-js");
+
+// Add your api_key here
+var Optimization = new openrouteservice.Optimization({api_key: "XYZ"});
+
+Optimization.optimize({
+  jobs: [
+    {
+      id: 1,
+      service: 300,
+      amount: [1],
+      location: [2.03655, 48.61128],
+      skills: [1]
+    },
+    {
+      id: 2,
+      service: 300,
+      amount: [1],
+      location: [2.03655, 48.61128],
+      skills: [2]
+    },
+  ],
+  vehicles: [
+    {
+      id: 1,
+      profile: 'driving-car',
+      start: [2.35044, 48.71764],
+      end: [2.35044, 48.71764],
+      capacity: [3],
+      skills: [1, 2],
+    }
+  ],
+})
+.then(function(response) {
+  // Add your own result handling here
+  console.log('response', JSON.stringify(response));
+})
+.catch(function(err) {
+  var str = 'An error occurred: ' + err;
+  console.log(str)
+});
 ```
 
 ## Development Setup
