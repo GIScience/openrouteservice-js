@@ -1,10 +1,11 @@
 node_modules/
-tim_tests/
-npm_distribution/
-*~
-/nbproject/
 .DS_Store
-test.html
+
+# Editor directories and files
+.idea
+.vscode
+
+# Tests and coverage
 spec/test-env.js
 coverage/lcov-report
 .nyc_output
