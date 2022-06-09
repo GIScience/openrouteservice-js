@@ -76,10 +76,10 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 ### Examples using the npm distribution
 
 ```javascript
-var openrouteservice = require("openrouteservice-js");
+const openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
-var Directions = new openrouteservice.Directions({ api_key: "XYZ");
+const Directions = new openrouteservice.Directions({ api_key: "XYZ");
 
 Directions.calculate({
     coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
@@ -106,7 +106,7 @@ Directions.calculate({
     console.log(JSON.stringify(json));
   })
   .catch(function(err) {
-    var str = "An error occurred: " + err;
+    const str = "An error occurred: " + err;
     console.log(str);
   });
 ```
@@ -114,10 +114,10 @@ Directions.calculate({
 Or use the geocoding services:
 
 ```javascript
-var openrouteservice = require("openrouteservice-js");
+const openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
-var Geocode = new openrouteservice.Geocode({ api_key: "XYZ"});
+const Geocode = new openrouteservice.Geocode({ api_key: "XYZ"});
 
 Geocode.geocode({
   text: "Heidelberg",
@@ -130,7 +130,7 @@ Geocode.geocode({
   console.log("response", JSON.stringify(response));
 })
 .catch(function(err) {
-  var str = "An error occurred: " + err;
+  const str = "An error occurred: " + err;
   console.log(str);
 });
 
@@ -144,7 +144,7 @@ Geocode.reverseGeocode({
   console.log("response", JSON.stringify(response));
 })
 .catch(function(err) {
-  var str = "An error occurred: " + err;
+  const str = "An error occurred: " + err;
   console.log(str);
 });
 
@@ -158,7 +158,7 @@ Geocode.structuredGeocode({
   console.log("response", JSON.stringify(response));
 })
 .catch(function(err) {
-  var str = "An error occurred: " + err;
+  const str = "An error occurred: " + err;
   console.log(str);
 });
 ```
@@ -166,10 +166,10 @@ Geocode.structuredGeocode({
 Query isochrones:
 
 ```javascript
-var openrouteservice = require("openrouteservice-js");
+const openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
-var Isochrones = new openrouteservice.Isochrones({ api_key: "XYZ"});
+const Isochrones = new openrouteservice.Isochrones({ api_key: "XYZ"});
 
 Isochrones.calculate({
     locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
@@ -199,7 +199,7 @@ Isochrones.calculate({
     console.log("response", response);
   })
   .catch(function(err) {
-    var str = "An error occurred: " + err;
+    const str = "An error occurred: " + err;
     console.log(str);
   });
 ```
@@ -207,10 +207,10 @@ Isochrones.calculate({
 Or fetch a time-distance matrix:
 
 ```javascript
-var openrouteservice = require("openrouteservice-js");
+const openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
-var Matrix = new openrouteservice.Matrix({ api_key: "XYZ"});
+const Matrix = new openrouteservice.Matrix({ api_key: "XYZ"});
 
 Matrix.calculate({
   locations: [[8.690958, 49.404662], [8.687868, 49.390139], [8.687868, 49.390133]],
@@ -223,7 +223,7 @@ Matrix.calculate({
   console.log("response", response);
 })
 .catch(function(err) {
-  var str = "An error occurred: " + err;
+  const str = "An error occurred: " + err;
   console.log(str);
 });
 ```
@@ -231,10 +231,10 @@ Matrix.calculate({
 Or return elevation data from a geojson line:
 
 ```javascript
-var openrouteservice = require("openrouteservice-js");
+const openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
-var Elevation = new openrouteservice.Elevation({api_key: "XYZ"});
+const Elevation = new openrouteservice.Elevation({api_key: "XYZ"});
 
 Elevation.lineElevation({
   format_in: 'geojson',
@@ -249,7 +249,7 @@ Elevation.lineElevation({
   console.log('response', JSON.stringify(response));
 })
 .catch(function(err) {
-  var str = 'An error occurred: ' + err;
+  const str = 'An error occurred: ' + err;
   console.log(str)
 });
 ```

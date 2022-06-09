@@ -27,9 +27,7 @@ class OrsElevation {
     let payload = {}
 
     for (const key in args) {
-      if (Constants.baseUrlConstituents.indexOf(key) > -1) {
-        continue
-      } else {
+      if (Constants.baseUrlConstituents.indexOf(key) <= -1) {
         payload[key] = args[key]
       }
     }

@@ -3,7 +3,7 @@ class OrsUtil {
   copyProperties(args, argsInto) {
     if (!args) return argsInto
 
-    for (var prop in args) {
+    for (const prop in args) {
       // eslint-disable-next-line no-prototype-builtins
       if (args.hasOwnProperty(prop) && args[prop] !== undefined) {
         argsInto[prop] = args[prop]
@@ -38,13 +38,10 @@ class OrsUtil {
 
   /**
    * Prepare the request url based on url constituents
-   * @param {Objet} args
+   * @param {Object} args
    */
   prepareUrl(args) {
-    let url = ''
-
-    // make path
-    let urlPathParts = []
+    let url, urlPathParts
 
     // If the service already defines the path
     // to the request service we have to add
@@ -79,7 +76,7 @@ class OrsUtil {
       counter++
     }
 
-    // Remove double slashs from path
+    // Remove double slashes from path
     let cleanUrlPath = urlPath.replace(/\/\//g, '/')
     url += cleanUrlPath
 
@@ -91,7 +88,7 @@ class OrsUtil {
   }
 
   /**
-   * Set defaults for a request comparing and posibly overwritting instance args
+   * Set defaults for a request comparing and overwriting instance args
    * @param {Object} instanceArgs
    * @param {Object} requestArgs
    * @param {Boolean} setAPIVersion

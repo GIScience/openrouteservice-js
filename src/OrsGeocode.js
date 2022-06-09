@@ -85,8 +85,7 @@ class OrsGeocode {
         return urlParams
       },
       boundary_country: function(key, val) {
-        let urlParams = '&' + 'boundary.country' + '=' + val
-        return urlParams
+        return '&' + 'boundary.country' + '=' + val
       },
       size: function(key, val) {
         return '&' + key + '=' + val
@@ -128,9 +127,7 @@ class OrsGeocode {
     let queryString = ''
     for (const key in args) {
       const val = args[key]
-      if (Constants.baseUrlConstituents.indexOf(key) > -1) {
-        continue
-      } else {
+      if (Constants.baseUrlConstituents.indexOf(key) <= -1) {
         queryString += this.lookupParameter[key](key, val)
       }
     }
