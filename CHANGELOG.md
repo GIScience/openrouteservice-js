@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/GIScience/openrouteservice-js/compare/v0.1.31...v0.2.0) (2022-06-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** moving declared dependencies to dev dependencies or remove
+
+fixes https://github.com/GIScience/openrouteservice-js/issues/43
+
+### Code Refactoring
+
+* cleanup basic code issues ([e5b33ad](https://github.com/GIScience/openrouteservice-js/commit/e5b33ade708981a6e9f136c12daf9ee94be6ed9e))
+
+
+### Others
+
+* **.gitignore:** Update .gitignore ([d742c59](https://github.com/GIScience/openrouteservice-js/commit/d742c59179dd824f4ae6c9f923d77f359a21526b))
+* cleanup npm package ([3acdf04](https://github.com/GIScience/openrouteservice-js/commit/3acdf04e026eb62237c4a3337a68fdfb05035a86))
+* **deps:** update and cleanup dependencies ([03a9d90](https://github.com/GIScience/openrouteservice-js/commit/03a9d905d2b77db04b8af1734fe5386d135927ef))
+* **nyc:** ignore tests for coverage ([cf89e97](https://github.com/GIScience/openrouteservice-js/commit/cf89e97a61d1f7c228212bf9022c7e5a57870c42))
+
 ### [0.1.31](https://github.com/GIScience/openrouteservice-js/compare/v0.1.30...v0.1.31) (2021-12-17)
 
 
