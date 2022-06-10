@@ -9,3 +9,6 @@ node_modules/
 spec/test-env.js
 coverage/lcov-report
 .nyc_output
+
+# npm lib
+lib

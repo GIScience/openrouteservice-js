@@ -4,9 +4,14 @@
   "description": "A Javascript client for openrouteservice services.",
   "author": "Openrouteservice Community",
   "license": "Apache-2.0",
-  "main": "./npm_distribution/index.js",
+  "main": "./lib/index.js",
+  "files": [
+    "lib/",
+    "dist/",
+    "CHANGELOG.md"
+  ],
   "scripts": {
-    "npmPublishBuild": "babel src --presets @babel/preset-env --out-dir npm_distribution",
+    "npmPublishBuild": "babel src --presets @babel/preset-env --out-dir lib",
     "prepublishOnly": "npm run npmPublishBuild",
     "browserBundle": "browserify src/index.js -o dist/ors-js-client.js -t babelify --presets @babel/preset-env",
     "browserBundleDebug": "browserify src/index.js --debug -o dist/ors-js-client.js -t babelify --presets @babel/preset-env",
