@@ -7,7 +7,6 @@ const orsUtil = new OrsUtil()
 
 class OrsDirections {
   constructor(args) {
-    this.requestSettings = null
     this.args = {}
     this.meta = null
     if (Constants.propNames.apiKey in args) {
@@ -36,11 +35,11 @@ class OrsDirections {
     if ('coordinates' in this.args) this.args.coordinates.length = 0
   }
 
-  addWaypoint(latlon) {
+  addWaypoint(latLon) {
     if (!('coordinates' in this.args)) {
       this.args.coordinates = []
     }
-    this.args.coordinates.push(latlon)
+    this.args.coordinates.push(latLon)
   }
 
   getBody(args) {

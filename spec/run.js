@@ -15,9 +15,9 @@ try {
   // Silence is gold!
 }
 
-var ORSKEY = process.env.ORSKEY
+const ORSKEY = process.env.ORSKEY
 
-if (ORSKEY && ORSKEY !== 'put-an-ors-key-here' && ORSKEY != '') {
+if (ORSKEY && ORSKEY !== 'put-an-ors-key-here' && ORSKEY !== '') {
   let jasmine = new Jasmine()
 
   // Modify this line to point to your jasmine.json

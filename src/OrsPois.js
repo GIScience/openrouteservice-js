@@ -34,12 +34,12 @@ class OrsPois {
 
     for (const key in args) {
       if (
-        Constants.baseUrlConstituents.indexOf(key) > -1 ||
-        key === Constants.propNames.apiKey ||
-        key === Constants.propNames.timeout
+        !(
+          Constants.baseUrlConstituents.indexOf(key) > -1 ||
+          key === Constants.propNames.apiKey ||
+          key === Constants.propNames.timeout
+        )
       ) {
-        continue
-      } else {
         payload[key] = args[key]
       }
     }
