@@ -8,7 +8,7 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 - Geocoding | Reverse Geocoding | Structured Geocoding (powered by Pelias)
 - Isochrones (accessibility)
 - Time-distance matrix
-- Pois (points of interest)
+- POIs (points of interest)
 - Elevation (linestring or point)
 
 See the examples in the [examples folder](examples)
@@ -17,14 +17,13 @@ See the examples in the [examples folder](examples)
 
 ## Documentation
 
-This library uses the ORS API for request validation. To understand the input of each API specifically, please check [API Playground](https://openrouteservice.org/dev/#/api-docs) that provides an interactive documentation. This library supports the following services:
+This library uses the ORS API for request validation. To understand the input of each API specifically, please check [API Playground](https://openrouteservice.org/dev/#/api-docs) that provides an interactive documentation.
 
-- Directions (routing)
-- Geocoding | Reverse Geocoding | Structured Geocoding (powered by Pelias)
-- Isochrones (accessibility)
-- Time-distance matrix
-- Pois (points of interest)
-- Elevation (linestring or point)
+## Developement Setup
+
+Clone the openrouteservice-js package from GitHub into a developement environment of your choice.
+
+Make sure you have installed the npm, node.js and nvm package managers to ensure you will be able to work in the repository.
 
 ## Installation
 
@@ -228,7 +227,7 @@ Matrix.calculate({
 });
 ```
 
-Or return elevation data from a geojson line:
+Or return elevation data from a geoJson line:
 
 ```javascript
 const openrouteservice = require("openrouteservice-js");
