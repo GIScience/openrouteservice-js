@@ -21,9 +21,27 @@ This library uses the ORS API for request validation. To understand the input of
 
 ## Developement Setup
 
-Clone the openrouteservice-js package from GitHub into a developement environment of your choice.
+### WSL Setup
 
-Make sure you have installed the npm, node.js and nvm package managers to ensure you will be able to work in the repository.
+Download and install an Ubuntu terminal environment.
+Set it as the default distribution in the command line ``wsl.exe --set-default [Distro]``
+You can use ``wsl.exe -l`` to check which distribution is currently the default one.
+
+You might need to update the apt package manager to access and be able to install packages. You can do this with the command ```sudo apt update && sudo apt upgrade```
+
+*Recommended steps (but not required):*
+Install nano and GitHub credential manager.
+
+### Openrouteservice Package Setup
+
+Clone the openrouteservice-js repository from GitHub into a developement environment of your choice.
+Install Git Bash if you do not have it already.
+
+Set the terminal to wsl.exe and make sure you have installed the npm, node.js and nvm package managers to ensure you will be able to work in the repository.
+
+Install the dependencies with ```npm install```
+
+If you have executed this step the following one will be unnecessary.
 
 ## Installation
 
@@ -31,7 +49,7 @@ Install the library with npm:
 
 ```npm install openrouteservice-js --save```
 
-## Or use the distribution file in your browser
+### Or use the distribution file in your browser
 
 ```js
 // Run this command if you need to build a new version
@@ -72,7 +90,11 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 </script>
 ```
 
+...or use the individual .js files in the src folder.
+
 ### Examples using the npm distribution
+
+To get directions:
 
 ```javascript
 const openrouteservice = require("openrouteservice-js");
