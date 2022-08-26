@@ -8,7 +8,7 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 - Geocoding | Reverse Geocoding | Structured Geocoding (powered by Pelias)
 - Isochrones (accessibility)
 - Time-distance matrix
-- Pois (points of interest)
+- POIs (points of interest)
 - Elevation (linestring or point)
 
 See the examples in the [examples folder](examples)
@@ -17,22 +17,23 @@ See the examples in the [examples folder](examples)
 
 ## Documentation
 
-This library uses the ORS API for request validation. To understand the input of each API specifically, please check [API Playground](https://openrouteservice.org/dev/#/api-docs) that provides an interactive documentation. This library supports the following services:
-
-- Directions (routing)
-- Geocoding | Reverse Geocoding | Structured Geocoding (powered by Pelias)
-- Isochrones (accessibility)
-- Time-distance matrix
-- Pois (points of interest)
-- Elevation (linestring or point)
+This library uses the ORS API for request validation. To understand the input of each API specifically, please check [API Playground](https://openrouteservice.org/dev/#/api-docs) that provides an interactive documentation.
 
 ## Installation
 
+Requirements
+
+- git
+- nodeJS
+- *if not included in nodeJS:* npm
+
 Install the library with npm:
 
-```npm install openrouteservice-js --save```
+```shell
+npm install openrouteservice-js --save
+```
 
-## Or use the distribution file in your browser
+### Or use the distribution file in your browser
 
 ```js
 // Run this command if you need to build a new version
@@ -74,6 +75,8 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 ```
 
 ### Examples using the npm distribution
+
+To get directions:
 
 ```javascript
 const openrouteservice = require("openrouteservice-js");
@@ -228,9 +231,9 @@ Matrix.calculate({
 });
 ```
 
-Or return elevation data from a geojson line:
+Or return elevation data from a geoJSON line:
 
-```javascript
+```js
 const openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
@@ -252,6 +255,17 @@ Elevation.lineElevation({
   const str = 'An error occurred: ' + err;
   console.log(str)
 });
+```
+## Developement Setup
+
+Clone the openrouteservice-js repository from GitHub into a developement environment of your choice.
+
+```shell
+git clone https://github.com/GIScience/openrouteservice-js.git
+cd openrouteservice-js
+
+#Install the dependencies
+npm install
 ```
 
 ## Running Tests
