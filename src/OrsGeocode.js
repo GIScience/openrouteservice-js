@@ -8,7 +8,7 @@ const orsUtil = new OrsUtil()
 
 class OrsGeocode extends OrsBase {
   constructor(args) {
-    super(args);
+    super(args)
 
     this.lookupParameter = {
       api_key: function(key, val) {
@@ -125,15 +125,17 @@ class OrsGeocode extends OrsBase {
   geocodePromise() {
     const that = this
     return new Promise(function(resolve, reject) {
-      const timeout = that.args[Constants.propNames.timeout] || 5000
-
       // Use old API via GET
       let url = orsUtil.prepareUrl(that.args)
-
       // Add url query string from args
       url += '?' + that.getParametersAsQueryString(that.args)
 
-      const orsRequest = request.get(url).timeout(timeout)
+      const timeout = that.args[Constants.propNames.timeout] || 5000
+
+      // createRequest function is not applicable: GET instead of POST request
+      const orsRequest = request
+          .get(url)
+          .timeout(timeout)
 
       for (const key in that.customHeaders) {
         orsRequest.set(key, that.customHeaders[key])
@@ -151,12 +153,8 @@ class OrsGeocode extends OrsBase {
   }
 
   geocode(reqArgs) {
-    // Get custom header and remove from args
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
-    }
+    this.checkHeaders(reqArgs)
+
     orsUtil.setRequestDefaults(this.args, reqArgs)
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search'
@@ -166,12 +164,8 @@ class OrsGeocode extends OrsBase {
   }
 
   reverseGeocode(reqArgs) {
-    // Get custom header and remove from args
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
-    }
+    this.checkHeaders(reqArgs)
+
     orsUtil.setRequestDefaults(this.args, reqArgs)
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/reverse'

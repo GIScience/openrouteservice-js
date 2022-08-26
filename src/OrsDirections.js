@@ -1,4 +1,3 @@
-import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
 import Constants from './constants'
@@ -53,11 +52,8 @@ class OrsDirections extends OrsBase {
 
   calculate(reqArgs) {
     // Get custom header and remove from args
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
-    }
+    this.checkHeaders(reqArgs)
+
     orsUtil.setRequestDefaults(this.args, reqArgs, true)
     if (!this.args[Constants.propNames.service]) {
       this.args[Constants.propNames.service] = 'directions'
@@ -66,35 +62,13 @@ class OrsDirections extends OrsBase {
 
     const that = this
     return new Promise(function(resolve, reject) {
-      const timeout = that.args[Constants.propNames.timeout] || 10000
-      // meta should be generated once that subsequent requests work
       if (that.meta == null) {
         that.meta = orsUtil.prepareMeta(that.args)
       }
       that.httpArgs = orsUtil.prepareRequest(that.args)
-      const url = orsUtil.prepareUrl(that.meta)
-
       const postBody = that.getBody(that.httpArgs)
-      const authorization = that.meta[Constants.propNames.apiKey]
-      const orsRequest = request
-        .post(url)
-        .send(postBody)
-        .set('Authorization', authorization)
-        .timeout(timeout)
-      // .accept(that.meta.mimeType)
 
-      for (const key in that.customHeaders) {
-        orsRequest.set(key, that.customHeaders[key])
-      }
-      orsRequest.end(function(err, res) {
-        if (err || !res.ok) {
-          // eslint-disable-next-line no-console
-          console.error(err)
-          reject(err)
-        } else if (res) {
-          resolve(res.body || res.text)
-        }
-      })
+      that.createRequest(null, postBody, resolve, reject);
     })
   }
 }

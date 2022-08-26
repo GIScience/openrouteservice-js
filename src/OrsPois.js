@@ -1,4 +1,3 @@
-import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
 import Constants from './constants'
@@ -40,10 +39,7 @@ class OrsPois extends OrsBase {
 
     const that = this
     return new Promise(function(resolve, reject) {
-      const timeout = that.args[Constants.propNames.timeout] || 5000
-
       let url = orsUtil.prepareUrl(that.args)
-
       url += url.indexOf('?') > -1 ? '&' : '?'
 
       if (that.args[Constants.propNames.service]) {
@@ -51,36 +47,14 @@ class OrsPois extends OrsBase {
       }
 
       const payload = that.generatePayload(that.args)
-      const authorization = that.args[Constants.propNames.apiKey]
 
-      const orsRequest = request
-        .post(url)
-        .send(payload)
-        .set('Authorization', authorization)
-        .timeout(timeout)
-
-      for (const key in that.customHeaders) {
-        orsRequest.set(key, that.customHeaders[key])
-      }
-      orsRequest.end(function(err, res) {
-        if (err || !res.ok) {
-          // eslint-disable-next-line no-console
-          console.error(err)
-          reject(err)
-        } else if (res) {
-          resolve(res.body || res.text)
-        }
-      })
+      that.createRequest(url, payload, resolve, reject);
     })
   }
 
   pois(reqArgs) {
-    // Get custom header and remove from args
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
-    }
+    this.checkHeaders(reqArgs)
+
     orsUtil.setRequestDefaults(this.args, reqArgs)
     orsUtil.copyProperties(reqArgs, this.args)
 
