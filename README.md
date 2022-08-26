@@ -19,31 +19,13 @@ See the examples in the [examples folder](examples)
 
 This library uses the ORS API for request validation. To understand the input of each API specifically, please check [API Playground](https://openrouteservice.org/dev/#/api-docs) that provides an interactive documentation.
 
-## Developement Setup
-
-### WSL Setup
-
-Download and install an Ubuntu terminal environment.
-Set it as the default distribution in the command line ``wsl.exe --set-default [Distro]``
-You can use ``wsl.exe -l`` to check which distribution is currently the default one.
-
-You might need to update the apt package manager to access and be able to install packages. You can do this with the command ```sudo apt update && sudo apt upgrade```
-
-*Recommended steps (but not required):*
-Install nano and GitHub credential manager.
-
-### Openrouteservice Package Setup
-
-Clone the openrouteservice-js repository from GitHub into a developement environment of your choice.
-Install Git Bash if you do not have it already.
-
-Set the terminal to wsl.exe and make sure you have installed the npm, node.js and nvm package managers to ensure you will be able to work in the repository.
-
-Install the dependencies with ```npm install```
-
-If you have executed this step the following one will be unnecessary.
-
 ## Installation
+
+Requirements
+
+- git
+- nodeJS
+- *if not included in nodeJS:* npm package manager
 
 Install the library with npm:
 
@@ -89,8 +71,6 @@ You can either use our [bundled version](./dist/ors-js-client.js) which includes
 
 </script>
 ```
-
-...or use the individual .js files in the src folder.
 
 ### Examples using the npm distribution
 
@@ -249,7 +229,7 @@ Matrix.calculate({
 });
 ```
 
-Or return elevation data from a geoJson line:
+Or return elevation data from a geoJSON line:
 
 ```javascript
 const openrouteservice = require("openrouteservice-js");
@@ -274,6 +254,11 @@ Elevation.lineElevation({
   console.log(str)
 });
 ```
+## Developement Setup
+
+Clone the openrouteservice-js repository from GitHub into a developement environment of your choice.
+
+Install the dependencies with ```npm install```
 
 ## Running Tests
 
