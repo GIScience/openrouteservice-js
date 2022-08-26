@@ -25,11 +25,13 @@ Requirements
 
 - git
 - nodeJS
-- *if not included in nodeJS:* npm package manager
+- *if not included in nodeJS:* npm
 
 Install the library with npm:
 
-```npm install openrouteservice-js --save```
+```shell
+npm install openrouteservice-js --save
+```
 
 ### Or use the distribution file in your browser
 
@@ -231,7 +233,7 @@ Matrix.calculate({
 
 Or return elevation data from a geoJSON line:
 
-```javascript
+```js
 const openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
@@ -258,7 +260,13 @@ Elevation.lineElevation({
 
 Clone the openrouteservice-js repository from GitHub into a developement environment of your choice.
 
-Install the dependencies with ```npm install```
+```shell
+git clone https://github.com/GIScience/openrouteservice-js.git
+cd openrouteservice-js
+
+#Install the dependencies
+npm install
+```
 
 ## Running Tests
 
