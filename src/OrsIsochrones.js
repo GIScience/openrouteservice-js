@@ -49,22 +49,23 @@ class OrsIsochrones extends OrsBase {
   }
 
   calculate(reqArgs) {
-    this.checkHeaders(reqArgs)
+    this.requestArgs = reqArgs
 
-    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs, true)
-    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs.service = 'isochrones'
+    this.checkHeaders()
+
+    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs, true)
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.requestArgs.service = 'isochrones'
     }
 
-    orsUtil.copyProperties(reqArgs, this.defaultArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
     const that = this
     return new Promise(function(resolve, reject) {
-      if (that.defaultArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
-        if (that.meta == null) {
-          that.meta = orsUtil.prepareMeta(that.defaultArgs)
-        }
-        that.httpArgs = orsUtil.prepareRequest(that.defaultArgs)
+      if (that.requestArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
+        that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+
+        that.httpArgs = orsUtil.prepareRequest(that.requestArgs)
         const postBody = that.getBody(that.httpArgs)
 
         that.createRequest(null, postBody, resolve, reject);

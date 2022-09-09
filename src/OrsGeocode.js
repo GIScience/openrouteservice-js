@@ -126,9 +126,9 @@ class OrsGeocode extends OrsBase {
     const that = this
     return new Promise(function(resolve, reject) {
       // Use old API via GET
-      let url = orsUtil.prepareUrl(that.defaultArgs)
+      let url = orsUtil.prepareUrl(that.requestArgs)
       // Add url query string from args
-      url += '?' + that.getParametersAsQueryString(that.defaultArgs)
+      url += '?' + that.getParametersAsQueryString(that.requestArgs)
 
       const timeout = that.defaultArgs[Constants.propNames.timeout] || 5000
 
@@ -153,24 +153,30 @@ class OrsGeocode extends OrsBase {
   }
 
   geocode(reqArgs) {
-    this.checkHeaders(reqArgs)
+    this.requestArgs = reqArgs
 
-    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
-    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs.service = 'geocode/search'
+    this.checkHeaders()
+
+    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs)
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.requestArgs.service = 'geocode/search'
     }
-    orsUtil.copyProperties(reqArgs, this.defaultArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.geocodePromise()
   }
 
   reverseGeocode(reqArgs) {
-    this.checkHeaders(reqArgs)
+    this.requestArgs = reqArgs
 
-    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
-    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs.service = 'geocode/reverse'
+    this.checkHeaders()
+
+    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs)
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.requestArgs.service = 'geocode/reverse'
     }
-    orsUtil.copyProperties(reqArgs, this.defaultArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.geocodePromise()
   }
 
@@ -179,7 +185,8 @@ class OrsGeocode extends OrsBase {
     if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search/structured'
     }
-    orsUtil.copyProperties(reqArgs, this.defaultArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.geocodePromise()
   }
 }

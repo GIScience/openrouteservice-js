@@ -26,38 +26,38 @@ class OrsElevation extends OrsBase {
   elevationPromise() {
     const that = this
     return new Promise(function(resolve, reject) {
-      const url = orsUtil.prepareUrl(that.defaultArgs)
-      const payload = that.generatePayload(that.defaultArgs)
+      let url = orsUtil.prepareUrl(that.requestArgs)
+      const payload = that.generatePayload(that.requestArgs)
 
       that.createRequest(url, payload, resolve, reject);
     })
   }
 
   lineElevation(reqArgs) {
-    this.checkHeaders(reqArgs)
+    this.requestArgs = reqArgs
+
+    this.checkHeaders()
 
     orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
     if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs[Constants.propNames.service] = 'elevation/line'
     }
-    orsUtil.copyProperties(reqArgs, this.defaultArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.elevationPromise()
   }
 
   pointElevation(reqArgs) {
-    // Get custom header and remove from args
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
-    }
+    this.requestArgs = reqArgs
 
-    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
-    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs[Constants.propNames.service] = 'elevation/point'
-    }
+    this.checkHeaders()
 
-    orsUtil.copyProperties(reqArgs, this.defaultArgs)
+    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs)
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.requestArgs[Constants.propNames.service] = 'elevation/point'
+    }
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.elevationPromise()
   }
 }

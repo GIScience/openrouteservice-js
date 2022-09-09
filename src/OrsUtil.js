@@ -1,18 +1,11 @@
 import Constants from './constants'
 class OrsUtil {
-  copyProperties(args, argsInto) {
-    if (!args) return argsInto
-
-    for (const prop in args) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (args.hasOwnProperty(prop) && args[prop] !== undefined) {
-        argsInto[prop] = args[prop]
-      }
-    }
-    return argsInto
+  fillArgs(defaultArgs, requestArgs) {
+    requestArgs = {...defaultArgs, ...requestArgs}
+    return requestArgs
   }
 
-  prepareMeta(args) {
+  saveArgsToCache(args) {
     return {
       host: args[Constants.propNames.host],
       api_version: args[Constants.propNames.apiVersion],

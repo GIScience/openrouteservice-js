@@ -29,7 +29,7 @@ class OrsDirections extends OrsBase {
     }
 
     // Set the default vehicle type when profile is 'driving-hgv' if it is missing
-    if (this.meta && this.meta.profile === 'driving-hgv' && (!args.options || !args.options.vehicle_type)) {
+    if (this.argsCache && this.argsCache.profile === 'driving-hgv' && (!args.options || !args.options.vehicle_type)) {
       args.options = args.options || {}
       args.options.vehicle_type = 'hgv'
     }
@@ -51,21 +51,22 @@ class OrsDirections extends OrsBase {
   }
 
   calculate(reqArgs) {
-    // Get custom header and remove from args
-    this.checkHeaders(reqArgs)
+    this.requestArgs = reqArgs
 
-    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs, true)
+    this.checkHeaders()
+
+    // to do: move function to base class
+    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs, true)
     if (!this.defaultArgs[Constants.propNames.service]) {
       this.defaultArgs[Constants.propNames.service] = 'directions'
     }
-    orsUtil.copyProperties(reqArgs, this.defaultArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
     const that = this
     return new Promise(function(resolve, reject) {
-      if (that.meta == null) {
-        that.meta = orsUtil.prepareMeta(that.defaultArgs)
-      }
-      that.httpArgs = orsUtil.prepareRequest(that.defaultArgs)
+      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+
+      that.httpArgs = orsUtil.prepareRequest(that.requestArgs)
       const postBody = that.getBody(that.httpArgs)
 
       that.createRequest(null, postBody, resolve, reject);

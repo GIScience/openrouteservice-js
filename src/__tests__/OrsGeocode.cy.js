@@ -1,13 +1,12 @@
 /* eslint-disable no-undef */
-import OrsGeocode from '../OrsGeocode'
-import Constants from '../constants'
+import OrsGeocode from '../OrsGeocode.js'
+import Constants from '../constants.js'
 
 const key = Cypress.env('api_key')
 const orsGeocode = new OrsGeocode({ api_key: key })
 
 describe('Geocode Test', function () {
   it('Should get geocode results', function (done) {
-    orsGeocode.clear()
     orsGeocode
       .geocode({
         text: 'Namibian Brewery',
@@ -16,7 +15,6 @@ describe('Geocode Test', function () {
           'country',
           'region',
           'macrocounty',
-          'borough',
           'macroregion',
           'county',
           'neighbourhood',
@@ -38,7 +36,6 @@ describe('Geocode Test', function () {
   })
 
   it('Should get geocode results with special char', function (done) {
-    orsGeocode.clear()
     orsGeocode
       .geocode({
         text: 'hauptstraße',
@@ -47,7 +44,6 @@ describe('Geocode Test', function () {
           'country',
           'region',
           'macrocounty',
-          'borough',
           'macroregion',
           'county',
           'neighbourhood',
@@ -69,9 +65,9 @@ describe('Geocode Test', function () {
   })
 
   it('Should clear Geocode args', function () {
-    orsGeocode.clear()
-    expect(orsGeocode.args.text).to.be.undefined
+    expect(orsGeocode.defaultArgs.text).to.be.undefined
   })
+
   it('Should geocode with boundaries', function (done) {
     new OrsGeocode({
       api_key: key,
@@ -101,7 +97,6 @@ describe('Geocode Test', function () {
       })
   })
   it('Should geocode structured address', function (done) {
-    orsGeocode.clear()
     orsGeocode
       .geocode({
         text: 'Namibian Brewery',
@@ -122,7 +117,6 @@ describe('Geocode Test', function () {
   })
 
   it('Should geocode without result', function (done) {
-    orsGeocode.clear()
     orsGeocode
       .geocode({
         text: 'xzxzxzxtakywqa',
@@ -142,7 +136,6 @@ describe('Geocode Test', function () {
       })
   })
   it('Should reverse Geocode result', function (done) {
-    orsGeocode.clear()
     orsGeocode
       .reverseGeocode({
         point: {

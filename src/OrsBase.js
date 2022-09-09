@@ -1,4 +1,5 @@
 import request from 'superagent'
+import Promise from 'bluebird';
 import OrsUtil from './OrsUtil'
 import Constants from './constants'
 
@@ -7,7 +8,8 @@ const orsUtil = new OrsUtil()
 class OrsBase {
   constructor(args) {
     this.defaultArgs = {}
-    this.meta = null
+    this.requestArgs = {}
+    this.argsCache = null
     this.customHeaders = []
 
     if (Constants.propNames.apiKey in args) {
@@ -26,19 +28,19 @@ class OrsBase {
     }
   }
 
-  checkHeaders(reqArgs) {
+  checkHeaders() {
     // Get custom header and remove from args
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
+    if (this.requestArgs.customHeaders) {
+      this.customHeaders = this.requestArgs.customHeaders
+      delete this.requestArgs.customHeaders
     }
   }
 
   createRequest(url, body, resolve, reject) {
-    let authorization = ""
+    let authorization
     if (url === null) {
-      url = orsUtil.prepareUrl(this.meta)
-      authorization = this.meta[Constants.propNames.apiKey]
+      url = orsUtil.prepareUrl(this.argsCache)
+      authorization = this.argsCache[Constants.propNames.apiKey]
     } else {
       authorization = this.defaultArgs[Constants.propNames.apiKey]
     }
@@ -61,6 +63,34 @@ class OrsBase {
         reject(err)
       } else if (res) {
         resolve(res.body || res.text)
+      }
+    })
+  }
+
+  // is overidden in Directions and Isochrones class
+  getBody() {
+    return this.httpArgs;
+  }
+
+  calculate(reqArgs) {
+    this.requestArgs = reqArgs
+
+    this.checkHeaders()
+
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
+
+    const that = this
+    return new Promise(function(resolve, reject) {
+      if (that.requestArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
+        that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+
+        that.httpArgs = orsUtil.prepareRequest(that.requestArgs)
+        const postBody = that.getBody(that.httpArgs)
+
+        that.createRequest(postBody, resolve, reject)
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(Constants.useAPIV2Msg)
       }
     })
   }
