@@ -7,8 +7,8 @@ const orsUtil = new OrsUtil()
 
 class OrsPois extends OrsBase {
   clear() {
-    for (const variable in this.args) {
-      if (variable !== Constants.propNames.apiKey) delete this.args[variable]
+    for (const variable in this.defaultArgs) {
+      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
     }
   }
 
@@ -31,22 +31,22 @@ class OrsPois extends OrsBase {
 
   poisPromise() {
     // the service arg is used to build the target url
-    if (!this.args[Constants.propNames.service]) {
-      this.args[Constants.propNames.service] = 'pois'
+    if (!this.defaultArgs[Constants.propNames.service]) {
+      this.defaultArgs[Constants.propNames.service] = 'pois'
     }
     // the request arg is required by the API as part of the body
-    this.args.request = this.args.request || 'pois'
+    this.defaultArgs.request = this.defaultArgs.request || 'pois'
 
     const that = this
     return new Promise(function(resolve, reject) {
-      let url = orsUtil.prepareUrl(that.args)
+      let url = orsUtil.prepareUrl(that.defaultArgs)
       url += url.indexOf('?') > -1 ? '&' : '?'
 
-      if (that.args[Constants.propNames.service]) {
-        delete that.args[Constants.propNames.service]
+      if (that.defaultArgs[Constants.propNames.service]) {
+        delete that.defaultArgs[Constants.propNames.service]
       }
 
-      const payload = that.generatePayload(that.args)
+      const payload = that.generatePayload(that.defaultArgs)
 
       that.createRequest(url, payload, resolve, reject);
     })
@@ -55,8 +55,8 @@ class OrsPois extends OrsBase {
   pois(reqArgs) {
     this.checkHeaders(reqArgs)
 
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
 
     return this.poisPromise()
   }

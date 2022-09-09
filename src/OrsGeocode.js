@@ -106,8 +106,8 @@ class OrsGeocode extends OrsBase {
   }
 
   clear() {
-    for (const variable in this.args) {
-      if (variable !== Constants.apiKeyPropName) delete this.args[variable]
+    for (const variable in this.defaultArgs) {
+      if (variable !== Constants.apiKeyPropName) delete this.defaultArgs[variable]
     }
   }
 
@@ -126,11 +126,11 @@ class OrsGeocode extends OrsBase {
     const that = this
     return new Promise(function(resolve, reject) {
       // Use old API via GET
-      let url = orsUtil.prepareUrl(that.args)
+      let url = orsUtil.prepareUrl(that.defaultArgs)
       // Add url query string from args
-      url += '?' + that.getParametersAsQueryString(that.args)
+      url += '?' + that.getParametersAsQueryString(that.defaultArgs)
 
-      const timeout = that.args[Constants.propNames.timeout] || 5000
+      const timeout = that.defaultArgs[Constants.propNames.timeout] || 5000
 
       // createRequest function is not applicable: GET instead of POST request
       const orsRequest = request
@@ -155,31 +155,31 @@ class OrsGeocode extends OrsBase {
   geocode(reqArgs) {
     this.checkHeaders(reqArgs)
 
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search'
     }
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
     return this.geocodePromise()
   }
 
   reverseGeocode(reqArgs) {
     this.checkHeaders(reqArgs)
 
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/reverse'
     }
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
     return this.geocodePromise()
   }
 
   structuredGeocode(reqArgs) {
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search/structured'
     }
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
     return this.geocodePromise()
   }
 }

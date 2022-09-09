@@ -7,10 +7,10 @@ const orsUtil = new OrsUtil()
 
 class OrsIsochrones extends OrsBase {
   addLocation(latlon) {
-    if (!('locations' in this.args)) {
-      this.args.locations = []
+    if (!('locations' in this.defaultArgs)) {
+      this.defaultArgs.locations = []
     }
-    this.args.locations.push(latlon)
+    this.defaultArgs.locations.push(latlon)
   }
 
   getBody(args) {
@@ -51,21 +51,20 @@ class OrsIsochrones extends OrsBase {
   calculate(reqArgs) {
     this.checkHeaders(reqArgs)
 
-    orsUtil.setRequestDefaults(this.args, reqArgs, true)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs, true)
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'isochrones'
     }
 
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
 
     const that = this
     return new Promise(function(resolve, reject) {
-      const timeout = that.args[Constants.propNames.timeout] || 10000
-      if (that.args[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
+      if (that.defaultArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
         if (that.meta == null) {
-          that.meta = orsUtil.prepareMeta(that.args)
+          that.meta = orsUtil.prepareMeta(that.defaultArgs)
         }
-        that.httpArgs = orsUtil.prepareRequest(that.args)
+        that.httpArgs = orsUtil.prepareRequest(that.defaultArgs)
         const postBody = that.getBody(that.httpArgs)
 
         that.createRequest(null, postBody, resolve, reject);

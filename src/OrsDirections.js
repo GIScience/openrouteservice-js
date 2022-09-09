@@ -7,20 +7,20 @@ const orsUtil = new OrsUtil()
 
 class OrsDirections extends OrsBase {
   clear() {
-    for (const variable in this.args) {
-      if (variable !== Constants.apiKeyPropName) delete this.args[variable]
+    for (const variable in this.defaultArgs) {
+      if (variable !== Constants.apiKeyPropName) delete this.defaultArgs[variable]
     }
   }
 
   clearPoints() {
-    if ('coordinates' in this.args) this.args.coordinates.length = 0
+    if ('coordinates' in this.defaultArgs) this.defaultArgs.coordinates.length = 0
   }
 
   addWaypoint(latLon) {
-    if (!('coordinates' in this.args)) {
-      this.args.coordinates = []
+    if (!('coordinates' in this.defaultArgs)) {
+      this.defaultArgs.coordinates = []
     }
-    this.args.coordinates.push(latLon)
+    this.defaultArgs.coordinates.push(latLon)
   }
 
   getBody(args) {
@@ -54,18 +54,18 @@ class OrsDirections extends OrsBase {
     // Get custom header and remove from args
     this.checkHeaders(reqArgs)
 
-    orsUtil.setRequestDefaults(this.args, reqArgs, true)
-    if (!this.args[Constants.propNames.service]) {
-      this.args[Constants.propNames.service] = 'directions'
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs, true)
+    if (!this.defaultArgs[Constants.propNames.service]) {
+      this.defaultArgs[Constants.propNames.service] = 'directions'
     }
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
 
     const that = this
     return new Promise(function(resolve, reject) {
       if (that.meta == null) {
-        that.meta = orsUtil.prepareMeta(that.args)
+        that.meta = orsUtil.prepareMeta(that.defaultArgs)
       }
-      that.httpArgs = orsUtil.prepareRequest(that.args)
+      that.httpArgs = orsUtil.prepareRequest(that.defaultArgs)
       const postBody = that.getBody(that.httpArgs)
 
       that.createRequest(null, postBody, resolve, reject);

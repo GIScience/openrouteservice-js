@@ -22,7 +22,7 @@ describe('Elevation Test', function () {
   })
 
   it('Get Point elevation results', function (done) {
-    new OrsElevation({ api_key: key})
+    orsElevation
       .pointElevation({
         format_in: 'point',
         geometry: [13.331273, 38.10849]

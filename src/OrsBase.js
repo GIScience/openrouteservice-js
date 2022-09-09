@@ -6,12 +6,12 @@ const orsUtil = new OrsUtil()
 
 class OrsBase {
   constructor(args) {
-    this.args = {}
+    this.defaultArgs = {}
     this.meta = null
     this.customHeaders = []
 
     if (Constants.propNames.apiKey in args) {
-      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
+      this.defaultArgs[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
       // eslint-disable-next-line no-console
       console.error(Constants.missingAPIKeyMsg)
@@ -19,10 +19,10 @@ class OrsBase {
     }
 
     if (Constants.propNames.host in args) {
-      this.args[Constants.propNames.host] = args[Constants.propNames.host]
+      this.defaultArgs[Constants.propNames.host] = args[Constants.propNames.host]
     }
     if (Constants.propNames.service in args) {
-      this.args[Constants.propNames.service] = args[Constants.propNames.service]
+      this.defaultArgs[Constants.propNames.service] = args[Constants.propNames.service]
     }
   }
 
@@ -40,10 +40,10 @@ class OrsBase {
       url = orsUtil.prepareUrl(this.meta)
       authorization = this.meta[Constants.propNames.apiKey]
     } else {
-      authorization = this.args[Constants.propNames.apiKey]
+      authorization = this.defaultArgs[Constants.propNames.apiKey]
     }
 
-    const timeout = this.args[Constants.propNames.timeout] || 10000
+    const timeout = this.defaultArgs[Constants.propNames.timeout] || 10000
 
     const orsRequest = request
       .post(url)

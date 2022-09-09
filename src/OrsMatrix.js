@@ -9,22 +9,20 @@ class OrsMatrix extends OrsBase {
   calculate(reqArgs) {
     this.checkHeaders(reqArgs)
 
-    orsUtil.setRequestDefaults(this.args, reqArgs, true)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      this.args[Constants.propNames.service] = 'matrix'
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs, true)
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+      this.defaultArgs[Constants.propNames.service] = 'matrix'
     }
 
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
 
     const that = this
     return new Promise(function(resolve, reject) {
-      const timeout = that.args[Constants.propNames.timeout] || 10000
-
-      if (that.args[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
+      if (that.defaultArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
         if (that.meta == null) {
-          that.meta = orsUtil.prepareMeta(that.args)
+          that.meta = orsUtil.prepareMeta(that.defaultArgs)
         }
-        that.httpArgs = orsUtil.prepareRequest(that.args)
+        that.httpArgs = orsUtil.prepareRequest(that.defaultArgs)
 
         that.createRequest(null, that.httpArgs, resolve, reject);
       } else {

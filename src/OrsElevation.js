@@ -7,8 +7,8 @@ const orsUtil = new OrsUtil()
 
 class OrsElevation extends OrsBase {
   clear() {
-    for (const variable in this.args) {
-      if (variable !== Constants.propNames.apiKey) delete this.args[variable]
+    for (const variable in this.defaultArgs) {
+      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
     }
   }
 
@@ -26,8 +26,8 @@ class OrsElevation extends OrsBase {
   elevationPromise() {
     const that = this
     return new Promise(function(resolve, reject) {
-      const url = orsUtil.prepareUrl(that.args)
-      const payload = that.generatePayload(that.args)
+      const url = orsUtil.prepareUrl(that.defaultArgs)
+      const payload = that.generatePayload(that.defaultArgs)
 
       that.createRequest(url, payload, resolve, reject);
     })
@@ -36,11 +36,11 @@ class OrsElevation extends OrsBase {
   lineElevation(reqArgs) {
     this.checkHeaders(reqArgs)
 
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs[Constants.propNames.service] = 'elevation/line'
     }
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
     return this.elevationPromise()
   }
 
@@ -52,12 +52,12 @@ class OrsElevation extends OrsBase {
       delete reqArgs.customHeaders
     }
 
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs[Constants.propNames.service] = 'elevation/point'
     }
 
-    orsUtil.copyProperties(reqArgs, this.args)
+    orsUtil.copyProperties(reqArgs, this.defaultArgs)
     return this.elevationPromise()
   }
 }
