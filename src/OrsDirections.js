@@ -1,9 +1,5 @@
-import Promise from 'bluebird'
-import OrsUtil from './OrsUtil'
 import Constants from './constants'
 import OrsBase from './OrsBase'
-
-const orsUtil = new OrsUtil()
 
 class OrsDirections extends OrsBase {
   constructor(args) {
@@ -58,29 +54,6 @@ class OrsDirections extends OrsBase {
       delete args.avoidables
     }
     return args
-  }
-
-  calculate(reqArgs) {
-    this.requestArgs = reqArgs
-
-    this.checkHeaders()
-
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
-
-    const that = this
-    return new Promise(function(resolve, reject) {
-      if (that.requestArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
-        that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
-
-        that.httpArgs = orsUtil.prepareRequest(that.requestArgs)
-        const postBody = that.getBody(that.httpArgs)
-
-        that.createRequest(null, postBody, resolve, reject);
-      } else {
-        // eslint-disable-next-line no-console
-        console.error(Constants.useAPIV2Msg)
-      }
-    })
   }
 }
 
