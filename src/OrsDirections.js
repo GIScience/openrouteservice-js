@@ -6,6 +6,16 @@ import OrsBase from './OrsBase'
 const orsUtil = new OrsUtil()
 
 class OrsDirections extends OrsBase {
+  constructor(args) {
+    super(args);
+    if (!this.defaultArgs[Constants.propNames.service]) {
+      this.defaultArgs[Constants.propNames.service] = 'directions'
+    }
+    if (!args[Constants.propNames.apiVersion]) {
+      this.defaultArgs.api_version = Constants.defaultAPIVersion
+    }
+  }
+
   clear() {
     for (const variable in this.defaultArgs) {
       if (variable !== Constants.apiKeyPropName) delete this.defaultArgs[variable]
@@ -55,21 +65,21 @@ class OrsDirections extends OrsBase {
 
     this.checkHeaders()
 
-    // to do: move function to base class
-    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs, true)
-    if (!this.defaultArgs[Constants.propNames.service]) {
-      this.defaultArgs[Constants.propNames.service] = 'directions'
-    }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
     const that = this
     return new Promise(function(resolve, reject) {
-      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+      if (that.requestArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
+        that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
 
-      that.httpArgs = orsUtil.prepareRequest(that.requestArgs)
-      const postBody = that.getBody(that.httpArgs)
+        that.httpArgs = orsUtil.prepareRequest(that.requestArgs)
+        const postBody = that.getBody(that.httpArgs)
 
-      that.createRequest(null, postBody, resolve, reject);
+        that.createRequest(null, postBody, resolve, reject);
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(Constants.useAPIV2Msg)
+      }
     })
   }
 }

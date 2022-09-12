@@ -6,6 +6,13 @@ import OrsBase from './OrsBase'
 const orsUtil = new OrsUtil()
 
 class OrsPois extends OrsBase {
+  constructor(args) {
+    super(args);
+    if (!this.defaultArgs[Constants.propNames.service]) {
+      this.defaultArgs[Constants.propNames.service] = 'pois'
+    }
+  }
+
   clear() {
     for (const variable in this.defaultArgs) {
       if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]

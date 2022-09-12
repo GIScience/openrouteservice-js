@@ -38,7 +38,6 @@ class OrsElevation extends OrsBase {
 
     this.checkHeaders()
 
-    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
     if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs[Constants.propNames.service] = 'elevation/line'
     }
@@ -52,7 +51,6 @@ class OrsElevation extends OrsBase {
 
     this.checkHeaders()
 
-    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs)
     if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
       this.requestArgs[Constants.propNames.service] = 'elevation/point'
     }

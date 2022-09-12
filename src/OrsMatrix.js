@@ -6,15 +6,20 @@ import OrsBase from './OrsBase'
 const orsUtil = new OrsUtil()
 
 class OrsMatrix extends OrsBase {
+  constructor(args) {
+    super(args);
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.defaultArgs[Constants.propNames.service] = 'matrix'
+    }
+    if (!args[Constants.propNames.apiVersion]) {
+      this.defaultArgs.api_version = Constants.defaultAPIVersion
+    }
+  }
+
   calculate(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
-
-    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs, true)
-    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
-      this.defaultArgs[Constants.propNames.service] = 'matrix'
-    }
 
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 

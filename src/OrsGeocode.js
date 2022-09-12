@@ -157,7 +157,6 @@ class OrsGeocode extends OrsBase {
 
     this.checkHeaders()
 
-    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs)
     if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
       this.requestArgs.service = 'geocode/search'
     }
@@ -171,7 +170,6 @@ class OrsGeocode extends OrsBase {
 
     this.checkHeaders()
 
-    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs)
     if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
       this.requestArgs.service = 'geocode/reverse'
     }
@@ -181,7 +179,10 @@ class OrsGeocode extends OrsBase {
   }
 
   structuredGeocode(reqArgs) {
-    orsUtil.setRequestDefaults(this.defaultArgs, reqArgs)
+    this.requestArgs = reqArgs
+
+    this.checkHeaders()
+
     if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search/structured'
     }

@@ -6,6 +6,16 @@ import OrsBase from './OrsBase'
 const orsUtil = new OrsUtil()
 
 class OrsIsochrones extends OrsBase {
+  constructor(args) {
+    super(args);
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.defaultArgs.service = 'isochrones'
+    }
+    if (!args[Constants.propNames.apiVersion]) {
+      this.defaultArgs.api_version = Constants.defaultAPIVersion
+    }
+  }
+
   addLocation(latlon) {
     if (!('locations' in this.defaultArgs)) {
       this.defaultArgs.locations = []
@@ -52,11 +62,6 @@ class OrsIsochrones extends OrsBase {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
-
-    orsUtil.setRequestDefaults(this.defaultArgs, this.requestArgs, true)
-    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
-      this.requestArgs.service = 'isochrones'
-    }
 
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 

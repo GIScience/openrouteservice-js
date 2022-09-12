@@ -12,6 +12,21 @@ class OrsBase {
     this.argsCache = null
     this.customHeaders = []
 
+    this._setRequestDefaults(args)
+  }
+
+  /**
+   * Set defaults for a request comparing with and overwriting default class arguments
+   * @param {Object} args - constructor input
+   */
+  _setRequestDefaults(args) {
+    this.defaultArgs[Constants.propNames.host] = Constants.defaultHost
+    if (args[Constants.propNames.host]) {
+      this.defaultArgs[Constants.propNames.host] = args[Constants.propNames.host]
+    }
+    if (args[Constants.propNames.service]) {
+      this.defaultArgs[Constants.propNames.service] = args[Constants.propNames.service]
+    }
     if (Constants.propNames.apiKey in args) {
       this.defaultArgs[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
@@ -20,12 +35,6 @@ class OrsBase {
       throw new Error(Constants.missingAPIKeyMsg)
     }
 
-    if (Constants.propNames.host in args) {
-      this.defaultArgs[Constants.propNames.host] = args[Constants.propNames.host]
-    }
-    if (Constants.propNames.service in args) {
-      this.defaultArgs[Constants.propNames.service] = args[Constants.propNames.service]
-    }
   }
 
   checkHeaders() {

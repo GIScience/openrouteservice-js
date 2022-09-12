@@ -54,33 +54,6 @@ class OrsUtil {
     }
     return url
   }
-
-  /**
-   * Set defaults for a request comparing and overwriting instance args
-   * @param {Object} instanceArgs
-   * @param {Object} requestArgs
-   * @param {Boolean} setAPIVersion
-   */
-  setRequestDefaults(instanceArgs, requestArgs, setAPIVersion = false) {
-    if (requestArgs[Constants.propNames.service]) {
-      instanceArgs[Constants.propNames.service] = requestArgs[Constants.propNames.service]
-    }
-    if (requestArgs[Constants.propNames.host]) {
-      instanceArgs[Constants.propNames.host] = requestArgs[Constants.propNames.host]
-    }
-    if (!instanceArgs[Constants.propNames.host]) {
-      instanceArgs[Constants.propNames.host] = Constants.defaultHost
-    }
-    if (setAPIVersion === true) {
-      if (!requestArgs[Constants.propNames.apiVersion]) {
-        requestArgs.api_version = Constants.defaultAPIVersion
-      }
-      if (!requestArgs[Constants.propNames.apiVersion]) {
-        requestArgs.api_version = Constants.defaultAPIVersion
-      }
-    }
-    return instanceArgs
-  }
 }
 
 export default OrsUtil
