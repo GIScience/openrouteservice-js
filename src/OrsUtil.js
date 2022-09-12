@@ -1,4 +1,4 @@
-import Constants from './constants'
+import Constants from './constants.js'
 class OrsUtil {
   fillArgs(defaultArgs, requestArgs) {
     requestArgs = {...defaultArgs, ...requestArgs}
@@ -35,43 +35,18 @@ class OrsUtil {
    * @return {string} url
    */
   prepareUrl(args) {
-    let url, urlPathParts
+    let url = args[Constants.propNames.host]
+    let urlPathParts = [
+      args[Constants.propNames.apiVersion],
+      args[Constants.propNames.service],
+      args[Constants.propNames.profile],
+      args[Constants.propNames.format]
+    ]
 
-    // If the service already defines the path
-    // to the request service we have to add
-    // only the profile and the format to the url
-    if (args[Constants.propNames.service] && args[Constants.propNames.service].indexOf('http') === 0) {
-      url = args[Constants.propNames.service]
-      urlPathParts = [
-        args[Constants.propNames.profile],
-        args[Constants.propNames.format]
-      ]
-    } else {
-      // if not, build the url from scratch
-      url = args[Constants.propNames.host]
-      urlPathParts = [
-        args[Constants.propNames.apiVersion],
-        args[Constants.propNames.service],
-        args[Constants.propNames.profile],
-        args[Constants.propNames.format]
-      ]
-    }
+    urlPathParts = urlPathParts.join("/")
+    urlPathParts = urlPathParts.replace(/\/(\/)+/g, "/")
 
-    let urlPath = '/'
-    let counter = 0
-    for (const key in urlPathParts) {
-      if (urlPathParts[key]) {
-        if (counter > 0 && counter) {
-          urlPath += '/'
-        }
-        urlPath += urlPathParts[key]
-      }
-      counter++
-    }
-
-    // Remove double slashes from path
-    const cleanUrlPath = urlPath.replace(/\/\//g, "/")
-    url += cleanUrlPath
+    url = url + '/' + urlPathParts
 
     // The end of the url can not be a slash
     if (url.slice(-1) === '/') {
@@ -104,6 +79,7 @@ class OrsUtil {
         requestArgs.api_version = Constants.defaultAPIVersion
       }
     }
+    return instanceArgs
   }
 }
 
