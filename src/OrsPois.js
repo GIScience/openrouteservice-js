@@ -2,35 +2,19 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
 import Constants from './constants'
+import OrsBase from './OrsBase'
 
 const orsUtil = new OrsUtil()
 
-class OrsPois {
-  constructor(args) {
-    this.args = {}
-    if (Constants.propNames.apiKey in args) {
-      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
-    } else {
-      // eslint-disable-next-line no-console
-      console.error(Constants.missingAPIKeyMsg)
-      throw new Error(Constants.missingAPIKeyMsg)
-    }
-    if (Constants.propNames.host in args) {
-      this.args[Constants.propNames.host] = args[Constants.propNames.host]
-    }
-    if (Constants.propNames.service in args) {
-      this.args[Constants.propNames.service] = args[Constants.propNames.service]
-    }
-  }
-
+class OrsPois extends OrsBase {
   clear() {
-    for (let variable in this.args) {
+    for (const variable in this.args) {
       if (variable !== Constants.propNames.apiKey) delete this.args[variable]
     }
   }
 
   generatePayload(args) {
-    let payload = {}
+    const payload = {}
 
     for (const key in args) {
       if (
@@ -67,15 +51,15 @@ class OrsPois {
       }
 
       const payload = that.generatePayload(that.args)
-      let authorization = that.args[Constants.propNames.apiKey]
+      const authorization = that.args[Constants.propNames.apiKey]
 
-      let orsRequest = request
+      const orsRequest = request
         .post(url)
         .send(payload)
         .set('Authorization', authorization)
         .timeout(timeout)
 
-      for (let key in that.customHeaders) {
+      for (const key in that.customHeaders) {
         orsRequest.set(key, that.customHeaders[key])
       }
       orsRequest.end(function(err, res) {

@@ -2,29 +2,11 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
 import Constants from './constants'
+import OrsBase from './OrsBase'
 
 const orsUtil = new OrsUtil()
 
-class OrsIsochrones {
-  constructor(args) {
-    this.meta = null
-    this.args = {}
-    if (Constants.propNames.apiKey in args) {
-      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
-    } else {
-      // eslint-disable-next-line no-console
-      console.log(Constants.missingAPIKeyMsg)
-      throw new Error(Constants.missingAPIKeyMsg)
-    }
-
-    if (Constants.propNames.host in args) {
-      this.args[Constants.propNames.host] = args[Constants.propNames.host]
-    }
-    if (Constants.propNames.service in args) {
-      this.args[Constants.propNames.service] = args[Constants.propNames.service]
-    }
-  }
-
+class OrsIsochrones extends OrsBase {
   addLocation(latlon) {
     if (!('locations' in this.args)) {
       this.args.locations = []
@@ -33,7 +15,7 @@ class OrsIsochrones {
   }
 
   getBody(args) {
-    let options = {}
+    const options = {}
 
     if (args.restrictions) {
       options.profile_params = {
@@ -92,18 +74,18 @@ class OrsIsochrones {
           that.meta = orsUtil.prepareMeta(that.args)
         }
         that.httpArgs = orsUtil.prepareRequest(that.args)
-        let url = orsUtil.prepareUrl(that.meta)
+        const url = orsUtil.prepareUrl(that.meta)
 
         const postBody = that.getBody(that.httpArgs)
-        let authorization = that.meta[Constants.propNames.apiKey]
+        const authorization = that.meta[Constants.propNames.apiKey]
 
-        let orsRequest = request
+        const orsRequest = request
           .post(url)
           .send(postBody)
           .set('Authorization', authorization)
           .timeout(timeout)
 
-        for (let key in that.customHeaders) {
+        for (const key in that.customHeaders) {
           orsRequest.set(key, that.customHeaders[key])
         }
         orsRequest.end(function(err, res) {

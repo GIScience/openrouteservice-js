@@ -39,6 +39,7 @@ class OrsUtil {
   /**
    * Prepare the request url based on url constituents
    * @param {Object} args
+   * @return {string} url
    */
   prepareUrl(args) {
     let url, urlPathParts
@@ -66,7 +67,7 @@ class OrsUtil {
 
     let urlPath = '/'
     let counter = 0
-    for (let key in urlPathParts) {
+    for (const key in urlPathParts) {
       if (urlPathParts[key]) {
         if (counter > 0 && counter) {
           urlPath += '/'
@@ -77,7 +78,7 @@ class OrsUtil {
     }
 
     // Remove double slashes from path
-    let cleanUrlPath = urlPath.replace(/\/\//g, '/')
+    const cleanUrlPath = urlPath.replace(/\/\//g, "/")
     url += cleanUrlPath
 
     // The end of the url can not be a slash

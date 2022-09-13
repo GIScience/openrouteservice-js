@@ -2,25 +2,13 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
 import Constants from './constants'
+import OrsBase from './OrsBase'
 
 const orsUtil = new OrsUtil()
 
-class OrsGeocode {
+class OrsGeocode extends OrsBase {
   constructor(args) {
-    this.args = {}
-    if (Constants.apiKeyPropName in args) {
-      this.args.api_key = args.api_key
-    } else {
-      // eslint-disable-next-line no-console
-      console.error(Constants.missingAPIKeyMsg)
-      throw new Error(Constants.missingAPIKeyMsg)
-    }
-    if (Constants.propNames.host in args) {
-      this.args[Constants.propNames.host] = args[Constants.propNames.host]
-    }
-    if (Constants.propNames.service in args) {
-      this.args[Constants.propNames.service] = args[Constants.propNames.service]
-    }
+    super(args);
 
     this.lookupParameter = {
       api_key: function(key, val) {
@@ -63,7 +51,7 @@ class OrsGeocode {
       sources: function(key, val) {
         let urlParams = '&sources='
         if (val) {
-          for (let key in val) {
+          for (const key in val) {
             if (Number(key) > 0) {
               urlParams += ','
             }
@@ -118,7 +106,7 @@ class OrsGeocode {
   }
 
   clear() {
-    for (let variable in this.args) {
+    for (const variable in this.args) {
       if (variable !== Constants.apiKeyPropName) delete this.args[variable]
     }
   }
@@ -145,9 +133,9 @@ class OrsGeocode {
       // Add url query string from args
       url += '?' + that.getParametersAsQueryString(that.args)
 
-      let orsRequest = request.get(url).timeout(timeout)
+      const orsRequest = request.get(url).timeout(timeout)
 
-      for (let key in that.customHeaders) {
+      for (const key in that.customHeaders) {
         orsRequest.set(key, that.customHeaders[key])
       }
       orsRequest.end(function(err, res) {
