@@ -4,22 +4,23 @@
     <script src="../dist/ors-js-client.js"></script>
   </head>
   <body>
+    <div>
     <h1>ORS-js lib examples</h1>
     <section >
       <h2>Isochrones</h2>
       <div id="isochrones">
         <script>
           window.onload = function() {
-            var apiKey = location.search.split('api_key=')[1];
+            const apiKey = location.search.split("api_key=")[1]
 
-            var node = document.getElementById("isochrones");
+            const node = document.getElementById("isochrones")
             if (!apiKey || apiKey === 'put_your_key_here') {
-              node.innerHTML = "<p>Please provide an API key via <b>?api_key=mykey</b> query parameter </p>";
+              node.innerHTML = "<p>Please provide an API key via <b>?api_key=myKey</b> query parameter </p>";
             } else {
               // add your api_key here
-              var Isochrones = new Openrouteservice.Isochrones({
+              const Isochrones = new Openrouteservice.Isochrones({
                 api_key: apiKey
-              });
+              })
 
               Isochrones.calculate({
                   profile: 'driving-car',
@@ -40,11 +41,12 @@
                   response = response.replace(/(\n)/g, '<br>');
                   response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
                   node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                });
-            };
+                })
+              }
           }
         </script>
       </div>
+
     </section>
     </div>
   </body>
