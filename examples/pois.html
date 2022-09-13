@@ -4,22 +4,23 @@
     <script src="../dist/ors-js-client.js"></script>
   </head>
   <body>
+    <div>
     <h1>ORS-js lib examples</h1>
     <section >
       <h2>POIs</h2>
       <div id="pois">
         <script>
           window.onload = function() {
-            var apiKey = location.search.split('api_key=')[1];
+            const apiKey = location.search.split("api_key=")[1]
 
-            var node = document.getElementById("pois");
+            const node = document.getElementById("pois")
             if (!apiKey || apiKey === 'put_your_key_here') {
-              node.innerHTML = "<p>Please provide an API key via <b>?api_key=mykey</b> query parameter </p>";
+              node.innerHTML = "<p>Please provide an API key via <b>?api_key=myKey</b> query parameter </p>";
             } else {
               // add your api_key here
-              var Pois = new Openrouteservice.Pois({
+              const Pois = new Openrouteservice.Pois({
                 api_key: apiKey
-              });
+              })
 
               Pois.pois({
                 geometry: {
@@ -45,11 +46,12 @@
                   response = response.replace(/(\n)/g, '<br>');
                   response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
                   node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                });
-              };
+                })
+              }
           }
         </script>
       </div>
+
     </section>
     </div>
   </body>

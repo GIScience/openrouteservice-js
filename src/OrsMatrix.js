@@ -2,22 +2,11 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
 import Constants from './constants'
+import OrsBase from './OrsBase'
 
 const orsUtil = new OrsUtil()
 
-class OrsMatrix {
-  constructor(args) {
-    this.meta = null
-    this.args = {}
-    if (Constants.propNames.apiKey in args) {
-      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
-    } else {
-      // eslint-disable-next-line no-console
-      console.log(Constants.missingAPIKeyMsg)
-      throw new Error(Constants.missingAPIKeyMsg)
-    }
-  }
-
+class OrsMatrix extends OrsBase {
   calculate(reqArgs) {
     // Get custom header and remove from args
     this.customHeaders = []
@@ -44,16 +33,16 @@ class OrsMatrix {
         }
         that.httpArgs = orsUtil.prepareRequest(that.args)
 
-        let url = orsUtil.prepareUrl(that.meta)
-        let authorization = that.meta[Constants.propNames.apiKey]
+        const url = orsUtil.prepareUrl(that.meta)
+        const authorization = that.meta[Constants.propNames.apiKey]
 
-        let orsRequest = request
+        const orsRequest = request
           .post(url)
           .send(that.httpArgs)
           .set('Authorization', authorization)
           .timeout(timeout)
 
-        for (let key in that.customHeaders) {
+        for (const key in that.customHeaders) {
           orsRequest.set(key, that.customHeaders[key])
         }
         orsRequest.end(function(err, res) {

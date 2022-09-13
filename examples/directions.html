@@ -4,23 +4,22 @@
     <script src="../dist/ors-js-client.js"></script>
   </head>
   <body>
+    <div>
     <h1>ORS-js lib examples</h1>
-    <section >
+    <section>
       <h2>Driving car directions</h2>
       <div id="driving-car-directions">
         <script>
           window.onload = function() {
-            var apiKey = location.search.split('api_key=')[1];
+            const apiKey = location.search.split('api_key=')[1]
+            const node = document.getElementById("driving-car-directions")
 
             if (!apiKey || apiKey === 'put_your_key_here') {
-              var node = document.getElementById("driving-car-directions");
-              node.innerHTML = "<p>Please provide an API key via <b>?api_key=mykey</b> query parameter </p>";
+              node.innerHTML = "<p>Please provide an API key via <b>?api_key=myKey</b> query parameter </p>";
             } else {
-              let orsDirections = new Openrouteservice.Directions({
+              const orsDirections = new Openrouteservice.Directions({
                 api_key: apiKey
-              });
-
-              var node = document.getElementById("driving-car-directions");
+              })
 
               orsDirections.calculate({
                 coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
@@ -43,11 +42,9 @@
                     response = response.replace(/(\n)/g, '<br>');
                     response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
                     node.innerHTML = "<h3>Error</h3><p>" + response + "</p>";
-                });
-            }
-
-          };
-
+                })
+              }
+          }
         </script>
       </div>
 

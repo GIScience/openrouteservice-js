@@ -2,31 +2,13 @@ import request from 'superagent'
 import Promise from 'bluebird'
 import OrsUtil from './OrsUtil'
 import Constants from './constants'
+import OrsBase from './OrsBase'
 
 const orsUtil = new OrsUtil()
 
-class OrsDirections {
-  constructor(args) {
-    this.args = {}
-    this.meta = null
-    if (Constants.propNames.apiKey in args) {
-      this.args[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
-    } else {
-      // eslint-disable-next-line no-console
-      console.error(Constants.missingAPIKeyMsg)
-      throw new Error(Constants.missingAPIKeyMsg)
-    }
-
-    if (Constants.propNames.host in args) {
-      this.args[Constants.propNames.host] = args[Constants.propNames.host]
-    }
-    if (Constants.propNames.service in args) {
-      this.args[Constants.propNames.service] = args[Constants.propNames.service]
-    }
-  }
-
+class OrsDirections extends OrsBase {
   clear() {
-    for (let variable in this.args) {
+    for (const variable in this.args) {
       if (variable !== Constants.apiKeyPropName) delete this.args[variable]
     }
   }
@@ -91,18 +73,18 @@ class OrsDirections {
         that.meta = orsUtil.prepareMeta(that.args)
       }
       that.httpArgs = orsUtil.prepareRequest(that.args)
-      let url = orsUtil.prepareUrl(that.meta)
+      const url = orsUtil.prepareUrl(that.meta)
 
       const postBody = that.getBody(that.httpArgs)
-      let authorization = that.meta[Constants.propNames.apiKey]
-      let orsRequest = request
+      const authorization = that.meta[Constants.propNames.apiKey]
+      const orsRequest = request
         .post(url)
         .send(postBody)
         .set('Authorization', authorization)
         .timeout(timeout)
       // .accept(that.meta.mimeType)
 
-      for (let key in that.customHeaders) {
+      for (const key in that.customHeaders) {
         orsRequest.set(key, that.customHeaders[key])
       }
       orsRequest.end(function(err, res) {
