@@ -42,10 +42,7 @@ class OrsPois extends OrsBase {
 
     const that = this
     return new Promise(function(resolve, reject) {
-      let url = orsUtil.prepareUrl(that.requestArgs)
-      url += url.indexOf('?') > -1 ? '&' : '?'
-
-      // that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
 
       if (that.requestArgs[Constants.propNames.service]) {
         delete that.requestArgs[Constants.propNames.service]
@@ -53,7 +50,7 @@ class OrsPois extends OrsBase {
 
       const payload = that.generatePayload(that.requestArgs)
 
-      that.createRequest(url, payload, resolve, reject);
+      that.createRequest(payload, resolve, reject);
     })
   }
 

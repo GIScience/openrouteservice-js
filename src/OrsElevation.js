@@ -26,10 +26,11 @@ class OrsElevation extends OrsBase {
   elevationPromise() {
     const that = this
     return new Promise(function(resolve, reject) {
-      let url = orsUtil.prepareUrl(that.requestArgs)
+      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+
       const payload = that.generatePayload(that.requestArgs)
 
-      that.createRequest(url, payload, resolve, reject);
+      that.createRequest(payload, resolve, reject);
     })
   }
 

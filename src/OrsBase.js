@@ -45,15 +45,13 @@ class OrsBase {
     }
   }
 
-  createRequest(url, body, resolve, reject) {
-    let authorization
-    if (url === null) {
-      url = orsUtil.prepareUrl(this.argsCache)
-      authorization = this.argsCache[Constants.propNames.apiKey]
-    } else {
-      authorization = this.defaultArgs[Constants.propNames.apiKey]
+  createRequest(body, resolve, reject) {
+    let url = orsUtil.prepareUrl(this.argsCache)
+    if (this.argsCache[Constants.propNames.service] === 'pois') {
+      url += url.indexOf('?') > -1 ? '&' : '?'
     }
 
+    const authorization = this.argsCache[Constants.propNames.apiKey]
     const timeout = this.defaultArgs[Constants.propNames.timeout] || 10000
 
     const orsRequest = request
