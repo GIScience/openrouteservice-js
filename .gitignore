@@ -12,3 +12,7 @@ coverage/lcov-report
 
 # npm lib
 lib
+
+# dev environmet
+.env.local
+examples/apiKey.js

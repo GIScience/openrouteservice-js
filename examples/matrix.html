@@ -9,15 +9,12 @@
     <section >
       <h2>Time distance matrix</h2>
       <div id="time-distance-matrix">
-        <script>
+        <script type='module'>
+          import apiKey from './apiKey.js'
           window.onload = function() {
-            const apiKey = location.search.split("api_key=")[1]
 
             const node = document.getElementById("time-distance-matrix")
-            if (!apiKey || apiKey === 'put_your_key_here') {
-              node.innerHTML = "<p>Please provide an API key via <b>?api_key=myKey</b> query parameter </p>";
-            } else {
-              // add your api_key here
+
               const Matrix = new Openrouteservice.Matrix({
                 api_key: apiKey
               })
@@ -42,7 +39,6 @@
                   response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
                   node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
                 })
-              }
           }
         </script>
       </div>

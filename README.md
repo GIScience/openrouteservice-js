@@ -264,8 +264,11 @@ Clone the openrouteservice-js repository from GitHub into a development environm
 git clone https://github.com/GIScience/openrouteservice-js.git
 cd openrouteservice-js
 
-#Install the dependencies
+# Install the dependencies
 npm install
+
+# Make your openrouteservice API key available for tests, examples and dev_app
+sh setup.sh <your-api-key>
 ```
 
 ## Running Tests

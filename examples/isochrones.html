@@ -9,15 +9,12 @@
     <section >
       <h2>Isochrones</h2>
       <div id="isochrones">
-        <script>
+        <script type='module'>
+          import apiKey from './apiKey.js'
           window.onload = function() {
-            const apiKey = location.search.split("api_key=")[1]
 
             const node = document.getElementById("isochrones")
-            if (!apiKey || apiKey === 'put_your_key_here') {
-              node.innerHTML = "<p>Please provide an API key via <b>?api_key=myKey</b> query parameter </p>";
-            } else {
-              // add your api_key here
+
               const Isochrones = new Openrouteservice.Isochrones({
                 api_key: apiKey
               })
@@ -42,7 +39,6 @@
                   response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
                   node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
                 })
-              }
           }
         </script>
       </div>

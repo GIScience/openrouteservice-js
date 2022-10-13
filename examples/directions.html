@@ -9,14 +9,11 @@
     <section>
       <h2>Driving car directions</h2>
       <div id="driving-car-directions">
-        <script>
+        <script type='module'>
+          import apiKey from './apiKey.js'
           window.onload = function() {
-            const apiKey = location.search.split('api_key=')[1]
             const node = document.getElementById("driving-car-directions")
 
-            if (!apiKey || apiKey === 'put_your_key_here') {
-              node.innerHTML = "<p>Please provide an API key via <b>?api_key=myKey</b> query parameter </p>";
-            } else {
               const orsDirections = new Openrouteservice.Directions({
                 api_key: apiKey
               })
@@ -43,7 +40,6 @@
                     response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
                     node.innerHTML = "<h3>Error</h3><p>" + response + "</p>";
                 })
-              }
           }
         </script>
       </div>
