@@ -30,7 +30,6 @@ class OrsDirections extends OrsBase {
     }
 
     // Set the default vehicle type when profile is 'driving-hgv' if it is missing
-    // eslint-disable-next-line prettier/prettier
     if (this.meta && this.meta.profile === 'driving-hgv' && (!args.options || !args.options.vehicle_type)) {
       args.options = args.options || {}
       args.options.vehicle_type = 'hgv'

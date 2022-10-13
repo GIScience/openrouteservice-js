@@ -158,7 +158,6 @@ class OrsGeocode extends OrsBase {
       delete reqArgs.customHeaders
     }
     orsUtil.setRequestDefaults(this.args, reqArgs)
-    // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search'
     }
@@ -174,7 +173,6 @@ class OrsGeocode extends OrsBase {
       delete reqArgs.customHeaders
     }
     orsUtil.setRequestDefaults(this.args, reqArgs)
-    // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/reverse'
     }
@@ -184,7 +182,6 @@ class OrsGeocode extends OrsBase {
 
   structuredGeocode(reqArgs) {
     orsUtil.setRequestDefaults(this.args, reqArgs)
-    // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search/structured'
     }
