@@ -254,6 +254,19 @@ npm install
 sh setup.sh <your-api-key>
 ```
 
+Start the dev_app for debugging when working with source files:
+```shell
+# runs the app at http://localhost:5173
+vite
+```
+
+Now you can either use the devtools of your browser to set breakpoints (e.g. in `OrsGeocode`)
+or create a `JavaScript Debug` configuration to debug with WebStorm:
+![debug_config](https://user-images.githubusercontent.com/23240110/195876234-4a0ad923-1c5c-4cfe-976a-d39dd23a50d8.png)
+
+Run the config in debug mode to open the Chrome browser and reload the page after changes for them to take
+effect immediately.
+
 ## Running Tests
 
 In order to run the tests locally, it is necessary to create a `spec/test-env.js` by using/copying the `spec/test-env-template.js` and to set a valid ORS key in the just created file.
