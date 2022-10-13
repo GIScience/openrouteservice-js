@@ -269,10 +269,18 @@ effect immediately.
 
 ## Running Tests
 
-In order to run the tests locally, it is necessary to create a `spec/test-env.js` by using/copying the `spec/test-env-template.js` and to set a valid ORS key in the just created file.
+To run specific unit test files in `src/__tests__` on demand during development, run
+```shell
+npm run test:e2e
+```
+Choose one of your installed browsers in the cypress UI you want to test in and select the test file you want to run.
 
-You can run all tests via `npm test`. If you only want to run a single spec file, you can use the `--spec` option, e.g., `npm test --spec spec/OrsDirectionsSpec.js`.
+Component tests for the web can be run by switching to component testing.
 
+To run tests without ui use the npm scripts ending with `:ci` e.g. for unit, component and e2e tests:
+```shell
+npm run test:ci
+```
 ## Commits and versioning
 
 - This app uses the `commitizen` plugin to generate standardized commit types/messages. After applying any change in a feature branch, use `git add .` and then `npm run commit` (instead of `git commit ...`)

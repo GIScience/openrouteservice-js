@@ -15,10 +15,14 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "nyc --reporter=lcov --reporter=text-summary babel-node spec/run.js",
-    "test-report": "nyc babel-node spec/run.js",
     "commit": "git-cz",
     "release": "standard-version",
+    "test": "cypress open",
+    "test:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run -q && cypress run --component -q'",
+    "test:e2e": "cypress open --e2e",
+    "test:e2e:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run --e2e --quiet'",
+    "test:unit": "cypress open --component",
+    "test:unit:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run --component --quiet'",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
@@ -29,12 +33,16 @@
     "@rushstack/eslint-patch": "^1.1.4",
     "@vitejs/plugin-vue": "^3.1.0",
     "commitizen": "^4.2.4",
+    "cypress": "^10.10.0",
     "cz-conventional-changelog": "^3.3.0",
     "derequire": "^2.1.1",
+    "dotenv": "^16.0.2",
     "eslint": "^8.23.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-vue": "^9.3.0",
     "nyc": "^15.1.0",
     "standard-version": "^9.5.0",
+    "start-server-and-test": "^1.14.0",
     "terser": "^5.15.0",
     "vite": "^3.1.0",
     "vue": "^3.2.38"

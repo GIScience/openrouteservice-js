@@ -1,18 +1,30 @@
-node_modules/
-.DS_Store
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Editor directories and files
-.idea
-.vscode
+# dev environment
+node_modules
+.DS_Store
+*.local
+/examples/apiKey.js
 
 # Tests and coverage
-spec/test-env.js
-coverage/lcov-report
+/cypress/videos/
+/cypress/screenshots/
+coverage
 .nyc_output
 
-# npm lib
-lib
-
-# dev environmet
-.env.local
-examples/apiKey.js
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
