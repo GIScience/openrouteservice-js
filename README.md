@@ -35,8 +35,8 @@ npm install openrouteservice-js --save
 
 ### Or use the distribution file in your browser
 
-```js
-// Run this command if you need to build a new version
+```sh
+# Run this command if you need to build a new version
 npm run browserBundleProduction
 ```
 
@@ -48,7 +48,7 @@ The bundled version will be saved to `openrouteservice-js/dist/ors-js-client.js`
 
 You can either use our [bundled version](./dist/ors-js-client.js) which includes all APIs
 
-```javascript
+```html
 <script src="dist/ors-js-client.js"></script>
 
 <script>
@@ -82,7 +82,7 @@ To get directions:
 const openrouteservice = require("openrouteservice-js");
 
 // Add your api_key here
-const Directions = new openrouteservice.Directions({ api_key: "XYZ");
+const Directions = new openrouteservice.Directions({ api_key: "XYZ"});
 
 Directions.calculate({
     coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
@@ -256,9 +256,9 @@ Elevation.lineElevation({
   console.log(str)
 });
 ```
-## Developement Setup
+## Development Setup
 
-Clone the openrouteservice-js repository from GitHub into a developement environment of your choice.
+Clone the openrouteservice-js repository from GitHub into a development environment of your choice.
 
 ```shell
 git clone https://github.com/GIScience/openrouteservice-js.git
