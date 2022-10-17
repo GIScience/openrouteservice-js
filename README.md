@@ -275,7 +275,7 @@ npm run test:e2e
 ```
 Choose one of your installed browsers in the cypress UI you want to test in and select the test file you want to run.
 
-Component tests for the web can be run by switching to component testing.
+Component tests for the web app can be run by switching to component testing.
 
 To run tests without ui use the npm scripts ending with `:ci` e.g. for unit, component and e2e tests:
 ```shell
