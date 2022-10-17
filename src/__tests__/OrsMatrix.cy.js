@@ -22,8 +22,5 @@ describe('Matrix Test', function () {
         expect(json.destinations.length).to.equal(3)
         done()
       })
-      .catch(function (json) {
-        console.error('Should not fail' + json)
-      })
   })
 })

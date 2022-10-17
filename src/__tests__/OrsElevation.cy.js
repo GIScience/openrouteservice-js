@@ -18,9 +18,7 @@ describe('Elevation Test', function () {
         expect(json.geometry.coordinates[0][1]).to.equal(38.10843)
         expect(json.geometry.coordinates[0][2]).to.equal(72)
         done()
-      }).catch(function (json) {
-      throw('Should not fail' + json)
-    })
+      })
   })
 
   it('Get Point elevation results', function (done) {
@@ -36,9 +34,6 @@ describe('Elevation Test', function () {
         expect(json.geometry.coordinates[1]).to.equal(38.10849)
         expect(json.geometry.coordinates[2]).to.equal(72)
         done()
-      })
-      .catch(function (json) {
-        throw('Should not fail' + json.response)
       })
   })
 })

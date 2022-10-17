@@ -35,10 +35,6 @@ describe('Geocode Test', function () {
         expect(json.features[1].geometry.type).to.equal('Point')
         done()
       })
-      .catch(function (json) {
-        // eslint-disable-next-line no-console
-        console.error('Should not fail Geocode Test ' + json)
-      })
   })
 
   it('Should get geocode results with special char', function (done) {
@@ -70,21 +66,11 @@ describe('Geocode Test', function () {
         expect(json.features[1].geometry.type).to.equal('Point')
         done()
       })
-      .catch(function (json) {
-        // eslint-disable-next-line no-console
-        console.error('Should not fail Geocode Test ' + json)
-      })
   })
 
-  it('Should clear Geocode args', function (done) {
+  it('Should clear Geocode args', function () {
     orsGeocode.clear()
-    try {
-      expect(orsGeocode.args.text).to.be.undefined
-      done()
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Should not fail Clear Geocode args Test ' + orsGeocode.args)
-    }
+    expect(orsGeocode.args.text).to.be.undefined
   })
   it('Should geocode with boundaries', function (done) {
     new OrsGeocode({
@@ -113,10 +99,6 @@ describe('Geocode Test', function () {
         expect(json.features[1].geometry.type).to.equal('Point')
         done()
       })
-      .catch(function (json) {
-        // eslint-disable-next-line no-console
-        console.error('Should not fail boundaries Test ' + json)
-      })
   })
   it('Should geocode structured address', function (done) {
     orsGeocode.clear()
@@ -136,10 +118,6 @@ describe('Geocode Test', function () {
         expect(json.features[0].geometry.type).to.equal('Point')
         expect(json.features[1].geometry.type).to.equal('Point')
         done()
-      })
-      .catch(function (json) {
-        // eslint-disable-next-line no-console
-        console.error('Should not fail address Test ' + json)
       })
   })
 
@@ -162,10 +140,6 @@ describe('Geocode Test', function () {
         expect(json.type).to.equal('FeatureCollection')
         done()
       })
-      .catch(function (json) {
-        // eslint-disable-next-line no-console
-        console.error('Geocode without result Test ' + json)
-      })
   })
   it('Should reverse Geocode result', function (done) {
     orsGeocode.clear()
@@ -181,10 +155,6 @@ describe('Geocode Test', function () {
         expect(json.features.length).to.be.greaterThan(5)
         expect(json.type).to.equal('FeatureCollection')
         done()
-      })
-      .catch(function (json) {
-        // eslint-disable-next-line no-console
-        console.error('Reverse Geocode result Test ' + json)
       })
   })
 })

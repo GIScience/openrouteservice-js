@@ -28,9 +28,6 @@ describe('Isochrone Test', function () {
         expect(json.features[1].properties.value).to.equal(600)
         done()
       })
-      .catch(function (json) {
-        console.error('Should not fail' + json)
-      })
   })
   it('Get results with custom host and service', function (done) {
     new OrsIsochrones({
@@ -56,9 +53,6 @@ describe('Isochrone Test', function () {
         expect(json.features[0].properties.value).to.equal(600)
         expect(json.features[1].properties.value).to.equal(600)
         done()
-      })
-      .catch(function (json) {
-        console.error('Should not fail' + json)
       })
   })
 
@@ -96,9 +90,6 @@ describe('Isochrone Test', function () {
         expect(json.features[0].properties.value).to.equal(600)
         expect(json.features[1].properties.value).to.equal(600)
         done()
-      })
-      .catch(function (json) {
-        console.error('Should not fail' + json.response)
       })
   })
 })

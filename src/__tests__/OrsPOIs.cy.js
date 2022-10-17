@@ -28,8 +28,5 @@ describe('POI Test', function () {
         expect(response.features[0].geometry.type).to.equal('Point')
         done()
       })
-      .catch(function (json) {
-        console.error('Should not fail' + json)
-      })
   })
 })
