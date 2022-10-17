@@ -1,15 +1,20 @@
-name: Build and test
-on: [push]
+name: test
+on: [pull_request]
 jobs:
-  Explore-GitHub-Actions:
+  install-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 7
+    container: cypress/browsers:node18.6.0-chrome105-ff104
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: Run NPM target
-        env:
-          ORSKEY: ${{ secrets.ORSKEY }}
-        uses: anna-money/github-actions-npm@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cypress install
+        uses: cypress-io/github-action@v4
+        with:
+          runTests: false
+      - name: Cypress info
+        run: npx cypress info
+      - name: Set API key
+        run: sh setup.sh ${{ secrets.ORS_API_KEY }}
+      - name: Run tests
+        run: npm run test:ci
