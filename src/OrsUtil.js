@@ -46,8 +46,7 @@ class OrsUtil {
 
     // If the service already defines the path
     // to the request service we have to add
-    // only yhe profile and the format to the url
-    // eslint-disable-next-line prettier/prettier
+    // only the profile and the format to the url
     if (args[Constants.propNames.service] && args[Constants.propNames.service].indexOf('http') === 0) {
       url = args[Constants.propNames.service]
       urlPathParts = [
@@ -96,11 +95,9 @@ class OrsUtil {
    */
   setRequestDefaults(instanceArgs, requestArgs, setAPIVersion = false) {
     if (requestArgs[Constants.propNames.service]) {
-      // eslint-disable-next-line prettier/prettier
       instanceArgs[Constants.propNames.service] = requestArgs[Constants.propNames.service]
     }
     if (requestArgs[Constants.propNames.host]) {
-      // eslint-disable-next-line prettier/prettier
       instanceArgs[Constants.propNames.host] = requestArgs[Constants.propNames.host]
     }
     if (!instanceArgs[Constants.propNames.host]) {

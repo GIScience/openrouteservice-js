@@ -19,7 +19,7 @@ See the examples in the [examples folder](examples)
 
 This library uses the ORS API for request validation. To understand the input of each API specifically, please check [API Playground](https://openrouteservice.org/dev/#/api-docs) that provides an interactive documentation.
 
-## Installation
+## Installation and Usage
 
 Requirements
 
@@ -33,146 +33,38 @@ Install the library with npm:
 npm install openrouteservice-js --save
 ```
 
-### Or use the distribution file in your browser
-
+### Use es module import
 ```js
-// Run this command if you need to build a new version
-npm run browserBundleProduction
+import Openrouteservice from 'openrouteservice-js'
+let orsDirections = new Openrouteservice.Directions({ api_key: "XYZ"});
+// ...
 ```
 
-The bundled version will be saved to `openrouteservice-js/dist/ors-js-client.js`.
+### Use requirejs
+```js
+const Openrouteservice = require("openrouteservice-js");
+let orsDirections = new Openrouteservice.Directions({ api_key: "XYZ"});
+// ...
+```
 
-## Integrate the APIs in your application
-
-### Example (browser)
-
-You can either use our [bundled version](./dist/ors-js-client.js) which includes all APIs
-
-```javascript
-<script src="dist/ors-js-client.js"></script>
-
+### Use the distribution file directly in html
+```html
+<script type="module" src="../openrouteservice-js/dist/ors-js-client.js"></script>
 <script>
-  window.onload = function() {
-    // Add your api_key here
-    let orsDirections = new Openrouteservice.Directions({ api_key: "XYZ"});
-
-    orsDirections.calculate({
-      coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
-      profile: "driving-car",
-      extra_info: ["waytype", "steepness"],
-      format: "json"
-    })
-    .then(function(json) {
-        // Add your own result handling here
-        console.log(JSON.stringify(json));
-      })
-    .catch(function(err) {
-      console.error(err);
-    });
-  };
-
+  let orsDirections = new Openrouteservice.Directions({ api_key: "XYZ"});
+  // ...
 </script>
 ```
 
-### Examples using the npm distribution
+## Integrate the APIs in your application
 
-To get directions:
-
-```javascript
-const openrouteservice = require("openrouteservice-js");
-
-// Add your api_key here
-const Directions = new openrouteservice.Directions({ api_key: "XYZ");
-
-Directions.calculate({
-    coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
-    profile: 'driving-hgv',
-    restrictions: { height: 10, weight: 5 },
-    extra_info: ['waytype', 'steepness'],
-    avoidables: ['highways', 'tollways', 'ferries', 'fords'],
-    avoid_polygons: {
-      type: 'Polygon',
-      coordinates: [
-        [
-          [8.683533668518066, 49.41987949639816],
-          [8.680272102355957, 49.41812070066643],
-          [8.683919906616211, 49.4132348262363],
-          [8.689756393432617, 49.41806486484901],
-          [8.683533668518066, 49.41987949639816]
-        ]
-      ]
-    },
-    format: 'json'
-  })
-  .then(function(json) {
-    // Add your own result handling here
-    console.log(JSON.stringify(json));
-  })
-  .catch(function(err) {
-    const str = "An error occurred: " + err;
-    console.log(str);
-  });
-```
-
-Or use the geocoding services:
+### Isochrones Example (es module import)
 
 ```javascript
-const openrouteservice = require("openrouteservice-js");
+import Openrouteservice from "openrouteservice-js"
 
 // Add your api_key here
-const Geocode = new openrouteservice.Geocode({ api_key: "XYZ"});
-
-Geocode.geocode({
-  text: "Heidelberg",
-  boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
-  boundary_bbox: [[49.260929, 8.40063], [49.504102, 8.941707]],
-  boundary_country: ["DE"]
-})
-.then(function(response) {
-  // Add your own result handling here
-  console.log("response", JSON.stringify(response));
-})
-.catch(function(err) {
-  const str = "An error occurred: " + err;
-  console.log(str);
-});
-
-Geocode.clear();
-
-Geocode.reverseGeocode({
-  point: { lat_lng: [49.412388, 8.681247], radius: 50 },
-  boundary_country: ["DE"]
-})
-.then(function(response) {
-  console.log("response", JSON.stringify(response));
-})
-.catch(function(err) {
-  const str = "An error occurred: " + err;
-  console.log(str);
-});
-
-Geocode.clear();
-
-Geocode.structuredGeocode({
-  locality: "Heidelberg"
-})
-.then(function(response) {
-  // Add your own result handling here
-  console.log("response", JSON.stringify(response));
-})
-.catch(function(err) {
-  const str = "An error occurred: " + err;
-  console.log(str);
-});
-```
-
-Query isochrones:
-
-```javascript
-const openrouteservice = require("openrouteservice-js");
-
-// Add your api_key here
-const Isochrones = new openrouteservice.Isochrones({ api_key: "XYZ"});
+const Isochrones = new Openrouteservice.Isochrones({ api_key: "XYZ"})
 
 Isochrones.calculate({
     locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
@@ -199,21 +91,114 @@ Isochrones.calculate({
   })
   .then(function(response) {
     // Add your own result handling here
-    console.log("response", response);
+    console.log("response", response)
   })
   .catch(function(err) {
-    const str = "An error occurred: " + err;
-    console.log(str);
-  });
+    const str = "An error occurred: " + err
+    console.log(str)
+  })
 ```
 
-Or fetch a time-distance matrix:
+### Directions HGV example (browser)
+> Note: Nested parameters from the options object are easier accessible like  `restrictions`, `avoidables`
+> and `avoid_polygons` (cf. [API docs](https://openrouteservice.org/dev/#/api-docs/v2/directions/{profile}/post)) 
+```html
+<script type="module" src="dist/ors-js-client.js"></script>
+
+<script>
+  window.onload = function() {
+    // Add your api_key here
+    let orsDirections = new Openrouteservice.Directions({ api_key: "XYZ"});
+
+    orsDirections.calculate({
+      coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
+      profile: 'driving-hgv',
+      restrictions: { height: 10, weight: 5 },
+      extra_info: ['waytype', 'steepness'],
+      avoidables: ['highways', 'tollways', 'ferries', 'fords'],
+      avoid_polygons: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [8.683533668518066, 49.41987949639816],
+            [8.680272102355957, 49.41812070066643],
+            [8.683919906616211, 49.4132348262363],
+            [8.689756393432617, 49.41806486484901],
+            [8.683533668518066, 49.41987949639816]
+          ]
+        ]
+      },
+      format: 'json'
+    })
+    .then(function(json) {
+        // Add your own result handling here
+        console.log(JSON.stringify(json));
+      })
+    .catch(function(err) {
+      console.error(err);
+    });
+  };
+</script>
+```
+
+### Geocode examples (require)
+
+Or use the geocoding services:
 
 ```javascript
-const openrouteservice = require("openrouteservice-js");
-
+const Openrouteservice = require('openrouteservice-js')
 // Add your api_key here
-const Matrix = new openrouteservice.Matrix({ api_key: "XYZ"});
+const Geocode = new Openrouteservice.Geocode({ api_key: "XYZ"})
+
+Geocode.geocode({
+  text: "Heidelberg",
+  boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
+  boundary_bbox: [[49.260929, 8.40063], [49.504102, 8.941707]],
+  boundary_country: ["DE"]
+})
+.then(function(response) {
+  // Add your own result handling here
+  console.log("response", JSON.stringify(response))
+})
+.catch(function(err) {
+  const str = "An error occurred: " + err;
+  console.log(str)
+})
+
+Geocode.clear()
+
+Geocode.reverseGeocode({
+  point: { lat_lng: [49.412388, 8.681247], radius: 50 },
+  boundary_country: ["DE"]
+})
+.then(function(response) {
+  console.log("response", JSON.stringify(response));
+})
+.catch(function(err) {
+  const str = "An error occurred: " + err;
+  console.log(str);
+})
+
+Geocode.clear()
+
+Geocode.structuredGeocode({
+  locality: "Heidelberg"
+})
+.then(function(response) {
+  // Add your own result handling here
+  console.log("response", JSON.stringify(response))
+})
+.catch(function(err) {
+  const str = "An error occurred: " + err
+  console.log(str)
+})
+```
+
+### Matrix example
+Calculate 
+```javascript
+// Add your api_key here
+const Matrix = new Openrouteservice.Matrix({ api_key: "XYZ"})
 
 Matrix.calculate({
   locations: [[8.690958, 49.404662], [8.687868, 49.390139], [8.687868, 49.390133]],
@@ -223,21 +208,18 @@ Matrix.calculate({
 })
 .then(function(response) {
   // Add your own result handling here
-  console.log("response", response);
+  console.log("response", response)
 })
 .catch(function(err) {
-  const str = "An error occurred: " + err;
-  console.log(str);
-});
+  const str = "An error occurred: " + err
+  console.log(str)
+})
 ```
 
-Or return elevation data from a geoJSON line:
-
+### Elevation example
 ```js
-const openrouteservice = require("openrouteservice-js");
-
 // Add your api_key here
-const Elevation = new openrouteservice.Elevation({api_key: "XYZ"});
+const Elevation = new Openrouteservice.Elevation({api_key: "XYZ"})
 
 Elevation.lineElevation({
   format_in: 'geojson',
@@ -249,31 +231,56 @@ Elevation.lineElevation({
 })
 .then(function(response) {
   // Add your own result handling here
-  console.log('response', JSON.stringify(response));
+  console.log('response', JSON.stringify(response))
 })
 .catch(function(err) {
-  const str = 'An error occurred: ' + err;
+  const str = 'An error occurred: ' + err
   console.log(str)
-});
+})
 ```
-## Developement Setup
 
-Clone the openrouteservice-js repository from GitHub into a developement environment of your choice.
+## Development Setup
+
+Clone the openrouteservice-js repository from GitHub into a development environment of your choice.
 
 ```shell
 git clone https://github.com/GIScience/openrouteservice-js.git
 cd openrouteservice-js
 
-#Install the dependencies
+# Install the dependencies
 npm install
+
+# Make your openrouteservice API key available for tests, examples and dev_app
+sh setup.sh <your-api-key>
 ```
+
+Start the dev_app for debugging when working with source files:
+```shell
+# runs the app at http://localhost:5173
+vite
+```
+
+Now you can either use the devtools of your browser to set breakpoints (e.g. in `OrsGeocode`)
+or create a `JavaScript Debug` configuration to debug with WebStorm:
+![debug_config](https://user-images.githubusercontent.com/23240110/195876234-4a0ad923-1c5c-4cfe-976a-d39dd23a50d8.png)
+
+Run the config in debug mode to open the Chrome browser and reload the page after changes for them to take
+effect immediately.
 
 ## Running Tests
 
-In order to run the tests locally, it is necessary to create a `spec/test-env.js` by using/copying the `spec/test-env-template.js` and to set a valid ORS key in the just created file.
+To run specific unit test files in `src/__tests__` on demand during development, run
+```shell
+npm run test:e2e
+```
+Choose one of your installed browsers in the cypress UI you want to test in and select the test file you want to run.
 
-You can run all tests via `npm test`. If you only want to run a single spec file, you can use the `--spec` option, e.g., `npm test --spec spec/OrsDirectionsSpec.js`.
+Component tests for the web can be run by switching to component testing.
 
+To run tests without ui use the npm scripts ending with `:ci` e.g. for unit, component and e2e tests:
+```shell
+npm run test:ci
+```
 ## Commits and versioning
 
 - This app uses the `commitizen` plugin to generate standardized commit types/messages. After applying any change in a feature branch, use `git add .` and then `npm run commit` (instead of `git commit ...`)

@@ -57,7 +57,6 @@ class OrsIsochrones extends OrsBase {
       delete reqArgs.customHeaders
     }
     orsUtil.setRequestDefaults(this.args, reqArgs, true)
-    // eslint-disable-next-line prettier/prettier
     if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'isochrones'
     }
@@ -67,7 +66,6 @@ class OrsIsochrones extends OrsBase {
 
     return new Promise(function(resolve, reject) {
       const timeout = that.args[Constants.propNames.timeout] || 10000
-      // eslint-disable-next-line prettier/prettier
       if (that.args[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
         // meta should be generated once that subsequent requests work
         if (that.meta == null) {
