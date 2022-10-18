@@ -35,7 +35,6 @@
     "commitizen": "^4.2.4",
     "cypress": "^10.10.0",
     "cz-conventional-changelog": "^3.3.0",
-    "derequire": "^2.1.1",
     "dotenv": "^16.0.2",
     "eslint": "^8.23.0",
     "eslint-plugin-cypress": "^2.12.1",
