@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import OrsPois from '../OrsPois'
+import OrsPois from '../OrsPois.js'
 
 const key = Cypress.env('api_key')
 const orsPois = new OrsPois({ api_key: key })

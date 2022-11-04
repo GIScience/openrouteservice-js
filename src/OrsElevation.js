@@ -1,15 +1,14 @@
-import request from 'superagent'
 import Promise from 'bluebird'
-import OrsUtil from './OrsUtil'
-import Constants from './constants'
-import OrsBase from './OrsBase'
+import OrsUtil from './OrsUtil.js'
+import Constants from './constants.js'
+import OrsBase from './OrsBase.js'
 
 const orsUtil = new OrsUtil()
 
 class OrsElevation extends OrsBase {
   clear() {
-    for (const variable in this.args) {
-      if (variable !== Constants.propNames.apiKey) delete this.args[variable]
+    for (const variable in this.defaultArgs) {
+      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
     }
   }
 
@@ -26,63 +25,38 @@ class OrsElevation extends OrsBase {
 
   elevationPromise() {
     const that = this
-
     return new Promise(function(resolve, reject) {
-      const timeout = that.args[Constants.propNames.timeout] || 5000
+      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
 
-      const url = orsUtil.prepareUrl(that.args)
+      const payload = that.generatePayload(that.requestArgs)
 
-      const payload = that.generatePayload(that.args)
-      const authorization = that.args[Constants.propNames.apiKey]
-      const orsRequest = request
-        .post(url)
-        .send(payload)
-        .set('Authorization', authorization)
-        .timeout(timeout)
-
-      for (const key in that.customHeaders) {
-        orsRequest.set(key, that.customHeaders[key])
-      }
-      orsRequest.end(function(err, res) {
-        if (err || !res.ok) {
-          // eslint-disable-next-line no-console
-          console.error(err)
-          reject(err)
-        } else if (res) {
-          resolve(res.body || res.text)
-        }
-      })
+      that.createRequest(payload, resolve, reject);
     })
   }
 
   lineElevation(reqArgs) {
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
-    }
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+    this.requestArgs = reqArgs
+
+    this.checkHeaders()
+
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs[Constants.propNames.service] = 'elevation/line'
     }
-    orsUtil.copyProperties(reqArgs, this.args)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.elevationPromise()
   }
 
   pointElevation(reqArgs) {
-    // Get custom header and remove from args
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
-    }
+    this.requestArgs = reqArgs
 
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs[Constants.propNames.service] = 'elevation/point'
-    }
+    this.checkHeaders()
 
-    orsUtil.copyProperties(reqArgs, this.args)
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.requestArgs[Constants.propNames.service] = 'elevation/point'
+    }
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.elevationPromise()
   }
 }

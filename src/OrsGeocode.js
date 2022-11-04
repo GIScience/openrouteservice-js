@@ -1,14 +1,14 @@
 import request from 'superagent'
 import Promise from 'bluebird'
-import OrsUtil from './OrsUtil'
-import Constants from './constants'
-import OrsBase from './OrsBase'
+import OrsUtil from './OrsUtil.js'
+import Constants from './constants.js'
+import OrsBase from './OrsBase.js'
 
 const orsUtil = new OrsUtil()
 
 class OrsGeocode extends OrsBase {
   constructor(args) {
-    super(args);
+    super(args)
 
     this.lookupParameter = {
       api_key: function(key, val) {
@@ -106,8 +106,8 @@ class OrsGeocode extends OrsBase {
   }
 
   clear() {
-    for (const variable in this.args) {
-      if (variable !== Constants.apiKeyPropName) delete this.args[variable]
+    for (const variable in this.defaultArgs) {
+      if (variable !== Constants.apiKeyPropName) delete this.defaultArgs[variable]
     }
   }
 
@@ -125,15 +125,17 @@ class OrsGeocode extends OrsBase {
   geocodePromise() {
     const that = this
     return new Promise(function(resolve, reject) {
-      const timeout = that.args[Constants.propNames.timeout] || 5000
-
       // Use old API via GET
-      let url = orsUtil.prepareUrl(that.args)
-
+      let url = orsUtil.prepareUrl(that.requestArgs)
       // Add url query string from args
-      url += '?' + that.getParametersAsQueryString(that.args)
+      url += '?' + that.getParametersAsQueryString(that.requestArgs)
 
-      const orsRequest = request.get(url).timeout(timeout)
+      const timeout = that.defaultArgs[Constants.propNames.timeout] || 5000
+
+      // createRequest function is not applicable: GET instead of POST request
+      const orsRequest = request
+          .get(url)
+          .timeout(timeout)
 
       for (const key in that.customHeaders) {
         orsRequest.set(key, that.customHeaders[key])
@@ -151,41 +153,41 @@ class OrsGeocode extends OrsBase {
   }
 
   geocode(reqArgs) {
-    // Get custom header and remove from args
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
+    this.requestArgs = reqArgs
+
+    this.checkHeaders()
+
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.requestArgs.service = 'geocode/search'
     }
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs.service = 'geocode/search'
-    }
-    orsUtil.copyProperties(reqArgs, this.args)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.geocodePromise()
   }
 
   reverseGeocode(reqArgs) {
-    // Get custom header and remove from args
-    this.customHeaders = []
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders
-      delete reqArgs.customHeaders
+    this.requestArgs = reqArgs
+
+    this.checkHeaders()
+
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.requestArgs.service = 'geocode/reverse'
     }
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs.service = 'geocode/reverse'
-    }
-    orsUtil.copyProperties(reqArgs, this.args)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.geocodePromise()
   }
 
   structuredGeocode(reqArgs) {
-    orsUtil.setRequestDefaults(this.args, reqArgs)
-    if (!this.args[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
+    this.requestArgs = reqArgs
+
+    this.checkHeaders()
+
+    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
       reqArgs.service = 'geocode/search/structured'
     }
-    orsUtil.copyProperties(reqArgs, this.args)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+
     return this.geocodePromise()
   }
 }
