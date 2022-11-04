@@ -21,16 +21,45 @@ describe('Test Base class', () => {
     })
 
     it('passes Host correctly', () => {
-      const base = new OrsBase({ 'api_key': 'test' , 'host': 'localhost:8080'})
+      const base = new OrsBase({
+        'api_key': 'test',
+        'host': 'localhost:8080'
+      })
       expect(base.defaultArgs, 'Base instance').to.haveOwnProperty('host')
       expect(base.defaultArgs['host'], 'host arg').to.equal('localhost:8080')
     })
 
     it('passes service correctly', () => {
-      const base = new OrsBase({ 'api_key': 'test' , 'service': 'test-service'})
+      const base = new OrsBase({
+        'api_key': 'test',
+        'service': 'test-service'
+      })
       expect(base.defaultArgs, 'Base instance').to.haveOwnProperty('service')
       expect(base.defaultArgs['service'], 'service arg').to.equal('test-service')
     })
   })
 
+  context('methods', () => {
+    context('_setRequestDefaults', () => {
+      it('sets defaultArgs from args', () => {
+        const base = new OrsBase({ 'api_key': 'test' })
+        base._setRequestDefaults({
+          'api_key': 'test',
+          [constants.propNames.service]: 'service',
+          [constants.propNames.host]: 'host'
+        })
+        expect(base.defaultArgs).to.include({
+          [constants.propNames.service]: 'service',
+          [constants.propNames.host]: 'host'
+        })
+      })
+      it('sets the default host when not in args', function() {
+        const base = new OrsBase({ 'api_key': 'test' })
+        base._setRequestDefaults({ 'api_key': 'test' })
+        expect(base.defaultArgs).to.include({
+          [constants.propNames.host]: constants.defaultHost
+        })
+      })
+    })
+  })
 })
