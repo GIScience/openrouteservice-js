@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import OrsIsochrones from '../OrsIsochrones'
-import Constants from '../constants'
+import OrsIsochrones from '../OrsIsochrones.js'
+import Constants from '../constants.js'
 
 const key = Cypress.env('api_key')
 const orsIsochrones = new OrsIsochrones({ api_key: key })

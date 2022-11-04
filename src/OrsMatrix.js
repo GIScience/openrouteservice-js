@@ -1,5 +1,5 @@
-import Constants from './constants'
-import OrsBase from './OrsBase'
+import Constants from './constants.js'
+import OrsBase from './OrsBase.js'
 
 class OrsMatrix extends OrsBase {
   constructor(args) {

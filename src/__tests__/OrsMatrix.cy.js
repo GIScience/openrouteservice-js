@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import OrsMatrix from '../OrsMatrix'
+import OrsMatrix from '../OrsMatrix.js'
 
 const key = Cypress.env('api_key')
 const orsMatrix = new OrsMatrix({ api_key: key })

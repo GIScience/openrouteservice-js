@@ -1,4 +1,4 @@
-import OrsBase from '../OrsBase'
+import OrsBase from '../OrsBase.js'
 import constants from '../constants.js'
 
 const key = Cypress.env('api_key')

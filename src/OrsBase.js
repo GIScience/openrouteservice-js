@@ -1,7 +1,7 @@
 import request from 'superagent'
 import Promise from 'bluebird';
-import OrsUtil from './OrsUtil'
-import Constants from './constants'
+import OrsUtil from './OrsUtil.js'
+import Constants from './constants.js'
 
 const orsUtil = new OrsUtil()
 
