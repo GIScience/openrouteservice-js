@@ -17,8 +17,9 @@
     "build": "vite build",
     "commit": "git-cz",
     "release": "standard-version",
+    "pretest:ci": "rimraf .nyc_output coverage",
     "test": "cypress open",
-    "test:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run -q && cypress run --component -q'",
+    "test:ci": "CYPRESS_COVERAGE=true start-server-and-test dev http://localhost:5173/ 'cypress run -q && cypress run --component -q'",
     "test:e2e": "cypress open --e2e",
     "test:e2e:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run --e2e --quiet'",
     "test:unit": "cypress open --component",
@@ -30,9 +31,11 @@
     "superagent": "^7.1.6"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.10.0",
     "@rushstack/eslint-patch": "^1.1.4",
     "@vitejs/plugin-vue": "^3.1.0",
     "commitizen": "^4.2.4",
+    "babel-plugin-istanbul": "^6.1.1",
     "cypress": "^10.10.0",
     "cz-conventional-changelog": "^3.3.0",
     "dotenv": "^16.0.2",
@@ -56,6 +59,6 @@
     }
   },
   "nyc": {
-    "exclude": "spec/**/*"
+    "exclude": "**/__tests__/*"
   }
 }

@@ -11,7 +11,16 @@ module.exports = defineConfig({
     ],
     baseUrl: "http://localhost:5173",
     env:{
-      api_key: process.env.VITE_ORS_API_KEY
+      api_key: process.env.VITE_ORS_API_KEY,
+      codeCoverage: {
+        exclude: ['cypress/**/*.*']
+      },
+    },
+    setupNodeEvents(on, config) {
+      require('@cypress/code-coverage/task')(on, config)
+      //used to instrument files included as unit tests
+      on('file:preprocessor', require('@cypress/code-coverage/use-babelrc'))
+      return config
     }
   },
   component: {
