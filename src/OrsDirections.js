@@ -14,7 +14,7 @@ class OrsDirections extends OrsBase {
 
   clear() {
     for (const variable in this.defaultArgs) {
-      if (variable !== Constants.apiKeyPropName) delete this.defaultArgs[variable]
+      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
     }
   }
 
