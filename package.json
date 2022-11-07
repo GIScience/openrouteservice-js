@@ -21,9 +21,9 @@
     "test": "cypress open",
     "test:ci": "CYPRESS_COVERAGE=true start-server-and-test dev http://localhost:5173/ 'cypress run -q && cypress run --component -q'",
     "test:e2e": "cypress open --e2e",
-    "test:e2e:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run --e2e --quiet'",
+    "test:e2e:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run -q'",
     "test:unit": "cypress open --component",
-    "test:unit:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run --component --quiet'",
+    "test:unit:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run --component -q'",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
