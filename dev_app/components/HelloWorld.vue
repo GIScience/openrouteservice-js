@@ -9,8 +9,8 @@
       <a href='https://vuejs.org/' target='_blank' rel='noopener'>Vue 3</a>.
     </h3>
   </div>
-  <div class='ors_call'>
-    {{ response }}
+  <div class='ors_call' v-if='data_ready'>
+    {{ json_data }}
   </div>
 </template>
 <style>
