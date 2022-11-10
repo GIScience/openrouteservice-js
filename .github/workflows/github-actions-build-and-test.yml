@@ -1,7 +1,11 @@
 name: test
-on: [pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 jobs:
-  install-and-test:
+  install-test-coverage:
     runs-on: ubuntu-latest
     timeout-minutes: 7
     container: cypress/browsers:node18.6.0-chrome105-ff104
