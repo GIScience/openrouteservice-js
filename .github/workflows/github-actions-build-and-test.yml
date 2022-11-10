@@ -18,3 +18,5 @@ jobs:
         run: sh setup.sh ${{ secrets.ORS_API_KEY }}
       - name: Run tests
         run: npm run test:ci
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
