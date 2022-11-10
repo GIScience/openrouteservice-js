@@ -1,7 +1,7 @@
 # The JavaScript API to consume openrouteservice(s) painlessly!
 
 [![Build and test](https://github.com/GIScience/openrouteservice-js/actions/workflows/github-actions-build-and-test.yml/badge.svg)](https://github.com/GIScience/openrouteservice-js/actions/workflows/github-actions-build-and-test.yml)
-[![codecov](https://codecov.io/gh/GIScience/openrouteservice-js/branch/master/graph/badge.svg?token=WCLd69Jqbp)](https://codecov.io/gh/GIScience/openrouteservice-js)
+[![codecov](https://codecov.io/gh/GIScience/openrouteservice-js/branch/main/graph/badge.svg?token=WCLd69Jqbp)](https://codecov.io/gh/GIScience/openrouteservice-js)
 
 This library lets you consume the openrouteservice API in *JavaScript* applications. It allows you to painlessly consume the following services:
 
@@ -291,6 +291,6 @@ Deployment flow:
 
 - Apply the changes in a feature branch and test it locally
 - Once the feature is ready, merge it to `develop`, deploy it to the testing environment
-- Checkout in `master`, merge from develop and use `npm run release` to generate a release. This will generate a new release commit as well as a git tag and an entry in [CHANGELOG.md](CHANGELOG.md).
+- Checkout in `main`, merge from develop and use `npm run release` to generate a release. This will generate a new release commit as well as a git tag and an entry in [CHANGELOG.md](CHANGELOG.md).
 
 *For more details about `commitizen` and `standard-version` see [this article](https://medium.com/tunaiku-tech/automate-javascript-project-versioning-with-commitizen-and-standard-version-6a967afae7)*
