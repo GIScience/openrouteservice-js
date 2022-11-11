@@ -1,8 +1,6 @@
 const constants = {
   defaultAPIVersion: "v2",
   defaultHost: "https://api.openrouteservice.org",
-  apiKeyPropName: "api_key",
-  hostPropName: "host",
   missingAPIKeyMsg: "Please add your openrouteservice api_key..",
   useAPIV2Msg: "Please use ORS API v2",
   baseUrlConstituents: ["host", "service", "api_version", "mime_type"],
@@ -18,17 +16,11 @@ const constants = {
   }
 };
 class OrsUtil {
-  copyProperties(args, argsInto) {
-    if (!args)
-      return argsInto;
-    for (const prop in args) {
-      if (args.hasOwnProperty(prop) && args[prop] !== void 0) {
-        argsInto[prop] = args[prop];
-      }
-    }
-    return argsInto;
+  fillArgs(defaultArgs, requestArgs) {
+    requestArgs = { ...defaultArgs, ...requestArgs };
+    return requestArgs;
   }
-  prepareMeta(args) {
+  saveArgsToCache(args) {
     return {
       host: args[constants.propNames.host],
       api_version: args[constants.propNames.apiVersion],
@@ -51,58 +43,20 @@ class OrsUtil {
     return { ...args };
   }
   prepareUrl(args) {
-    let url, urlPathParts;
-    if (args[constants.propNames.service] && args[constants.propNames.service].indexOf("http") === 0) {
-      url = args[constants.propNames.service];
-      urlPathParts = [
-        args[constants.propNames.profile],
-        args[constants.propNames.format]
-      ];
-    } else {
-      url = args[constants.propNames.host];
-      urlPathParts = [
-        args[constants.propNames.apiVersion],
-        args[constants.propNames.service],
-        args[constants.propNames.profile],
-        args[constants.propNames.format]
-      ];
-    }
-    let urlPath = "/";
-    let counter = 0;
-    for (const key in urlPathParts) {
-      if (urlPathParts[key]) {
-        if (counter > 0 && counter) {
-          urlPath += "/";
-        }
-        urlPath += urlPathParts[key];
-      }
-      counter++;
-    }
-    const cleanUrlPath = urlPath.replace(/\/\//g, "/");
-    url += cleanUrlPath;
+    let url = args[constants.propNames.host];
+    let urlPathParts = [
+      args[constants.propNames.apiVersion],
+      args[constants.propNames.service],
+      args[constants.propNames.profile],
+      args[constants.propNames.format]
+    ];
+    urlPathParts = urlPathParts.join("/");
+    urlPathParts = urlPathParts.replace(/\/(\/)+/g, "/");
+    url = url + "/" + urlPathParts;
     if (url.slice(-1) === "/") {
       url = url.slice(0, -1);
     }
     return url;
-  }
-  setRequestDefaults(instanceArgs, requestArgs, setAPIVersion = false) {
-    if (requestArgs[constants.propNames.service]) {
-      instanceArgs[constants.propNames.service] = requestArgs[constants.propNames.service];
-    }
-    if (requestArgs[constants.propNames.host]) {
-      instanceArgs[constants.propNames.host] = requestArgs[constants.propNames.host];
-    }
-    if (!instanceArgs[constants.propNames.host]) {
-      instanceArgs[constants.propNames.host] = constants.defaultHost;
-    }
-    if (setAPIVersion === true) {
-      if (!requestArgs[constants.propNames.apiVersion]) {
-        requestArgs.api_version = constants.defaultAPIVersion;
-      }
-      if (!requestArgs[constants.propNames.apiVersion]) {
-        requestArgs.api_version = constants.defaultAPIVersion;
-      }
-    }
   }
 }
 class OrsInput {
@@ -8332,25 +8286,77 @@ var bluebird = { exports: {} };
   }
 })(bluebird);
 const Promise$1 = bluebird.exports;
+const orsUtil$4 = new OrsUtil();
 class OrsBase {
   constructor(args) {
-    this.args = {};
-    this.meta = null;
+    this.defaultArgs = {};
+    this.requestArgs = {};
+    this.argsCache = null;
+    this.customHeaders = [];
+    this._setRequestDefaults(args);
+  }
+  _setRequestDefaults(args) {
+    this.defaultArgs[constants.propNames.host] = constants.defaultHost;
+    if (args[constants.propNames.host]) {
+      this.defaultArgs[constants.propNames.host] = args[constants.propNames.host];
+    }
+    if (args[constants.propNames.service]) {
+      this.defaultArgs[constants.propNames.service] = args[constants.propNames.service];
+    }
     if (constants.propNames.apiKey in args) {
-      this.args[constants.propNames.apiKey] = args[constants.propNames.apiKey];
+      this.defaultArgs[constants.propNames.apiKey] = args[constants.propNames.apiKey];
     } else {
       console.error(constants.missingAPIKeyMsg);
       throw new Error(constants.missingAPIKeyMsg);
     }
-    if (constants.propNames.host in args) {
-      this.args[constants.propNames.host] = args[constants.propNames.host];
-    }
-    if (constants.propNames.service in args) {
-      this.args[constants.propNames.service] = args[constants.propNames.service];
+  }
+  checkHeaders() {
+    if (this.requestArgs.customHeaders) {
+      this.customHeaders = this.requestArgs.customHeaders;
+      delete this.requestArgs.customHeaders;
     }
   }
+  createRequest(body, resolve, reject) {
+    let url = orsUtil$4.prepareUrl(this.argsCache);
+    if (this.argsCache[constants.propNames.service] === "pois") {
+      url += url.indexOf("?") > -1 ? "&" : "?";
+    }
+    const authorization = this.argsCache[constants.propNames.apiKey];
+    const timeout = this.defaultArgs[constants.propNames.timeout] || 1e4;
+    const orsRequest = request.post(url).send(body).set("Authorization", authorization).timeout(timeout);
+    for (const key in this.customHeaders) {
+      orsRequest.set(key, this.customHeaders[key]);
+    }
+    orsRequest.end(function(err, res) {
+      if (err || !res.ok) {
+        console.error(err);
+        reject(err);
+      } else if (res) {
+        resolve(res.body || res.text);
+      }
+    });
+  }
+  getBody() {
+    return this.httpArgs;
+  }
+  calculate(reqArgs) {
+    this.requestArgs = reqArgs;
+    this.checkHeaders();
+    this.requestArgs = orsUtil$4.fillArgs(this.defaultArgs, this.requestArgs);
+    const that = this;
+    return new Promise$1(function(resolve, reject) {
+      if (that.requestArgs[constants.propNames.apiVersion] === constants.defaultAPIVersion) {
+        that.argsCache = orsUtil$4.saveArgsToCache(that.requestArgs);
+        that.httpArgs = orsUtil$4.prepareRequest(that.requestArgs);
+        const postBody = that.getBody(that.httpArgs);
+        that.createRequest(postBody, resolve, reject);
+      } else {
+        console.error(constants.useAPIV2Msg);
+      }
+    });
+  }
 }
-const orsUtil$5 = new OrsUtil();
+const orsUtil$3 = new OrsUtil();
 class OrsGeocode extends OrsBase {
   constructor(args) {
     super(args);
@@ -8447,9 +8453,9 @@ class OrsGeocode extends OrsBase {
     };
   }
   clear() {
-    for (const variable in this.args) {
-      if (variable !== constants.apiKeyPropName)
-        delete this.args[variable];
+    for (const variable in this.defaultArgs) {
+      if (variable !== constants.propNames.apiKey)
+        delete this.defaultArgs[variable];
     }
   }
   getParametersAsQueryString(args) {
@@ -8465,9 +8471,9 @@ class OrsGeocode extends OrsBase {
   geocodePromise() {
     const that = this;
     return new Promise$1(function(resolve, reject) {
-      const timeout = that.args[constants.propNames.timeout] || 5e3;
-      let url = orsUtil$5.prepareUrl(that.args);
-      url += "?" + that.getParametersAsQueryString(that.args);
+      let url = orsUtil$3.prepareUrl(that.requestArgs);
+      url += "?" + that.getParametersAsQueryString(that.requestArgs);
+      const timeout = that.defaultArgs[constants.propNames.timeout] || 5e3;
       const orsRequest = request.get(url).timeout(timeout);
       for (const key in that.customHeaders) {
         orsRequest.set(key, that.customHeaders[key]);
@@ -8483,47 +8489,48 @@ class OrsGeocode extends OrsBase {
     });
   }
   geocode(reqArgs) {
-    this.customHeaders = [];
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders;
-      delete reqArgs.customHeaders;
+    this.requestArgs = reqArgs;
+    this.checkHeaders();
+    if (!this.defaultArgs[constants.propNames.service] && !this.requestArgs[constants.propNames.service]) {
+      this.requestArgs.service = "geocode/search";
     }
-    orsUtil$5.setRequestDefaults(this.args, reqArgs);
-    if (!this.args[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
-      reqArgs.service = "geocode/search";
-    }
-    orsUtil$5.copyProperties(reqArgs, this.args);
+    this.requestArgs = orsUtil$3.fillArgs(this.defaultArgs, this.requestArgs);
     return this.geocodePromise();
   }
   reverseGeocode(reqArgs) {
-    this.customHeaders = [];
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders;
-      delete reqArgs.customHeaders;
+    this.requestArgs = reqArgs;
+    this.checkHeaders();
+    if (!this.defaultArgs[constants.propNames.service] && !this.requestArgs[constants.propNames.service]) {
+      this.requestArgs.service = "geocode/reverse";
     }
-    orsUtil$5.setRequestDefaults(this.args, reqArgs);
-    if (!this.args[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
-      reqArgs.service = "geocode/reverse";
-    }
-    orsUtil$5.copyProperties(reqArgs, this.args);
+    this.requestArgs = orsUtil$3.fillArgs(this.defaultArgs, this.requestArgs);
     return this.geocodePromise();
   }
   structuredGeocode(reqArgs) {
-    orsUtil$5.setRequestDefaults(this.args, reqArgs);
-    if (!this.args[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
+    this.requestArgs = reqArgs;
+    this.checkHeaders();
+    if (!this.defaultArgs[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
       reqArgs.service = "geocode/search/structured";
     }
-    orsUtil$5.copyProperties(reqArgs, this.args);
+    this.requestArgs = orsUtil$3.fillArgs(this.defaultArgs, this.requestArgs);
     return this.geocodePromise();
   }
 }
-const orsUtil$4 = new OrsUtil();
 class OrsIsochrones extends OrsBase {
-  addLocation(latlon) {
-    if (!("locations" in this.args)) {
-      this.args.locations = [];
+  constructor(args) {
+    super(args);
+    if (!this.defaultArgs[constants.propNames.service] && !this.requestArgs[constants.propNames.service]) {
+      this.defaultArgs.service = "isochrones";
     }
-    this.args.locations.push(latlon);
+    if (!args[constants.propNames.apiVersion]) {
+      this.defaultArgs.api_version = constants.defaultAPIVersion;
+    }
+  }
+  addLocation(latlon) {
+    if (!("locations" in this.defaultArgs)) {
+      this.defaultArgs.locations = [];
+    }
+    this.defaultArgs.locations.push(latlon);
   }
   getBody(args) {
     const options = {};
@@ -8556,110 +8563,49 @@ class OrsIsochrones extends OrsBase {
       };
     }
   }
-  calculate(reqArgs) {
-    this.customHeaders = [];
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders;
-      delete reqArgs.customHeaders;
-    }
-    orsUtil$4.setRequestDefaults(this.args, reqArgs, true);
-    if (!this.args[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
-      reqArgs.service = "isochrones";
-    }
-    orsUtil$4.copyProperties(reqArgs, this.args);
-    const that = this;
-    return new Promise$1(function(resolve, reject) {
-      const timeout = that.args[constants.propNames.timeout] || 1e4;
-      if (that.args[constants.propNames.apiVersion] === constants.defaultAPIVersion) {
-        if (that.meta == null) {
-          that.meta = orsUtil$4.prepareMeta(that.args);
-        }
-        that.httpArgs = orsUtil$4.prepareRequest(that.args);
-        const url = orsUtil$4.prepareUrl(that.meta);
-        const postBody = that.getBody(that.httpArgs);
-        const authorization = that.meta[constants.propNames.apiKey];
-        const orsRequest = request.post(url).send(postBody).set("Authorization", authorization).timeout(timeout);
-        for (const key in that.customHeaders) {
-          orsRequest.set(key, that.customHeaders[key]);
-        }
-        orsRequest.end(function(err, res) {
-          if (err || !res.ok) {
-            console.error(err);
-            reject(err);
-          } else if (res) {
-            resolve(res.body || res.text);
-          }
-        });
-      } else {
-        console.error(constants.useAPIV2Msg);
-      }
-    });
-  }
 }
-const orsUtil$3 = new OrsUtil();
 class OrsMatrix extends OrsBase {
-  calculate(reqArgs) {
-    this.customHeaders = [];
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders;
-      delete reqArgs.customHeaders;
+  constructor(args) {
+    super(args);
+    if (!this.defaultArgs[constants.propNames.service] && !this.requestArgs[constants.propNames.service]) {
+      this.defaultArgs[constants.propNames.service] = "matrix";
     }
-    orsUtil$3.setRequestDefaults(this.args, reqArgs, true);
-    if (!this.args[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
-      this.args[constants.propNames.service] = "matrix";
+    if (!args[constants.propNames.apiVersion]) {
+      this.defaultArgs.api_version = constants.defaultAPIVersion;
     }
-    orsUtil$3.copyProperties(reqArgs, this.args);
-    const that = this;
-    return new Promise$1(function(resolve, reject) {
-      const timeout = that.args[constants.propNames.timeout] || 1e4;
-      if (that.args[constants.propNames.apiVersion] === constants.defaultAPIVersion) {
-        if (that.meta == null) {
-          that.meta = orsUtil$3.prepareMeta(that.args);
-        }
-        that.httpArgs = orsUtil$3.prepareRequest(that.args);
-        const url = orsUtil$3.prepareUrl(that.meta);
-        const authorization = that.meta[constants.propNames.apiKey];
-        const orsRequest = request.post(url).send(that.httpArgs).set("Authorization", authorization).timeout(timeout);
-        for (const key in that.customHeaders) {
-          orsRequest.set(key, that.customHeaders[key]);
-        }
-        orsRequest.end(function(err, res) {
-          if (err || !res.ok) {
-            console.error(err);
-            reject(err);
-          } else if (res) {
-            resolve(res.body || res.text);
-          }
-        });
-      } else {
-        console.error(constants.useAPIV2Msg);
-      }
-    });
   }
 }
-const orsUtil$2 = new OrsUtil();
 class OrsDirections extends OrsBase {
+  constructor(args) {
+    super(args);
+    if (!this.defaultArgs[constants.propNames.service]) {
+      this.defaultArgs[constants.propNames.service] = "directions";
+    }
+    if (!args[constants.propNames.apiVersion]) {
+      this.defaultArgs.api_version = constants.defaultAPIVersion;
+    }
+  }
   clear() {
-    for (const variable in this.args) {
-      if (variable !== constants.apiKeyPropName)
-        delete this.args[variable];
+    for (const variable in this.defaultArgs) {
+      if (variable !== constants.propNames.apiKey)
+        delete this.defaultArgs[variable];
     }
   }
   clearPoints() {
-    if ("coordinates" in this.args)
-      this.args.coordinates.length = 0;
+    if ("coordinates" in this.defaultArgs)
+      this.defaultArgs.coordinates.length = 0;
   }
   addWaypoint(latLon) {
-    if (!("coordinates" in this.args)) {
-      this.args.coordinates = [];
+    if (!("coordinates" in this.defaultArgs)) {
+      this.defaultArgs.coordinates = [];
     }
-    this.args.coordinates.push(latLon);
+    this.defaultArgs.coordinates.push(latLon);
   }
   getBody(args) {
     if (args.options && typeof args.options !== "object") {
       args.options = JSON.parse(args.options);
     }
-    if (this.meta && this.meta.profile === "driving-hgv" && (!args.options || !args.options.vehicle_type)) {
+    if (this.argsCache && this.argsCache.profile === "driving-hgv" && (!args.options || !args.options.vehicle_type)) {
       args.options = args.options || {};
       args.options.vehicle_type = "hgv";
     }
@@ -8677,48 +8623,19 @@ class OrsDirections extends OrsBase {
     }
     return args;
   }
-  calculate(reqArgs) {
-    this.customHeaders = [];
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders;
-      delete reqArgs.customHeaders;
-    }
-    orsUtil$2.setRequestDefaults(this.args, reqArgs, true);
-    if (!this.args[constants.propNames.service]) {
-      this.args[constants.propNames.service] = "directions";
-    }
-    orsUtil$2.copyProperties(reqArgs, this.args);
-    const that = this;
-    return new Promise$1(function(resolve, reject) {
-      const timeout = that.args[constants.propNames.timeout] || 1e4;
-      if (that.meta == null) {
-        that.meta = orsUtil$2.prepareMeta(that.args);
-      }
-      that.httpArgs = orsUtil$2.prepareRequest(that.args);
-      const url = orsUtil$2.prepareUrl(that.meta);
-      const postBody = that.getBody(that.httpArgs);
-      const authorization = that.meta[constants.propNames.apiKey];
-      const orsRequest = request.post(url).send(postBody).set("Authorization", authorization).timeout(timeout);
-      for (const key in that.customHeaders) {
-        orsRequest.set(key, that.customHeaders[key]);
-      }
-      orsRequest.end(function(err, res) {
-        if (err || !res.ok) {
-          console.error(err);
-          reject(err);
-        } else if (res) {
-          resolve(res.body || res.text);
-        }
-      });
-    });
-  }
 }
-const orsUtil$1 = new OrsUtil();
+const orsUtil$2 = new OrsUtil();
 class OrsPois extends OrsBase {
+  constructor(args) {
+    super(args);
+    if (!this.defaultArgs[constants.propNames.service]) {
+      this.defaultArgs[constants.propNames.service] = "pois";
+    }
+  }
   clear() {
-    for (const variable in this.args) {
+    for (const variable in this.defaultArgs) {
       if (variable !== constants.propNames.apiKey)
-        delete this.args[variable];
+        delete this.defaultArgs[variable];
     }
   }
   generatePayload(args) {
@@ -8731,51 +8648,30 @@ class OrsPois extends OrsBase {
     return payload;
   }
   poisPromise() {
-    if (!this.args[constants.propNames.service]) {
-      this.args[constants.propNames.service] = "pois";
-    }
-    this.args.request = this.args.request || "pois";
+    this.requestArgs.request = this.requestArgs.request || "pois";
     const that = this;
     return new Promise$1(function(resolve, reject) {
-      const timeout = that.args[constants.propNames.timeout] || 5e3;
-      let url = orsUtil$1.prepareUrl(that.args);
-      url += url.indexOf("?") > -1 ? "&" : "?";
-      if (that.args[constants.propNames.service]) {
-        delete that.args[constants.propNames.service];
+      that.argsCache = orsUtil$2.saveArgsToCache(that.requestArgs);
+      if (that.requestArgs[constants.propNames.service]) {
+        delete that.requestArgs[constants.propNames.service];
       }
-      const payload = that.generatePayload(that.args);
-      const authorization = that.args[constants.propNames.apiKey];
-      const orsRequest = request.post(url).send(payload).set("Authorization", authorization).timeout(timeout);
-      for (const key in that.customHeaders) {
-        orsRequest.set(key, that.customHeaders[key]);
-      }
-      orsRequest.end(function(err, res) {
-        if (err || !res.ok) {
-          console.error(err);
-          reject(err);
-        } else if (res) {
-          resolve(res.body || res.text);
-        }
-      });
+      const payload = that.generatePayload(that.requestArgs);
+      that.createRequest(payload, resolve, reject);
     });
   }
   pois(reqArgs) {
-    this.customHeaders = [];
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders;
-      delete reqArgs.customHeaders;
-    }
-    orsUtil$1.setRequestDefaults(this.args, reqArgs);
-    orsUtil$1.copyProperties(reqArgs, this.args);
+    this.requestArgs = reqArgs;
+    this.checkHeaders();
+    this.requestArgs = orsUtil$2.fillArgs(this.defaultArgs, this.requestArgs);
     return this.poisPromise();
   }
 }
-const orsUtil = new OrsUtil();
+const orsUtil$1 = new OrsUtil();
 class OrsElevation extends OrsBase {
   clear() {
-    for (const variable in this.args) {
+    for (const variable in this.defaultArgs) {
       if (variable !== constants.propNames.apiKey)
-        delete this.args[variable];
+        delete this.defaultArgs[variable];
     }
   }
   generatePayload(args) {
@@ -8790,49 +8686,63 @@ class OrsElevation extends OrsBase {
   elevationPromise() {
     const that = this;
     return new Promise$1(function(resolve, reject) {
-      const timeout = that.args[constants.propNames.timeout] || 5e3;
-      const url = orsUtil.prepareUrl(that.args);
-      const payload = that.generatePayload(that.args);
-      const authorization = that.args[constants.propNames.apiKey];
-      const orsRequest = request.post(url).send(payload).set("Authorization", authorization).timeout(timeout);
-      for (const key in that.customHeaders) {
-        orsRequest.set(key, that.customHeaders[key]);
-      }
-      orsRequest.end(function(err, res) {
-        if (err || !res.ok) {
-          console.error(err);
-          reject(err);
-        } else if (res) {
-          resolve(res.body || res.text);
-        }
-      });
+      that.argsCache = orsUtil$1.saveArgsToCache(that.requestArgs);
+      const payload = that.generatePayload(that.requestArgs);
+      that.createRequest(payload, resolve, reject);
     });
   }
   lineElevation(reqArgs) {
-    this.customHeaders = [];
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders;
-      delete reqArgs.customHeaders;
-    }
-    orsUtil.setRequestDefaults(this.args, reqArgs);
-    if (!this.args[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
+    this.requestArgs = reqArgs;
+    this.checkHeaders();
+    if (!this.defaultArgs[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
       reqArgs[constants.propNames.service] = "elevation/line";
     }
-    orsUtil.copyProperties(reqArgs, this.args);
+    this.requestArgs = orsUtil$1.fillArgs(this.defaultArgs, this.requestArgs);
     return this.elevationPromise();
   }
   pointElevation(reqArgs) {
-    this.customHeaders = [];
-    if (reqArgs.customHeaders) {
-      this.customHeaders = reqArgs.customHeaders;
-      delete reqArgs.customHeaders;
+    this.requestArgs = reqArgs;
+    this.checkHeaders();
+    if (!this.defaultArgs[constants.propNames.service] && !this.requestArgs[constants.propNames.service]) {
+      this.requestArgs[constants.propNames.service] = "elevation/point";
     }
-    orsUtil.setRequestDefaults(this.args, reqArgs);
-    if (!this.args[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
-      reqArgs[constants.propNames.service] = "elevation/point";
-    }
-    orsUtil.copyProperties(reqArgs, this.args);
+    this.requestArgs = orsUtil$1.fillArgs(this.defaultArgs, this.requestArgs);
     return this.elevationPromise();
+  }
+}
+const orsUtil = new OrsUtil();
+class OrsOptimization extends OrsBase {
+  clear() {
+    for (let variable in this.defaultArgs) {
+      if (variable !== constants.propNames.apiKey)
+        delete this.defaultArgs[variable];
+    }
+  }
+  generatePayload(args) {
+    let payload = {};
+    for (const key in args) {
+      if (constants.baseUrlConstituents.indexOf(key) <= -1) {
+        payload[key] = args[key];
+      }
+    }
+    return payload;
+  }
+  optimizationPromise() {
+    const that = this;
+    return new Promise$1(function(resolve, reject) {
+      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs);
+      const payload = that.generatePayload(that.requestArgs);
+      that.createRequest(payload, resolve, reject);
+    });
+  }
+  optimize(reqArgs) {
+    this.requestArgs = reqArgs;
+    this.checkHeaders();
+    if (!this.defaultArgs[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
+      reqArgs[constants.propNames.service] = "optimization";
+    }
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs);
+    return this.optimizationPromise();
   }
 }
 const Openrouteservice = {
@@ -8843,7 +8753,8 @@ const Openrouteservice = {
   Directions: OrsDirections,
   Matrix: OrsMatrix,
   Pois: OrsPois,
-  Elevation: OrsElevation
+  Elevation: OrsElevation,
+  Optimization: OrsOptimization
 };
 if (typeof module === "object" && typeof module.exports === "object") {
   module.exports = Openrouteservice;
