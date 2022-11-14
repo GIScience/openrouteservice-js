@@ -24,3 +24,6 @@ jobs:
         run: npm run test:ci
       - name: Upload coverage
         uses: codecov/codecov-action@v3
+        with:
+          # fix for https://github.com/codecov/codecov-action/issues/598 / https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
+          token: ${{ secrets.CODECOV_TOKEN }}
