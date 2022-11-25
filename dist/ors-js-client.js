@@ -8694,8 +8694,8 @@ class OrsElevation extends OrsBase {
   lineElevation(reqArgs) {
     this.requestArgs = reqArgs;
     this.checkHeaders();
-    if (!this.defaultArgs[constants.propNames.service] && !reqArgs[constants.propNames.service]) {
-      reqArgs[constants.propNames.service] = "elevation/line";
+    if (!this.defaultArgs[constants.propNames.service] && !this.requestArgs[constants.propNames.service]) {
+      this.requestArgs[constants.propNames.service] = "elevation/line";
     }
     this.requestArgs = orsUtil$1.fillArgs(this.defaultArgs, this.requestArgs);
     return this.elevationPromise();
