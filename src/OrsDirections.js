@@ -45,7 +45,7 @@ class OrsDirections extends OrsBase {
       args.options.profile_params = {
         restrictions: { ...args.restrictions }
       }
-      delete args.options.restrictions
+      delete args.restrictions
     }
 
     if (args.avoidables) {
