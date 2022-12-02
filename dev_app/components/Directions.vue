@@ -8,12 +8,12 @@
     </h3>
   </div>
   <div>
-    <p class='ors_title' v-if='data_ready'>
-      {{ json_title }}
-    </p>
-    <p class='ors_call' v-if='data_ready'>
-      {{ json_data }}
-    </p>
+  <p class='ors_title' v-if='data_ready'>
+    {{ json_title }}
+  </p>
+  <p class='ors_call' v-if='data_ready'>
+    {{ json_data }}
+  </p>
   </div>
 </template>
 

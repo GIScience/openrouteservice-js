@@ -4,12 +4,13 @@ export default {
   props: {
     msg: {
       type: String,
-      required: true
+      required: false
     }
   },
   data() {
     return {
       api_key: import.meta.env.VITE_ORS_API_KEY,
+      json_title: '',
       json_data: {},
       data_ready: false
     }
