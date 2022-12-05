@@ -57,14 +57,31 @@ describe('Test Utils', () => {
   })
 
   it('url is built and has no double slashes', () => {
-    let response = orsUtil.
-      prepareUrl({
+    let response = orsUtil
+    .prepareUrl({
       [Constants.propNames.host]: Constants.defaultHost,
       [Constants.propNames.apiVersion]: 'v2',
       [Constants.propNames.service]: '/directions'
       })
-      expect(response.length).to.be.greaterThan(25)
-      expect(response).to.include('https://')
-      expect(response.slice(7, response.length)).to.not.include('//')
+    expect(response.length).to.be.greaterThan(25)
+    expect(response).to.include('https://')
+    expect(response.slice(7, response.length)).to.not.include('//')
+
+    let noApiVersion = orsUtil
+    .prepareUrl({
+      [Constants.propNames.host]: Constants.defaultHost,
+      [Constants.propNames.service]: 'elevation/line'
+    })
+    expect(noApiVersion.slice(7, response.length)).to.not.include('//')
+  })
+
+  it('url is built and has no slash at end', () => {
+    let response = orsUtil
+        .prepareUrl({
+          [Constants.propNames.host]: Constants.defaultHost,
+          [Constants.propNames.apiVersion]: 'v2',
+          [Constants.propNames.service]: '/directions/'
+        })
+    expect(response.slice(-1)).to.not.equal('/')
   })
 })
