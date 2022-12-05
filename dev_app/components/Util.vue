@@ -1,4 +1,4 @@
-<script src='./GeocodeApp.js'></script>
+<script src='./UtilApp.js'></script>
 
 <template>
   <div>
@@ -12,13 +12,11 @@
       {{ json_title }}
     </p>
     <p class='ors_call' v-if='data_ready'>
-      {{ json_data }}
-    </p>
-    <p class='ors_call' v-if='data_ready'>
-      {{ json_data_reverse }}
+      {{ url }}
     </p>
   </div>
 </template>
+
 <style>
 .green {
   color: green;
