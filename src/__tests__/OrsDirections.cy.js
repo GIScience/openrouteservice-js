@@ -150,16 +150,10 @@ describe('Test Directions', () => {
         expect(orsDirections.defaultArgs.coordinates.length).to.equal(2)
       })
 
-      it('addWaypoint() creates property if not existing', () => {
+      it('addWaypoint() creates pÁroperty if not existing', () => {
         orsDirections.defaultArgs = {}
         orsDirections.addWaypoint()
         expect(orsDirections.defaultArgs).to.have.property('coordinates')
-      })
-
-      it('addWaypoint() does not duplicate coordinates', () => {
-        orsDirections.defaultArgs.coordinates = [[8.690958, 49.404662], [8.687868, 49.390139]]
-        orsDirections.addWaypoint([8.687868, 49.390139])
-        expect(orsDirections.defaultArgs.coordinates.length).to.equal(2)
       })
     })
   })
