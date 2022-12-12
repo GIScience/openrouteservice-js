@@ -1,8 +1,8 @@
 <script setup>
+import Util from './components/Util.vue'
 import Directions from './components/Directions.vue'
 import Elevation from './components/Elevation.vue'
 import Geocode from './components/Geocode.vue'
-import Util from './components/Util.vue'
 import Isochrones from "./components/Isochrones.vue"
 import Matrix from "./components/Matrix.vue"
 import Optimization from "./components/Optimization.vue"
