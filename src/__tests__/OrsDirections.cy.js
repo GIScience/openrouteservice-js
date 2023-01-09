@@ -32,19 +32,6 @@ describe('Test Directions', () => {
         expect(bodyArgs['options']).to.deep.equal({ "option1": "o1", "option2": "o2" })
       })
 
-      it('sets default vehicle type', () => {
-        orsDirections.argsCache = {
-          profile: 'driving-hgv'
-        }
-        let noOptions = orsDirections
-          .getBody({})
-        expect(noOptions['options']['vehicle_type']).to.equal('hgv')
-
-        let noVehicleType = orsDirections
-            .getBody({ options: {} })
-        expect(noVehicleType['options']['vehicle_type']).to.equal('hgv')
-      })
-
       it('moves restrictions to profile_params', () => {
         let bodyArgs = orsDirections
           .getBody({

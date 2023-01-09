@@ -34,12 +34,6 @@ class OrsDirections extends OrsBase {
       args.options = JSON.parse(args.options)
     }
 
-    // Set the default vehicle type when profile is 'driving-hgv' if it is missing
-    if (this.argsCache && this.argsCache.profile === 'driving-hgv' && (!args.options || !args.options.vehicle_type)) {
-      args.options = args.options || {}
-      args.options.vehicle_type = 'hgv'
-    }
-
     if (args.restrictions) {
       args.options = args.options || {}
       args.options.profile_params = {
