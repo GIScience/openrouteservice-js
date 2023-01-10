@@ -150,7 +150,7 @@ describe('Test Directions', () => {
         expect(orsDirections.defaultArgs.coordinates.length).to.equal(2)
       })
 
-      it('addWaypoint() creates pÁroperty if not existing', () => {
+      it('addWaypoint() creates property if not existing', () => {
         orsDirections.defaultArgs = {}
         orsDirections.addWaypoint()
         expect(orsDirections.defaultArgs).to.have.property('coordinates')

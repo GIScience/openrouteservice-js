@@ -3,7 +3,7 @@ import OrsPois from '../OrsPois.js'
 const key = Cypress.env('api_key')
 const orsPois = new OrsPois({ api_key: key })
 
-describe('POI Test', function () {
+describe('POI Test', () => {
 
   context('construction', () => {
     it('sets correct service', () => {
@@ -50,7 +50,7 @@ describe('POI Test', function () {
             buffer: 250
           }
         })
-        .then(function (response) {
+        .then((response) => {
           expect(response).to.be.instanceOf(Object)
           expect(response.features.length).to.be.greaterThan(2)
           expect(response.type).to.equal('FeatureCollection')

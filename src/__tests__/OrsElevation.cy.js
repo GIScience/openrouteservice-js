@@ -3,7 +3,7 @@ import OrsElevation from '../OrsElevation.js'
 const key = Cypress.env('api_key')
 const orsElevation = new OrsElevation({ 'api_key': key })
 
-describe('Test Elevation', function () {
+describe('Test Elevation', () => {
 
   context('methods', () => {
     context('generatePayload', () => {
@@ -41,7 +41,7 @@ describe('Test Elevation', function () {
             format_in: 'encodedpolyline',
             geometry: 'u`rgFswjpAKD'
           })
-        .then(function (json) {
+        .then((json) => {
           expect(json.geometry.coordinates.length).to.equal(2)
           expect(json.geometry.type).to.equal('LineString')
           expect(json.geometry.coordinates[0][0]).to.equal(13.3313)
@@ -75,7 +75,7 @@ describe('Test Elevation', function () {
           format_in: 'point',
           geometry: [13.331273, 38.10849]
         })
-        .then(function (json) {
+        .then((json) => {
           expect(json.geometry.coordinates.length).to.equal(3)
           expect(json.geometry.type).to.equal('Point')
           expect(json.geometry.coordinates[0]).to.equal(13.331273)

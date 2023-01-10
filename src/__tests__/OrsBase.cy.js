@@ -67,7 +67,7 @@ describe('Test Base class', () => {
         })
       })
 
-      it('sets the default host when not in args', function() {
+      it('sets the default host when not in args', () => {
         const base = new OrsBase({ 'api_key': 'test' })
         base._setRequestDefaults({ 'api_key': 'test' })
         expect(base.defaultArgs).to.include({

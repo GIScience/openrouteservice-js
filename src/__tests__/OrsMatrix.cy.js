@@ -4,7 +4,7 @@ import Constants from '../constants.js'
 const key = Cypress.env('api_key')
 const orsMatrix = new OrsMatrix({ api_key: key })
 
-describe('Matrix Test', function () {
+describe('Matrix Test', () => {
 
   context('construction', () => {
     it('sets correct service and API version', () => {
@@ -46,7 +46,7 @@ describe('Matrix Test', function () {
           sources: ['all'],
           destinations: ['all']
         })
-        .then(function (json) {
+        .then((json) => {
           expect(json.durations.length).to.equal(3)
           expect(json.destinations.length).to.equal(3)
           done()

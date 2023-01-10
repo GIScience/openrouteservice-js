@@ -3,7 +3,7 @@ import OrsOptimization from '../OrsOptimization.js'
 const key = Cypress.env('api_key')
 const orsOptimization = new OrsOptimization({ 'api_key': key })
 
-describe('Optimization Test', function() {
+describe('Optimization Test', () => {
 
   context('methods', () => {
     context('generatePayload', () => {
@@ -93,7 +93,7 @@ describe('Optimization Test', function() {
             }
           ]
         })
-        .then(function (json) {
+        .then((json) => {
           expect(json['summary']['unassigned']).to.equal(0)
           expect(json['summary']['delivery'][0]).to.equal(3)
           expect(json['routes']['length']).to.equal(2)
