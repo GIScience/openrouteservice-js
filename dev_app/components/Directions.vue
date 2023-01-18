@@ -13,10 +13,15 @@
           name="OpenStreetMap"
       ></l-tile-layer>
 
-      <l-marker :lat-lng='[point.start[1], point.start[0]]' draggable> </l-marker>
-      <l-marker :lat-lng='[point.end[1], point.end[0]]' draggable> </l-marker>
-
-      <l-geo-json :geojson='geojson'> </l-geo-json>
+      <div v-for='(key, index) in route' :key='key'>
+        <l-marker :lat-lng='[route[index][0][1], route[index][0][0]]'>
+          <l-icon :icon-url="iconUrl[index]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+        </l-marker>
+        <l-marker :lat-lng='[route[index][1][1], route[index][1][0]]'>
+          <l-icon :icon-url="iconUrl[index]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+        </l-marker>
+        <l-geo-json :geojson='geojson[index]' :options='colorStyle[index]'></l-geo-json>
+      </div>
 
     </l-map>
   </div>
