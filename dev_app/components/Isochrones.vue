@@ -13,34 +13,23 @@
           name="OpenStreetMap"
       ></l-tile-layer>
 
-      <l-marker :lat-lng='[points[0][1], points[0][0]]'>
-        <l-icon :icon-url="blueIconUrl" :icon-size="iconSize" :icon-anchor="iconAnchor"> </l-icon>
-      </l-marker>
-      <l-geo-json :geojson='iso[0][5]' :options='hueStyle[5]'> </l-geo-json>
-      <l-geo-json :geojson='iso[0][4]' :options='hueStyle[4]'> </l-geo-json>
-      <l-geo-json :geojson='iso[0][3]' :options='hueStyle[3]'> </l-geo-json>
-      <l-geo-json :geojson='iso[0][2]' :options='hueStyle[2]'> </l-geo-json>
-      <l-geo-json :geojson='iso[0][1]' :options='hueStyle[1]'> </l-geo-json>
-      <l-geo-json :geojson='iso[0][0]' :options='hueStyle[0]'> </l-geo-json>
+			<div v-if='color_style'>
+				<div v-for='(key, index) in iso' :key='key'>
+					<l-marker :lat-lng='[points[index][1], points[index][0]]'>
+						<l-icon :icon-url="iconUrl[index]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+					</l-marker>
+					<l-geo-json :geojson='iso[index]' :options='colorStyle[index]'></l-geo-json>
+				</div>
+			</div>
 
-      <l-marker :lat-lng='[points[1][1], points[1][0]]'>
-        <l-icon :icon-url="blueIconUrl" :icon-size="iconSize" :icon-anchor="iconAnchor"> </l-icon>
-      </l-marker>
-      <l-geo-json :geojson='iso[1][5]' :options='hueStyle[5]'> </l-geo-json>
-      <l-geo-json :geojson='iso[1][4]' :options='hueStyle[4]'> </l-geo-json>
-      <l-geo-json :geojson='iso[1][3]' :options='hueStyle[3]'> </l-geo-json>
-      <l-geo-json :geojson='iso[1][2]' :options='hueStyle[2]'> </l-geo-json>
-      <l-geo-json :geojson='iso[1][1]' :options='hueStyle[1]'> </l-geo-json>
-      <l-geo-json :geojson='iso[1][0]' :options='hueStyle[0]'> </l-geo-json>
-
-      <div v-if='hue_style'>
-        <l-marker :lat-lng='[points[0][1], points[0][0]]'>
-          <l-icon :icon-url="blueIconUrl" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
-        </l-marker>
-        <div v-for='(hue, index) in hueStyle' :key='hue'>
-          <l-geo-json :geojson='iso[0][iso[0].length - index]' :options='hueStyle[index]'></l-geo-json>
-        </div>
-      </div>
+			<div v-if='hue_style'>
+				<l-marker :lat-lng='[points[0][1], points[0][0]]'>
+					<l-icon :icon-url="iconUrl[0]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+				</l-marker>
+				<div v-for='(hue, index) in hueStyle' :key='hue'>
+					<l-geo-json :geojson='iso[0][iso[0].length - index]' :options='hueStyle[index]'></l-geo-json>
+				</div>
+			</div>
 
     </l-map>
   </div>

@@ -32,20 +32,52 @@ export default {
         lon: 0
       },
       geojson: {},
+      colorStyle: [
+        {
+          style: {
+            color: '#2b82cb',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
+          }
+        },
+        {
+          style: {
+            color: '#c3577a',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
+          }
+        },
+        {
+          style: {
+            color: '#298f57',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
+          }
+        }
+      ],
       hueStyle: [],
       iso: [],
 
 
       json_title: '',
       json_data: {},
+      color_style: false,
+      hue_style: false,
       data_ready: false,
       map_ready: false
 
     }
   },
   computed: {
-    blueIconUrl() {
-      return blueIcon
+    iconUrl() {
+      return [
+        blueIcon,
+        redIcon,
+        greenIcon
+      ]
     },
     iconSize() {
       return [25, 41]
@@ -62,7 +94,7 @@ export default {
     })
 
     // add center point for isochrones here
-    this.points = [[8.681495, 49.41461]]
+    this.points = [[8.681495, 49.41461], [8.686507, 49.41943], [8.69059, 49.37818]]
 
     for (let i = 0; i < (this.extent / 100); i++) {
       let z = i + 1
@@ -83,20 +115,21 @@ export default {
         lat: (response.bbox[1] + response.bbox[3]) / 2,
         lon: (response.bbox[0] + response.bbox[2]) / 2
       }
+
       // code to style isochrones
       // divide response.features into the same amount of arrays as points requested, here: two
-      if (this.points.length <= 2) {
-        this.iso = [
-          response.features.slice(0, response.features.length / this.points.length),
-          response.features.slice(this.iso[0], response.features.length / this.points.length)
-        ]
+      this.iso = [
+        response.features.slice(0, response.features.length / this.points.length)
+      ]
+      for (let i = 1; i < this.points.length; i++) {
+        let start = i * this.iso[0].length
+        this.iso.push(response.features.slice(start, start + response.features.length / this.points.length))
       }
 
-      // isochrones styled by changing opacity
       if (this.points.length > 1) {
         this.color_style = true
-      // isochrones styled by changing hue, push different hues to the hueStyle array
       } else {
+        // isochrones styled by changing hue, push different hues to the hueStyle array
         let i = 0
         if (i < this.iso[0].length) {
           this.hueStyle.push({
