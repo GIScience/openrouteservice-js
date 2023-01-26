@@ -24,7 +24,7 @@ import Pois from "./components/Pois.vue"
     <div class="wrapper">
       <Util msg="Utils"/>
     </div>
-    <div class="wrapper">
+    <div class="leaflet_map">
       <Directions msg="OrsDirections"/>
     </div>
     <div class="wrapper">
@@ -33,7 +33,7 @@ import Pois from "./components/Pois.vue"
     <div class="wrapper">
       <Geocode msg="OrsGeocode"/>
     </div>
-    <div class="wrapper">
+    <div class="leaflet_map">
       <Isochrones msg="OrsIsochrones"/>
     </div>
     <div class="wrapper">
@@ -42,8 +42,14 @@ import Pois from "./components/Pois.vue"
     <div class="wrapper">
       <Optimization msg="OrsOptimization"/>
     </div>
-    <div class="wrapper">
+    <div class="leaflet_map">
       <Pois msg="OrsPOIs"/>
     </div>
   </main>
 </template>
+
+<style>
+.leaflet_map {
+  min-height: 600px;
+}
+</style>

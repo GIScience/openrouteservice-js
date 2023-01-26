@@ -50,7 +50,9 @@
 }
 .leaflet {
   height: 540px;
-  width: 810px;
+  float: right;
+  width: 50%;
+  padding: 10px;
 }
 .ors_title {
   font-weight: bold;
