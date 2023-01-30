@@ -3,10 +3,10 @@ import Util from './components/Util.vue'
 import Directions from './components/Directions.vue'
 import Elevation from './components/Elevation.vue'
 import Geocode from './components/Geocode.vue'
-import Isochrones from "./components/Isochrones.vue"
-import Matrix from "./components/Matrix.vue"
-import Optimization from "./components/Optimization.vue"
-import Pois from "./components/Pois.vue"
+import Isochrones from './components/Isochrones.vue'
+import Matrix from './components/Matrix.vue'
+import Optimization from './components/Optimization.vue'
+import Pois from './components/Pois.vue'
 </script>
 
 <template>
@@ -20,11 +20,20 @@ import Pois from "./components/Pois.vue"
     </div>
   </header>
 
-  <main>
-    <div class="wrapper">
+  <div class="sidebar">
+    <button class="button" @click="">
+      Utils
+    </button>
+    <button class="button" @click="">
+      Directions
+    </button>
+  </div>
+
+  <div class="main">
+    <div class="wrapper" v-if="">
       <Util msg="Utils"/>
     </div>
-    <div class="leaflet_map">
+    <div class="wrapper" v-if="">
       <Directions msg="OrsDirections"/>
     </div>
     <div class="wrapper">
@@ -45,11 +54,25 @@ import Pois from "./components/Pois.vue"
     <div class="leaflet_map">
       <Pois msg="OrsPOIs"/>
     </div>
-  </main>
+  </div>
 </template>
 
 <style>
-.leaflet_map {
-  min-height: 600px;
+.button {
+  border: none;
+  margin: 4px 2px;
+  width: 100%;
+  height: 40px;
+  background-color: darkseagreen;
+}
+.sidebar {
+  float: left;
+  width: 15%;
+  padding: 15px;
+}
+.main {
+  float: right;
+  width: 80%;
+  padding: 15px;
 }
 </style>
