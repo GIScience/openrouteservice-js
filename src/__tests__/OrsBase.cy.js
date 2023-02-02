@@ -20,6 +20,19 @@ describe('Test Base class', () => {
       }
     })
 
+    it('fails when API version not default API version', () => {
+      let base
+      try {
+        base = new OrsBase({
+          'api_key': 'test',
+          'apiVersion': 'v1'
+        })
+      } catch (err) {
+        expect(err.message).to.equal(constants.useAPIV2Msg)
+        expect(base.calculate()).to.throw(console.error)
+      }
+    })
+
     it('passes Host correctly', () => {
       const base = new OrsBase({
         'api_key': 'test',
@@ -53,12 +66,25 @@ describe('Test Base class', () => {
           [constants.propNames.host]: 'host'
         })
       })
-      it('sets the default host when not in args', function() {
+
+      it('sets the default host when not in args', () => {
         const base = new OrsBase({ 'api_key': 'test' })
         base._setRequestDefaults({ 'api_key': 'test' })
         expect(base.defaultArgs).to.include({
           [constants.propNames.host]: constants.defaultHost
         })
+      })
+    })
+
+    context('checkHeaders', () => {
+      it('sets customHeaders', () => {
+        const base = new OrsBase({ 'api_key': 'test' })
+        base.requestArgs = {
+          customHeaders: ['customHeader']
+        }
+        base.checkHeaders()
+        expect(base.customHeaders).to.not.be.empty
+        expect(base.requestArgs).to.not.include({customHeaders: []})
       })
     })
   })

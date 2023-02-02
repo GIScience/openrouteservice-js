@@ -43,15 +43,20 @@ class OrsUtil {
       args[Constants.propNames.format]
     ]
 
-    urlPathParts = urlPathParts.join("/")
-    urlPathParts = urlPathParts.replace(/\/(\/)+/g, "/")
+    urlPathParts = urlPathParts.join('/')
+    urlPathParts = urlPathParts.replace(/\/(\/)+/g, '/')
+
+    // The beginning and end of urlPathParts can not be a slash
+    if (urlPathParts[0] === '/') {
+      urlPathParts = urlPathParts.slice(1)
+    }
+    let end = urlPathParts.slice(-1)
+    if (end[0] === '/') {
+      urlPathParts = urlPathParts.slice(0, -1)
+    }
 
     url = url + '/' + urlPathParts
 
-    // The end of the url can not be a slash
-    if (url.slice(-1) === '/') {
-      url = url.slice(0, -1)
-    }
     return url
   }
 }

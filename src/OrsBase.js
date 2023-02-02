@@ -10,7 +10,7 @@ class OrsBase {
     this.defaultArgs = {}
     this.requestArgs = {}
     this.argsCache = null
-    this.customHeaders = []
+    this.customHeaders = {}
 
     this._setRequestDefaults(args)
   }
