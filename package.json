@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "bluebird": "^3.7.2",
-    "superagent": "^7.1.6"
+    "superagent": "^8.0.9"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.0",
