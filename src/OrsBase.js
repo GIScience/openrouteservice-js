@@ -1,5 +1,4 @@
 import request from 'superagent'
-import Promise from 'bluebird';
 import OrsUtil from './OrsUtil.js'
 import Constants from './constants.js'
 
