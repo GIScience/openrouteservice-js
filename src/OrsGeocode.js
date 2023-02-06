@@ -151,7 +151,7 @@ class OrsGeocode extends OrsBase {
     })
   }
 
-  geocode(reqArgs) {
+  async geocode(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -161,10 +161,10 @@ class OrsGeocode extends OrsBase {
     }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
-    return this.geocodePromise()
+    return await this.geocodePromise()
   }
 
-  reverseGeocode(reqArgs) {
+  async reverseGeocode(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -174,10 +174,10 @@ class OrsGeocode extends OrsBase {
     }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
-    return this.geocodePromise()
+    return await this.geocodePromise()
   }
 
-  structuredGeocode(reqArgs) {
+  async structuredGeocode(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -187,7 +187,7 @@ class OrsGeocode extends OrsBase {
     }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
-    return this.geocodePromise()
+    return await this.geocodePromise()
   }
 }
 

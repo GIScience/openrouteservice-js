@@ -34,7 +34,7 @@ class OrsOptimization extends OrsBase {
     })
   }
 
-  optimize(reqArgs) {
+  async optimize(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -44,7 +44,7 @@ class OrsOptimization extends OrsBase {
     }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    return this.optimizationPromise()
+    return await this.optimizationPromise()
   }
 }
 

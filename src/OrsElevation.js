@@ -33,7 +33,7 @@ class OrsElevation extends OrsBase {
     })
   }
 
-  lineElevation(reqArgs) {
+  async lineElevation(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -43,10 +43,10 @@ class OrsElevation extends OrsBase {
     }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
-    return this.elevationPromise()
+    return await this.elevationPromise()
   }
 
-  pointElevation(reqArgs) {
+  async pointElevation(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -56,7 +56,7 @@ class OrsElevation extends OrsBase {
     }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
-    return this.elevationPromise()
+    return await this.elevationPromise()
   }
 }
 

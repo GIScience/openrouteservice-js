@@ -53,14 +53,14 @@ class OrsPois extends OrsBase {
     })
   }
 
-  pois(reqArgs) {
+  async pois(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
 
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
-    return this.poisPromise()
+    return await this.poisPromise()
   }
 }
 
