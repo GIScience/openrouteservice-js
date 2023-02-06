@@ -22,16 +22,12 @@ class OrsOptimization extends OrsBase {
     return payload
   }
 
-  optimizationPromise() {
-    const that = this
+  async optimizationPromise() {
+    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
 
-    return new Promise(function(resolve, reject) {
-      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+    const payload = this.generatePayload(this.requestArgs)
 
-      const payload = that.generatePayload(that.requestArgs)
-
-      that.createRequest(payload, resolve, reject);
-    })
+    return await this.createRequest(payload)
   }
 
   async optimize(reqArgs) {
