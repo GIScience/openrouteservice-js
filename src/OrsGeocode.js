@@ -182,8 +182,8 @@ class OrsGeocode extends OrsBase {
 
     this.checkHeaders()
 
-    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs.service = 'geocode/search/structured'
+    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
+      this.requestArgs.service = 'geocode/search/structured'
     }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
 
