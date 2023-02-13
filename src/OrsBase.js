@@ -44,36 +44,29 @@ class OrsBase {
     }
   }
 
-  createRequest(body) {
-    const that = this
-    return new Promise(function (resolve, reject) {
-      let url = orsUtil.prepareUrl(that.argsCache)
-      if (that.argsCache[Constants.propNames.service] === 'pois') {
-        url += url.indexOf('?') > -1 ? '&' : '?'
-      }
+  async createRequest(body) {
 
-      const authorization = that.argsCache[Constants.propNames.apiKey]
-      const timeout = that.defaultArgs[Constants.propNames.timeout] || 10000
+    let url = orsUtil.prepareUrl(this.argsCache)
+    if (this.argsCache[Constants.propNames.service] === 'pois') {
+      url += url.indexOf('?') > -1 ? '&' : '?'
+    }
 
-      const orsRequest = request
+    const authorization = this.argsCache[Constants.propNames.apiKey]
+    const timeout = this.defaultArgs[Constants.propNames.timeout] || 10000
+
+    try {
+      const orsRequest = await request
           .post(url)
           .send(body)
           .set('Authorization', authorization)
           .timeout(timeout)
+          .set(this.customHeaders)
 
-      for (const key in that.customHeaders) {
-        orsRequest.set(key, that.customHeaders[key])
-      }
-      orsRequest.end(function (err, res) {
-        if (err || !res.ok) {
-          // eslint-disable-next-line no-console
-          console.error(err)
-          reject(err)
-        } else if (res) {
-          resolve(res.body || res.text)
-        }
-      })
-    })
+      return orsRequest.body || orsRequest.text
+    } catch (err) {
+      console.error(err)
+      return err
+    }
   }
 
   // is overidden in Directions and Isochrones class
