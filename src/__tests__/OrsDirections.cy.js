@@ -11,17 +11,6 @@ describe('Test Directions', () => {
       expect(orsDirections.defaultArgs.service).to.equal('directions')
       expect(orsDirections.defaultArgs.api_version).to.equal('v2')
     })
-
-    it('fails when API version not default API version', () => {
-      try {
-        new OrsDirections({
-          'api_key': 'test',
-          'apiVersion': 'v1'
-        })
-      } catch (err) {
-        expect(err.message).to.equal(Constants.useAPIV2Msg)
-      }
-    })
   })
 
   context('methods', () => {
@@ -94,17 +83,24 @@ describe('Test Directions', () => {
         expect(json2['metadata']['query']['profile']).to.equal('foot-walking')
       })
 
-      it('sets customHeaders in request', (done) => {
+      it('sets customHeaders in request', () => {
         orsDirections.calculate({
           coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
           profile: 'driving-car',
-          format: 'geojson',
           customHeaders: {'Accept': 'application/json'}
+        })
+        cy.intercept('GET', 'https://api.openrouteservice.org/directions', (req) => {
+          expect(req.headers).to.include({'Accept': 'application/json'})
+        })
+      })
+
+      it('fails when API version not default API version', () => {
+        orsDirections.calculate({
+          coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
+          profile: 'driving-car',
+          api_version: 'v1'
         }).catch((err) => {
-          expect(err.message.length).to.be.greaterThan(0)
-          expect(err.response.accepted).to.equal(false)
-          expect(err.response.header['content-type']).to.equal('application/json')
-          done()
+          expect(err.message).to.equal(Constants.useAPIV2Msg)
         })
       })
     })
