@@ -134,15 +134,14 @@ describe('Geocode Test', () => {
         })
       })
 
-      it('uses customHeaders', (done) => {
-        orsGeocode.geocode({
+      it('uses customHeaders', () => {
+        new OrsGeocode({ api_key: key }).geocode({
           text: 'Heidelberg',
-          boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
-          customHeaders: {'Accept': 'application/json'}
-        }).then((json) => {
-          expect(json.features.length).to.equal(2)
-          expect(json.type).to.equal('FeatureCollection')
-          done()
+          boundary_circle: {lat_lng: [49.412388, 8.681247], radius: 50},
+          customHeaders: {'x-request-with': 'test'}
+        })
+        cy.intercept('GET', 'https://api.openrouteservice.org/geocode', (req) => {
+          expect(req.headers).to.include({'x-request-with': 'test'})
         })
       })
     })

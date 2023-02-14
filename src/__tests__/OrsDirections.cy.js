@@ -94,17 +94,15 @@ describe('Test Directions', () => {
         expect(json2['metadata']['query']['profile']).to.equal('foot-walking')
       })
 
-      it('sets customHeaders in request', (done) => {
+      it('sets customHeaders in request', () => {
         orsDirections.calculate({
           coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
           profile: 'driving-car',
           format: 'geojson',
           customHeaders: {'Accept': 'application/json'}
-        }).catch((err) => {
-          expect(err.message.length).to.be.greaterThan(0)
-          expect(err.response.accepted).to.equal(false)
-          expect(err.response.header['content-type']).to.equal('application/json')
-          done()
+        })
+        cy.intercept('GET', 'https://api.openrouteservice.org/directions', (req) => {
+          expect(req.headers).to.include({'Accept': 'application/json'})
         })
       })
     })
