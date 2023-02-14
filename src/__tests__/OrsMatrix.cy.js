@@ -28,9 +28,9 @@ describe('Matrix Test', () => {
     context('calculate', () => {
       it('fails without parameters', (done) => {
         orsMatrix.calculate({})
-        .catch((err) => {
-          expect(err.status).to.equal(400)
-          expect(err.message).to.equal('Bad Request')
+        .then((errJson) => {
+          expect(errJson.status).to.equal(400)
+          expect(errJson.message).to.equal('Bad Request')
           done()
         })
       })

@@ -55,9 +55,9 @@ describe('Test Directions', () => {
     context('calculate', () => {
       it('fails without parameters', (done) => {
         orsDirections.calculate({})
-        .catch((err) => {
-          expect(err.status).to.equal(400)
-          expect(err.message).to.equal('Bad Request')
+        .then((errJson) => {
+          expect(errJson.status).to.equal(400)
+          expect(errJson.message).to.equal('Bad Request')
           done()
         })
       })
@@ -100,7 +100,7 @@ describe('Test Directions', () => {
           profile: 'driving-car',
           format: 'geojson',
           customHeaders: {'Accept': 'application/json'}
-        }).catch((err) => {
+        }).then((err) => {
           expect(err.message.length).to.be.greaterThan(0)
           expect(err.response.accepted).to.equal(false)
           expect(err.response.header['content-type']).to.equal('application/json')

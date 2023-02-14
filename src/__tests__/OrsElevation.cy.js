@@ -29,7 +29,7 @@ describe('Test Elevation', () => {
 
       it('fails without parameters', (done) => {
         orsElevation.lineElevation({})
-        .catch((err) => {
+        .then((err) => {
           expect(err.status).to.equal(400)
           expect(err.message).to.equal('Bad Request')
           done()
@@ -63,9 +63,9 @@ describe('Test Elevation', () => {
 
       it('fails without parameters', (done) => {
         orsElevation.pointElevation({})
-        .catch((err) => {
-          expect(err.status).to.equal(400)
-          expect(err.message).to.equal('Bad Request')
+        .then((errJson) => {
+          expect(errJson.status).to.equal(400)
+          expect(errJson.message).to.equal('Bad Request')
           done()
         })
       })

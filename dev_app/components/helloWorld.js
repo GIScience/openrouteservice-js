@@ -19,22 +19,16 @@ export default {
   // `mounted` is a lifecycle hook
   async mounted() {
     // `this` refers to the component instance.
-    let geocode = new Openrouteservice.Geocode({ api_key: import.meta.env.VITE_ORS_API_KEY })
-    console.log(geocode)
-    // inside the promise we are in a different context when using 'this'
-    // reassign the current context to be usable within
-    let response = {}
-    try {
-      response = await geocode.geocode({
-        text: "Heidelberg",
-        boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
-        boundary_bbox: [[49.260929, 8.40063], [49.504102, 8.941707]],
-        boundary_country: ["DE"]
-      })
-      this.json_data = JSON.stringify(response, null, "\t")
-    } catch (e) {
-      this.json_data = JSON.stringify(e, null, "\t")
-    }
+    let geocode = new Openrouteservice.Geocode({api_key: import.meta.env.VITE_ORS_API_KEY})
+
+    let response = await geocode.geocode({
+      text: "Heidelberg",
+      boundary_circle: {lat_lng: [49.412388, 8.681247], radius: 50},
+      boundary_bbox: [[49.260929, 8.40063], [49.504102, 8.941707]],
+      boundary_country: ["DE"]
+    })
+    this.json_data = JSON.stringify(response, null, "\t")
+
     // if we don't wait for the response it won't be available at the time it is tested
     // see: https://stackoverflow.com/questions/53513538/is-async-await-available-in-vue-js-mounted
     this.data_ready = true

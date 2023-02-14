@@ -37,9 +37,9 @@ describe('Geocode Test', () => {
 
       it('fails without parameters', (done) => {
         orsGeocode.geocode({})
-        .catch((err) => {
-          expect(err.status).to.equal(400)
-          expect(err.message).to.equal('Bad Request')
+        .then((errJson) => {
+          expect(errJson.status).to.equal(400)
+          expect(errJson.message).to.equal('Bad Request')
           done()
         })
       })
@@ -139,9 +139,10 @@ describe('Geocode Test', () => {
           text: 'Heidelberg',
           boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
           customHeaders: {'Accept': 'application/json'}
-        }).then((json) => {
-          expect(json.features.length).to.equal(2)
-          expect(json.type).to.equal('FeatureCollection')
+        }).then((err) => {
+          expect(err.message.length).to.be.greaterThan(0)
+          expect(err.response.accepted).to.equal(false)
+          expect(err.response.header['content-type']).to.equal('application/json')
           done()
         })
       })
