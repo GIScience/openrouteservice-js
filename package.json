@@ -29,6 +29,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.4",
     "@rushstack/eslint-patch": "^1.1.4",
+    "@vue-leaflet/vue-leaflet": "^0.8.4",
     "@vitejs/plugin-vue": "^3.2.0",
     "commitizen": "^4.2.5",
     "babel-plugin-istanbul": "^6.1.1",
@@ -39,6 +40,7 @@
     "eslint": "^8.23.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-vue": "^9.3.0",
+    "leaflet": "^1.9.3",
     "nyc": "^15.1.0",
     "standard-version": "^9.5.0",
     "start-server-and-test": "^2.0.0",
