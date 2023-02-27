@@ -7,6 +7,33 @@
 
     </h3>
   </div>
+
+  <div class='leaflet' v-if='map_ready'>
+    <l-map ref='map' :useGlobalLeaflet='false' v-model:zoom='zoom' :center='[center.lat, center.lon]'>
+      <l-tile-layer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          layer-type="base"
+          name="OpenStreetMap"
+      ></l-tile-layer>
+
+      <div v-for='(key, index) in vehicle_routes' :key="key">
+        <l-marker :lat-lng='[vehicle_routes[index][0][1], vehicle_routes[index][0][0]]'>
+          <l-icon :icon-url="iconUrl[0]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+        </l-marker>
+        <l-marker :lat-lng='[vehicle_routes[index][1][1], vehicle_routes[index][1][0]]'>
+          <l-icon :icon-url="iconUrl[0]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+        </l-marker>
+
+        <div v-for="(key, job) in job_location" :key="key">
+          <l-marker :lat-lng='[job_location[job][1], job_location[job][0]]'>
+            <l-icon :icon-url="iconUrl[index + 1]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+          </l-marker>
+        </div>
+      </div>
+
+    </l-map>
+  </div>
+
   <div>
     <p class='ors_title' v-if='data_ready'>
       {{ json_title }}
@@ -20,6 +47,12 @@
 <style>
 .green {
   color: green;
+}
+.leaflet {
+  height: 540px;
+  float: right;
+  width: 50%;
+  padding: 10px;
 }
 .ors_title {
   font-weight: bold;
