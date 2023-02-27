@@ -1,6 +1,19 @@
-import Openrouteservice from '@'
+import Openrouteservice from '@/index.js'
+
+import blueIcon from './icons/blue_icon.png'
+
+import "leaflet/dist/leaflet.css";
+import {LMap, LTileLayer, LMarker, LIcon, LTooltip, LPolyline} from "@vue-leaflet/vue-leaflet";
 
 export default {
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker,
+    LIcon,
+    LTooltip,
+    LPolyline
+  },
   props: {
     msg: {
       type: String,
@@ -9,9 +22,32 @@ export default {
   },
   data() {
     return {
+      zoom: 19,
+      center: {
+        lat: 0,
+        lon: 0
+      },
+      linestring: [],
+      height: [],
+      colorStyle: {
+        color: '#2b82cb'
+      },
+
       json_title: '',
       json_data: {},
-      data_ready: false
+      data_ready: false,
+      map_ready: false
+    }
+  },
+  computed: {
+    iconUrl() {
+      return blueIcon
+    },
+    iconSize() {
+      return [25, 41]
+    },
+    iconAnchor() {
+      return [15, 41]
     }
   },
   methods: {},
@@ -28,6 +64,14 @@ export default {
         geometry: "u`rgFswjpAKD"
       })
       this.json_title = 'Response'
+      for (let i = 0; i < response.geometry.coordinates.length; i++) {
+        this.linestring.push([response.geometry.coordinates[i][1], response.geometry.coordinates[i][0]])
+        this.height.push(response.geometry.coordinates[i][2])
+      }
+      this.center = {
+        lat: (response.geometry.coordinates[0][1] + response.geometry.coordinates[1][1]) / 2,
+        lon: (response.geometry.coordinates[0][0] + response.geometry.coordinates[1][0]) / 2
+      }
       this.json_data = JSON.stringify(response, null, "\t")
     } catch (e) {
       this.json_title = 'Error'
@@ -35,5 +79,6 @@ export default {
     }
 
     this.data_ready = true
+    this.map_ready = true;
   }
 }
