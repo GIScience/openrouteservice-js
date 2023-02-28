@@ -1,6 +1,19 @@
 import Openrouteservice from '@/index.js'
 
+import blueIcon from './icons/blue_icon.png'
+import redIcon from "./icons/red_icon.png";
+
+import "leaflet/dist/leaflet.css";
+import {LMap, LTileLayer, LMarker, LIcon, LTooltip} from "@vue-leaflet/vue-leaflet";
+
 export default {
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker,
+    LIcon,
+    LTooltip
+  },
   props: {
     msg: {
       type: String,
@@ -9,11 +22,36 @@ export default {
   },
   data() {
     return {
-      api_key: import.meta.env.VITE_ORS_API_KEY,
+      zoom: 6,
+      center: {
+        lat: 0,
+        lon: 0
+      },
+      points: [],
+      search: '',
+      reversePoints: [],
+      foundNames: [],
+
       json_title: '',
       json_data: {},
       json_data_reverse: {},
-      data_ready: false
+
+      data_ready: false,
+      map_ready: false
+    }
+  },
+  computed: {
+    iconUrl() {
+      return [
+        blueIcon,
+        redIcon
+      ]
+    },
+    iconSize() {
+      return [25, 41]
+    },
+    iconAnchor() {
+      return [15, 41]
     }
   },
   methods: {},
@@ -38,12 +76,28 @@ export default {
       size: 8
     })
     this.json_title = 'Response'
+
+    this.center = {
+      lat: (response.bbox[1] + response.bbox[3]) / 2,
+      lon: (response.bbox[0] + response.bbox[2]) / 2
+    }
+    for (let i = 0; i < response.features.length; i++) {
+      this.points.push(response.features[i].geometry.coordinates)
+    }
+    this.search = response.geocoding.query.text
     this.json_data = JSON.stringify(response, null, "\t")
+
+    for (let i = 0; i < reverseResponse.features.length; i++) {
+      this.reversePoints.push(reverseResponse.features[i].geometry.coordinates)
+    }
+    for (let i = 0; i < reverseResponse.features.length; i++) {
+      this.foundNames.push(reverseResponse.features[i].properties.name)
+    }
     this.json_data_reverse = JSON.stringify(reverseResponse, null, "\t")
 
     // if we don't wait for the response it won't be available at the time it is tested
     // see: https://stackoverflow.com/questions/53513538/is-async-await-available-in-vue-js-mounted
     this.data_ready = true
-
+    this.map_ready = true
   }
 }
