@@ -1,4 +1,3 @@
-import Util from './components/Util.vue'
 import Directions from './components/Directions.vue'
 import Elevation from './components/Elevation.vue'
 import Geocode from './components/Geocode.vue'
@@ -9,7 +8,6 @@ import Pois from './components/Pois.vue'
 
 export default {
   components: {
-    Util,
     Directions,
     Elevation,
     Geocode,
@@ -22,7 +20,6 @@ export default {
     return {
       renderedData: 'Directions',
       servicesData: [
-        'Util',
         'Directions',
         'Elevation',
         'Geocode',
