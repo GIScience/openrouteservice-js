@@ -32,19 +32,13 @@ export default {
       geojson: [],
       colorStyle: [
         {
-          style: {
-            color: '#2b82cb'
-          }
+          color: '#2b82cb'
         },
         {
-          style: {
-            color: '#c3577a'
-          }
+          color: '#c3577a'
         },
         {
-          style: {
-            color: '#298f57'
-          }
+          color: '#298f57'
         }
       ],
 

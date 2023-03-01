@@ -34,28 +34,22 @@ export default {
       geojson: {},
       colorStyle: [
         {
-          style: {
-            color: '#2b82cb',
-            opacity: 0.3,
-            fillOpacity: 0.2,
-            weight: 3
-          }
+          color: '#2b82cb',
+          opacity: 0.3,
+          fillOpacity: 0.2,
+          weight: 3
         },
         {
-          style: {
-            color: '#c3577a',
-            opacity: 0.3,
-            fillOpacity: 0.2,
-            weight: 3
-          }
+          color: '#c3577a',
+          opacity: 0.3,
+          fillOpacity: 0.2,
+          weight: 3
         },
         {
-          style: {
-            color: '#298f57',
-            opacity: 0.3,
-            fillOpacity: 0.2,
-            weight: 3
-          }
+          color: '#298f57',
+          opacity: 0.3,
+          fillOpacity: 0.2,
+          weight: 3
         }
       ],
       hueStyle: [],
@@ -133,109 +127,89 @@ export default {
         let i = 0
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(155, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(155, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
           i++
         }
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(95, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(95, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
           i++
         }
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(55, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(55, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
           i++
         }
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(25, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(25, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
           i++
         }
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(360, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(360, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
           i++
         }
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(315, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(315, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
           i++
         }
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(230, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(230, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
           i++
         }
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(240, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(240, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
           i++
         }
         if (i < this.iso[0].length) {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(180, 100%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(180, 100%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
         } else {
           this.hueStyle.push({
-            style: {
-              color: 'hsl(0, 0%, 40%)',
-              opacity: 0.3,
-              fillOpacity: 0.2,
-              weight: 3
-            }
+            color: 'hsl(0, 0%, 40%)',
+            opacity: 0.3,
+            fillOpacity: 0.2,
+            weight: 3
           })
         }
         this.hue_style = true

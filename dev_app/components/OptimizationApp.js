@@ -33,14 +33,10 @@ export default {
       routes: [],
       colorStyle: [
         {
-          style: {
-            color: '#2b82cb'
-          }
+          color: '#2b82cb'
         },
         {
-          style: {
-            color: '#298f57'
-          }
+          color: '#298f57'
         }
       ],
       json_title: '',
