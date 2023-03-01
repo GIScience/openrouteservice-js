@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      zoom: 6,
+      zoom: 7,
       center: {
         lat: 0,
         lon: 0

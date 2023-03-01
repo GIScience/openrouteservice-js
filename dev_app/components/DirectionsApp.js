@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      zoom: 13,
+      zoom: 14,
       route: [],
       center: {
         lat: 0,

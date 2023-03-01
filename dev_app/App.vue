@@ -32,9 +32,9 @@
 <style>
 .button {
   border: none;
-  margin: 10px 2px;
+  margin: 25px 2px;
   width: 100%;
-  height: 45px;
+  height: 55px;
   background: darkseagreen;
 }
 .button:hover {
@@ -44,8 +44,10 @@
   background: seagreen;
 }
 .sidebar {
+	position: fixed;
   float: left;
-  width: 15%;
+  width: 16%;
+	height: 100%;
   padding: 15px;
 }
 .main {

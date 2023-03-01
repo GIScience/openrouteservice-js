@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      zoom: 17,
+      zoom: 18,
       coordinates: [],
       center: {
         lat: 0,

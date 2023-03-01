@@ -37,6 +37,11 @@
 .green {
   color: green;
 }
+.leaflet {
+	height: 850px;
+	width: 100%;
+	padding-bottom: 15px;
+}
 .ors_title {
   font-weight: bold;
 }

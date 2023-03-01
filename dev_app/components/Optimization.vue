@@ -54,10 +54,9 @@
   color: green;
 }
 .leaflet {
-  height: 540px;
-  float: right;
-  width: 50%;
-  padding: 10px;
+	height: 850px;
+	width: 100%;
+	padding-bottom: 15px;
 }
 .ors_title {
   font-weight: bold;
