@@ -1,9 +1,11 @@
 import Openrouteservice from '@/index.js'
 
 import redIcon from './icons/red_icon.png'
+import blueIcon from './icons/blue_icon.png'
 
 import "leaflet/dist/leaflet.css";
-import {LMap, LTileLayer, LMarker, LIcon, LGeoJson} from "@vue-leaflet/vue-leaflet";
+import {LMap, LTileLayer, LMarker, LIcon, LTooltip} from "@vue-leaflet/vue-leaflet";
+import greenIcon from "./icons/green_icon.png";
 
 export default {
   components: {
@@ -11,7 +13,7 @@ export default {
     LTileLayer,
     LMarker,
     LIcon,
-    LGeoJson
+    LTooltip
   },
   props: {
     msg: {
@@ -27,7 +29,8 @@ export default {
         lat: 0,
         lon: 0
       },
-      geojson: {},
+      pois: [],
+      poi_names: [],
 
       json_title: '',
       json_data: {},
@@ -36,8 +39,12 @@ export default {
     }
   },
   computed: {
-    redIconUrl() {
-      return redIcon
+    iconUrl() {
+      return [
+        redIcon,
+        blueIcon,
+        greenIcon
+      ]
     },
     iconSize() {
       return [25, 41]
@@ -74,7 +81,18 @@ export default {
         lat: (response.bbox[1] + response.bbox[3]) / 2,
         lon: (response.bbox[0] + response.bbox[2]) / 2
       }
-      this.geojson = response
+      for (const i in response.features) {
+        this.pois.push([
+          response.features[i].geometry.coordinates[1],
+          response.features[i].geometry.coordinates[0]
+        ])
+        if (response.features[i].properties.hasOwnProperty('osm_tags') && response.features[i].properties.osm_tags.hasOwnProperty('name')) {
+          this.poi_names.push(response.features[i].properties.osm_tags.name)
+        } else {
+          this.poi_names.push('(name unknown)')
+        }
+      }
+
       this.json_data = JSON.stringify(response, null, "\t")
     } catch (e) {
       this.json_title = 'Error'

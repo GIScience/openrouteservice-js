@@ -14,9 +14,14 @@
 			></l-tile-layer>
 
 			<l-marker :lat-lng='[coordinates[1], coordinates[0]]'>
-				<l-icon :icon-url="redIconUrl" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+				<l-icon :icon-url="iconUrl[0]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
 			</l-marker>
-			<l-geo-json :geojson='geojson'></l-geo-json>
+			<div v-for="(key, index) in pois" :key="key">
+				<l-marker :lat-lng='pois[index]'>
+					<l-icon :icon-url="iconUrl[1]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+					<l-tooltip>{{ poi_names[index] }}</l-tooltip>
+				</l-marker>
+			</div>
 
 		</l-map>
 	</div>
