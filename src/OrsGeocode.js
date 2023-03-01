@@ -1,4 +1,3 @@
-import request from 'superagent'
 import OrsUtil from './OrsUtil.js'
 import Constants from './constants.js'
 import OrsBase from './OrsBase.js'
@@ -121,19 +120,32 @@ class OrsGeocode extends OrsBase {
     // Add url query string from args
     url += '?' + this.getParametersAsQueryString(this.requestArgs)
 
-    const timeout = this.defaultArgs[Constants.propNames.timeout] || 5000
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort('timed out'), this.defaultArgs[Constants.propNames.timeout] || 5000)
 
     try {
       // createRequest function from base class is not applicable: GET instead of POST request
-      const orsRequest = await request
-        .get(url)
-        .timeout(timeout)
-        .set(this.customHeaders)
+      const orsRequest = await fetch(url, {
+        method: 'GET',
+        headers: this.customHeaders,
+        signal: controller.signal
+      })
 
-      return orsRequest.body || orsRequest.text
+      if (!orsRequest.ok) {
+        throw {
+          status: orsRequest.status,
+          message: orsRequest.statusText
+        }
+      }
+      return await orsRequest.json() || orsRequest.text
     } catch (err) {
-      console.error(err)
-      return err
+      const error = new Error(err.message)
+      error.status = err.status
+
+      console.error(error)
+      throw error
+    } finally {
+      clearTimeout(timeout)
     }
   }
 

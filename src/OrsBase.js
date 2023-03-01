@@ -1,4 +1,3 @@
-import request from 'superagent'
 import OrsUtil from './OrsUtil.js'
 import Constants from './constants.js'
 
@@ -42,6 +41,10 @@ class OrsBase {
       this.customHeaders = this.requestArgs.customHeaders
       delete this.requestArgs.customHeaders
     }
+    // set default Content-type, since Postman sets Content-type to text/plain if not specified
+    if (!('Content-type' in this.customHeaders)) {
+      this.customHeaders = {...this.customHeaders, 'Content-type': 'application/json'}
+    }
   }
 
   async createRequest(body) {
@@ -51,21 +54,33 @@ class OrsBase {
       url += url.indexOf('?') > -1 ? '&' : '?'
     }
 
-    const authorization = this.argsCache[Constants.propNames.apiKey]
-    const timeout = this.defaultArgs[Constants.propNames.timeout] || 10000
+    const authorization = { 'Authorization': this.argsCache[Constants.propNames.apiKey]}
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort('timed out'), this.defaultArgs[Constants.propNames.timeout] || 5000)
 
     try {
-      const orsRequest = await request
-          .post(url)
-          .send(body)
-          .set('Authorization', authorization)
-          .timeout(timeout)
-          .set(this.customHeaders)
+      const orsRequest = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {...authorization, ...this.customHeaders},
+        signal: controller.signal
+      })
 
-      return orsRequest.body || orsRequest.text
+      if (!orsRequest.ok) {
+        throw {
+          status: orsRequest.status,
+          message: orsRequest.statusText
+        }
+      }
+      return await orsRequest.json() || orsRequest.text
     } catch (err) {
-      console.error(err)
-      return err
+      const error = new Error(err.message)
+      error.status = err.status
+
+      console.error(error)
+      throw error
+    } finally {
+      clearTimeout(timeout)
     }
   }
 
