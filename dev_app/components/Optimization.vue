@@ -19,19 +19,24 @@
       <div v-for='(key, index) in vehicle_routes' :key="key">
         <l-marker :lat-lng='[vehicle_routes[index][0][1], vehicle_routes[index][0][0]]'>
           <l-icon :icon-url="iconUrl[0]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+					<l-tooltip>Vehicle {{ index + 1 }}: start</l-tooltip>
         </l-marker>
         <l-marker :lat-lng='[vehicle_routes[index][1][1], vehicle_routes[index][1][0]]'>
           <l-icon :icon-url="iconUrl[0]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+					<l-tooltip>Vehicle {{ index + 1 }}: end</l-tooltip>
         </l-marker>
 
-        <div v-for="(key, job) in job_location" :key="key">
-          <l-marker :lat-lng='[job_location[job][1], job_location[job][0]]'>
-            <l-icon :icon-url="iconUrl[index + 1]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
-          </l-marker>
-        </div>
-      </div>
+				<div v-for="(key, job) in jobs[index]" :key="key">
+					<l-marker :lat-lng='[jobs[index][job][1], jobs[index][job][0]]'>
+						<l-icon :icon-url="iconUrl[index + 1]" :icon-size="iconSize" :icon-anchor="iconAnchor"></l-icon>
+						<l-tooltip>Job: {{ job + 1 }}</l-tooltip>
+					</l-marker>
+				</div>
 
-    </l-map>
+				<l-geo-json :geojson='geojson[index]' :options='colorStyle[index]'></l-geo-json>
+			</div>
+
+		</l-map>
   </div>
 
   <div>

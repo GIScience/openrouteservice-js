@@ -5,7 +5,7 @@ import blueIcon from './icons/blue_icon.png'
 import greenIcon from './icons/green_icon.png'
 
 import "leaflet/dist/leaflet.css";
-import {LMap, LTileLayer, LMarker, LIcon, LGeoJson} from "@vue-leaflet/vue-leaflet";
+import {LMap, LTileLayer, LMarker, LIcon, LTooltip, LGeoJson} from "@vue-leaflet/vue-leaflet";
 
 export default {
   components: {
@@ -13,6 +13,7 @@ export default {
     LTileLayer,
     LMarker,
     LIcon,
+    LTooltip,
     LGeoJson
   },
   props: {
@@ -24,13 +25,16 @@ export default {
   data() {
     return {
       zoom: 10,
-      job_location: [],
       vehicle_routes: [],
+      req_args: {
+        profile: 'cycling-regular'
+      },
       center: {
         lat: 0,
         lon: 0
       },
-      routes: [],
+      jobs: [],
+      geojson: [],
       colorStyle: [
         {
           color: '#2b82cb'
@@ -66,22 +70,14 @@ export default {
     const orsOptimization = new Openrouteservice.Optimization({
       api_key: import.meta.env.VITE_ORS_API_KEY
     })
-
-    this.job_location = [
-      [1.98935, 47.701],
-      [2.03655, 47.61128],
-      [2.39719, 48.07611]
-    ]
+    const orsDirections = new Openrouteservice.Directions({
+      api_key: import.meta.env.VITE_ORS_API_KEY
+    })
 
     this.vehicle_routes = [
       // start and end point of one vehicle
       [[2.35044, 47.71764], [2.35044, 47.71764]]
     ]
-
-    this.center = {
-      lat: (this.vehicle_routes[0][1][1] + this.vehicle_routes[0][1][1]) / 2,
-      lon: (this.vehicle_routes[0][1][0] + this.vehicle_routes[0][1][0]) / 2
-    }
 
     let response = {}
     try {
@@ -91,28 +87,28 @@ export default {
             id: 1,
             service: 200,
             amount: [1],
-            location: this.job_location[0],
+            location: [1.98935, 47.701],
             skills: [1]
           },
           {
             id: 2,
             service: 200,
             amount: [1],
-            location: this.job_location[1],
+            location: [2.03655, 47.61128],
             skills: [1]
           },
           {
             id: 3,
             service: 200,
             amount: [1],
-            location: this.job_location[2],
+            location: [2.39719, 48.07611],
             skills: [14]
           }
         ],
         vehicles: [
           {
             id: 1,
-            profile: 'cycling-regular',
+            profile: this.req_args.profile,
             start: this.vehicle_routes[0][0],
             end: this.vehicle_routes[0][1],
             capacity: [4],
@@ -122,13 +118,28 @@ export default {
       })
       this.json_title = 'Response'
       this.json_data = JSON.stringify(response, null, "\t")
-      /*
-      for(let i = 0; i < response.routes.length; i++) {
-        for(let j = 1; j < response.routes[i]; j++) {
-          this.routes.push(response.routes[i].steps[j].location)
+      for (const routeIndex in response.routes) {
+        this.jobs.push([])
+        for (let i = 0; i < response.routes[routeIndex].steps.length; i++) {
+          this.jobs[routeIndex].push(response.routes[routeIndex].steps[i].location)
         }
+
+        let routing = await orsDirections.calculate({
+          coordinates: this.jobs[routeIndex],
+          profile: this.req_args.profile,
+          format: "geojson"
+        })
+        if (routeIndex === '0') {
+          this.center = {
+            lat: (routing.bbox[1] + routing.bbox[3]) / 2,
+            lon: (routing.bbox[0] + routing.bbox[2]) / 2
+          }
+        }
+        this.geojson[routeIndex] = routing
+
+        this.jobs[routeIndex] = this.jobs[routeIndex].slice(1, -1)
       }
-      */
+
     } catch (e) {
       this.json_title = 'Error'
       this.json_data = JSON.stringify(e, null, "\t")
