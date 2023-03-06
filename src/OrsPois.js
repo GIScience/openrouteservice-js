@@ -13,12 +13,6 @@ class OrsPois extends OrsBase {
     }
   }
 
-  clear() {
-    for (const variable in this.defaultArgs) {
-      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
-    }
-  }
-
   generatePayload(args) {
     const payload = {}
 
