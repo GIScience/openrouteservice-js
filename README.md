@@ -96,7 +96,7 @@ Isochrones.calculate({
     console.log("response", response)
   })
   .catch(function(err) {
-    const str = "An error occurred: " + err
+    const str = "An error occurred: " + err.status + " " + err
     console.log(str)
   })
 ```
@@ -163,11 +163,10 @@ Geocode.geocode({
   console.log("response", JSON.stringify(response))
 })
 .catch(function(err) {
-  const str = "An error occurred: " + err;
+  const str = "An error occurred: " + err.status + " " + err
   console.log(str)
 })
 
-Geocode.clear()
 
 Geocode.reverseGeocode({
   point: { lat_lng: [49.412388, 8.681247], radius: 50 },
@@ -177,11 +176,10 @@ Geocode.reverseGeocode({
   console.log("response", JSON.stringify(response));
 })
 .catch(function(err) {
-  const str = "An error occurred: " + err;
+  const str = "An error occurred: " + err.status + " " + err
   console.log(str);
 })
 
-Geocode.clear()
 
 Geocode.structuredGeocode({
   locality: "Heidelberg"
@@ -191,7 +189,7 @@ Geocode.structuredGeocode({
   console.log("response", JSON.stringify(response))
 })
 .catch(function(err) {
-  const str = "An error occurred: " + err
+  const str = "An error occurred: " + err.status + " " + err
   console.log(str)
 })
 ```
@@ -213,7 +211,7 @@ Matrix.calculate({
   console.log("response", response)
 })
 .catch(function(err) {
-  const str = "An error occurred: " + err
+  const str = "An error occurred: " + err.status + " " + err
   console.log(str)
 })
 ```
@@ -236,7 +234,7 @@ Elevation.lineElevation({
   console.log('response', JSON.stringify(response))
 })
 .catch(function(err) {
-  const str = 'An error occurred: ' + err
+  const str = 'An error occurred: ' + err.status + " " + err
   console.log(str)
 })
 ```
@@ -282,7 +280,7 @@ Optimization.optimize({
   console.log('response', JSON.stringify(response));
 })
 .catch(function(err) {
-  var str = 'An error occurred: ' + err;
+  var str = 'An error occurred: ' + err.status + " " + err
   console.log(str)
 });
 ```
