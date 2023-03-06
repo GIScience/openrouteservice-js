@@ -167,7 +167,6 @@ Geocode.geocode({
   console.log(str)
 })
 
-Geocode.clear()
 
 Geocode.reverseGeocode({
   point: { lat_lng: [49.412388, 8.681247], radius: 50 },
@@ -181,7 +180,6 @@ Geocode.reverseGeocode({
   console.log(str);
 })
 
-Geocode.clear()
 
 Geocode.structuredGeocode({
   locality: "Heidelberg"
