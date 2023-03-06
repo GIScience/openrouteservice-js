@@ -2,6 +2,7 @@ import OrsBase from '../OrsBase.js'
 import constants from '../constants.js'
 
 const key = Cypress.env('api_key')
+const base = new OrsBase({ 'api_key': 'test' })
 
 describe('Test Base class', () => {
 
@@ -55,7 +56,6 @@ describe('Test Base class', () => {
   context('methods', () => {
     context('_setRequestDefaults', () => {
       it('sets defaultArgs from args', () => {
-        const base = new OrsBase({ 'api_key': 'test' })
         base._setRequestDefaults({
           'api_key': 'test',
           [constants.propNames.service]: 'service',
@@ -68,7 +68,6 @@ describe('Test Base class', () => {
       })
 
       it('sets the default host when not in args', () => {
-        const base = new OrsBase({ 'api_key': 'test' })
         base._setRequestDefaults({ 'api_key': 'test' })
         expect(base.defaultArgs).to.include({
           [constants.propNames.host]: constants.defaultHost
@@ -78,7 +77,6 @@ describe('Test Base class', () => {
 
     context('checkHeaders', () => {
       it('sets customHeaders', () => {
-        const base = new OrsBase({ 'api_key': 'test' })
         base.requestArgs = {
           customHeaders: ['customHeader']
         }
