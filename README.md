@@ -58,17 +58,25 @@ let orsDirections = new Openrouteservice.Directions({ api_key: "XYZ"});
 </script>
 ```
 
+### Pair with local openrouteservice instance
+```js
+// Note: The API key is currently still passed as a parameter but not needed by the local instance
+import Openrouteservice from 'openrouteservice-js'
+let orsDirections = new Openrouteservice.Directions(
+  { host: "http://localhost:8082/ors" }
+);
+// ...
+```
+
 ## Integrate the APIs in your application
 
-### Isochrones Example (es module import)
+### Isochrones Example
 
 ```javascript
-import Openrouteservice from "openrouteservice-js"
-
 // Add your api_key here
 const Isochrones = new Openrouteservice.Isochrones({ api_key: "XYZ"})
-
-Isochrones.calculate({
+try {
+  let response = await Isochrones.calculate({
     locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
     profile: 'driving-car',
     range: [600],
@@ -91,129 +99,126 @@ Isochrones.calculate({
     },
     area_units: 'km'
   })
-  .then(function(response) {
-    // Add your own result handling here
-    console.log("response", response)
-  })
-  .catch(function(err) {
-    const str = "An error occurred: " + err
-    console.log(str)
-  })
+  // Add your own result handling here
+  console.log("response: ", response)
+    
+} catch (err) {
+  console.log("An error occurred: " + err.status)
+  console.error(await err.response.json())
+}
 ```
 
 ### Directions HGV example (browser)
 > Note: Nested parameters from the options object are easier accessible like  `restrictions`, `avoidables`
 > and `avoid_polygons` (cf. [API docs](https://openrouteservice.org/dev/#/api-docs/v2/directions/{profile}/post)) 
 ```html
-<script type="module" src="dist/ors-js-client.js"></script>
-
 <script>
-  window.onload = function() {
+  window.onload = async function() {
     // Add your api_key here
     let orsDirections = new Openrouteservice.Directions({ api_key: "XYZ"});
 
-    orsDirections.calculate({
-      coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
-      profile: 'driving-hgv',
-      restrictions: { height: 10, weight: 5 },
-      extra_info: ['waytype', 'steepness'],
-      avoidables: ['highways', 'tollways', 'ferries', 'fords'],
-      avoid_polygons: {
-        type: 'Polygon',
-        coordinates: [
-          [
-            [8.683533668518066, 49.41987949639816],
-            [8.680272102355957, 49.41812070066643],
-            [8.683919906616211, 49.4132348262363],
-            [8.689756393432617, 49.41806486484901],
-            [8.683533668518066, 49.41987949639816]
+    try {
+      let response = await orsDirections.calculate({
+        coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
+        profile: 'driving-hgv',
+        restrictions: {
+          height: 10,
+          weight: 5
+        },
+        extra_info: ['waytype', 'steepness'],
+        avoidables: ['highways', 'tollways', 'ferries', 'fords'],
+        avoid_polygons: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [8.683533668518066, 49.41987949639816],
+              [8.680272102355957, 49.41812070066643],
+              [8.683919906616211, 49.4132348262363],
+              [8.689756393432617, 49.41806486484901],
+              [8.683533668518066, 49.41987949639816]
+            ]
           ]
-        ]
-      },
-      format: 'json'
-    })
-    .then(function(json) {
-        // Add your own result handling here
-        console.log(JSON.stringify(json));
+        },
+        format: 'json'
       })
-    .catch(function(err) {
-      console.error(err);
-    });
+      // Add your own result handling here
+      console.log("response: ", response)
+
+    } catch (err) {
+      console.log("An error occurred: " + err.status)
+      console.error(await err.response.json())
+    }
   };
 </script>
 ```
 
-### Geocode examples (require)
-
-Or use the geocoding services:
+### Geocode examples
 
 ```javascript
-const Openrouteservice = require('openrouteservice-js')
 // Add your api_key here
 const Geocode = new Openrouteservice.Geocode({ api_key: "XYZ"})
 
-Geocode.geocode({
-  text: "Heidelberg",
-  boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
-  boundary_bbox: [[49.260929, 8.40063], [49.504102, 8.941707]],
-  boundary_country: ["DE"]
-})
-.then(function(response) {
+try {
+  let response = await Geocode.geocode({
+    text: "Heidelberg",
+    boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
+    boundary_bbox: [[49.260929, 8.40063], [49.504102, 8.941707]],
+    boundary_country: ["DE"]
+  })
   // Add your own result handling here
-  console.log("response", JSON.stringify(response))
-})
-.catch(function(err) {
-  const str = "An error occurred: " + err;
-  console.log(str)
-})
+  console.log("response: ", response)
 
+} catch (err) {
+  console.log("An error occurred: " + err.status)
+  console.error(await err.response.json())
+}
 
-Geocode.reverseGeocode({
+try {
+  let response_reverse = await Geocode.reverseGeocode({
   point: { lat_lng: [49.412388, 8.681247], radius: 50 },
   boundary_country: ["DE"]
 })
-.then(function(response) {
-  console.log("response", JSON.stringify(response));
-})
-.catch(function(err) {
-  const str = "An error occurred: " + err;
-  console.log(str);
-})
+  // Add your own result handling here
+  console.log("response: ", response_reverse)
+
+} catch (err) {
+  console.log("An error occurred: " + err.status)
+  console.error(await err.response.json())
+}
 
 
-Geocode.structuredGeocode({
+try {
+  let response_structured = await Geocode.structuredGeocode({
   locality: "Heidelberg"
 })
-.then(function(response) {
   // Add your own result handling here
-  console.log("response", JSON.stringify(response))
-})
-.catch(function(err) {
-  const str = "An error occurred: " + err
-  console.log(str)
-})
+  console.log("response: ", response_structured)
+
+} catch (err) {
+  console.log("An error occurred: " + err.status)
+  console.error(await err.response.json())
+}
 ```
 
 ### Matrix example
-Calculate 
 ```javascript
 // Add your api_key here
 const Matrix = new Openrouteservice.Matrix({ api_key: "XYZ"})
 
-Matrix.calculate({
+try {
+  let response = Matrix.calculate({
   locations: [[8.690958, 49.404662], [8.687868, 49.390139], [8.687868, 49.390133]],
   profile: "driving-car",
   sources: ['all'],
   destinations: ['all']
 })
-.then(function(response) {
   // Add your own result handling here
-  console.log("response", response)
-})
-.catch(function(err) {
-  const str = "An error occurred: " + err
-  console.log(str)
-})
+  console.log("response: ", response)
+
+} catch (err) {
+  console.log("An error occurred: " + err.status)
+  console.error(await err.response.json())
+}
 ```
 
 ### Elevation example
@@ -221,7 +226,8 @@ Matrix.calculate({
 // Add your api_key here
 const Elevation = new Openrouteservice.Elevation({api_key: "XYZ"})
 
-Elevation.lineElevation({
+try {
+  let response = Elevation.lineElevation({
   format_in: 'geojson',
   format_out: 'geojson',
   geometry: {
@@ -229,25 +235,23 @@ Elevation.lineElevation({
     type: 'LineString'
   }
 })
-.then(function(response) {
   // Add your own result handling here
-  console.log('response', JSON.stringify(response))
-})
-.catch(function(err) {
-  const str = 'An error occurred: ' + err
-  console.log(str)
-})
+  console.log("response: ", response)
+
+} catch (err) {
+  console.log("An error occurred: " + err.status)
+  console.error(await err.response.json())
+}
 ```
 ### Optimization example
 Or consume Optimization API to solve [vehicle routing problems](https://en.wikipedia.org/wiki/Vehicle_routing_problem)
 
 ```javascript
-var openrouteservice = require("openrouteservice-js");
-
 // Add your api_key here
-var Optimization = new openrouteservice.Optimization({api_key: "XYZ"});
+let Optimization = new openrouteservice.Optimization({api_key: "XYZ"});
 
-Optimization.optimize({
+try {
+  let response = Optimization.optimize({
   jobs: [
     {
       id: 1,
@@ -275,14 +279,13 @@ Optimization.optimize({
     }
   ],
 })
-.then(function(response) {
   // Add your own result handling here
-  console.log('response', JSON.stringify(response));
-})
-.catch(function(err) {
-  var str = 'An error occurred: ' + err;
-  console.log(str)
-});
+  console.log("response: ", response)
+
+} catch (err) {
+  console.log("An error occurred: " + err.status)
+  console.error(await err.response.json())
+}
 ```
 
 ## Development Setup
