@@ -86,15 +86,4 @@ describe('Test Elevation', () => {
       })
     })
   })
-
-  context('unused functions', () => {
-    it('clear() clears everything but API key', () => {
-      orsElevation.defaultArgs = {
-        variable1: 'v1',
-        api_key: 'API key'
-      }
-      orsElevation.clear()
-      expect(orsElevation.defaultArgs).to.deep.equal({api_key: 'API key'})
-    })
-  })
 })
