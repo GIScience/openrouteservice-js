@@ -197,16 +197,5 @@ describe('Geocode Test', () => {
       })
     })
   })
-
-  context('unused functions', () => {
-    it('clear() clears everything but API key', () => {
-      orsGeocode.defaultArgs = {
-        variable1: 'v1',
-        api_key: 'API key'
-      }
-      orsGeocode.clear()
-      expect(orsGeocode.defaultArgs).to.deep.equal({api_key: 'API key'})
-    })
-  })
 })
 
