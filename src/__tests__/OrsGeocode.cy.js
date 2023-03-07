@@ -120,6 +120,7 @@ describe('Geocode Test', () => {
           text: 'xzxzxzxtakywqa',
           point: { lat_lng: [49.436431, 8.673964] },
           sources: ['openstreetmap', 'openaddresses'],
+          layers: [ 'address', 'venue'],
           size: 2,
           country: 'DE',
           address: 'Non existing address',
@@ -138,10 +139,10 @@ describe('Geocode Test', () => {
         new OrsGeocode({ api_key: key }).geocode({
           text: 'Heidelberg',
           boundary_circle: {lat_lng: [49.412388, 8.681247], radius: 50},
-          customHeaders: {'x-request-with': 'test'}
+          customHeaders: {'Accept': 'application/json'}
         })
         cy.intercept('GET', 'https://api.openrouteservice.org/geocode', (req) => {
-          expect(req.headers).to.include({'x-request-with': 'test'})
+          expect(req.headers).to.include({'Accept': 'application/json'})
         })
       })
     })
