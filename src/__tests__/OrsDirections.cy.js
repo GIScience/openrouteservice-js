@@ -98,7 +98,6 @@ describe('Test Directions', () => {
         orsDirections.calculate({
           coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
           profile: 'driving-car',
-          format: 'geojson',
           customHeaders: {'Accept': 'application/json'}
         })
         cy.intercept('GET', 'https://api.openrouteservice.org/directions', (req) => {
