@@ -114,36 +114,34 @@ class OrsGeocode extends OrsBase {
     return queryString
   }
 
-  async geocodePromise() {
-    // Use old API via GET
+  async fetchGetRequest(controller) {
     let url = orsUtil.prepareUrl(this.requestArgs)
     // Add url query string from args
     url += '?' + this.getParametersAsQueryString(this.requestArgs)
 
+    // createRequest function from base class is not applicable: GET instead of POST request
+    return await fetch(url, {
+      method: 'GET',
+      headers: this.customHeaders,
+      signal: controller.signal
+    })
+  }
+
+  async geocodePromise() {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort('timed out'), this.defaultArgs[Constants.propNames.timeout] || 5000)
 
     try {
-      // createRequest function from base class is not applicable: GET instead of POST request
-      const orsRequest = await fetch(url, {
-        method: 'GET',
-        headers: this.customHeaders,
-        signal: controller.signal
-      })
+      const orsResponse = await this.fetchGetRequest(controller)
 
-      if (!orsRequest.ok) {
-        throw {
-          status: orsRequest.status,
-          message: orsRequest.statusText
-        }
+      if (!orsResponse.ok) {
+        const error = new Error(orsResponse.statusText)
+        error.status = orsResponse.status
+        error.response = orsResponse
+        throw error
       }
-      return await orsRequest.json() || orsRequest.text
-    } catch (err) {
-      const error = new Error(err.message)
-      error.status = err.status
 
-      console.error(error)
-      throw error
+      return await orsResponse.json() || orsResponse.text()
     } finally {
       clearTimeout(timeout)
     }
