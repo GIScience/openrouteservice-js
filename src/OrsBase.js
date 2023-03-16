@@ -47,38 +47,47 @@ class OrsBase {
     }
   }
 
-  async createRequest(body) {
-
+  async fetchRequest(body, controller) {
     let url = orsUtil.prepareUrl(this.argsCache)
     if (this.argsCache[Constants.propNames.service] === 'pois') {
       url += url.indexOf('?') > -1 ? '&' : '?'
     }
 
-    const authorization = { 'Authorization': this.argsCache[Constants.propNames.apiKey]}
+    const authorization = {'Authorization': this.argsCache[Constants.propNames.apiKey]}
+
+    const res = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {...authorization, ...this.customHeaders},
+      signal: controller.signal
+    })
+    return {
+      ok: res.ok,
+      errorStatus: res.status,
+      errorText: res.statusText,
+      body: await res.json() || res.text
+    }
+  }
+
+  async createRequest(body) {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort('timed out'), this.defaultArgs[Constants.propNames.timeout] || 5000)
 
     try {
-      const orsRequest = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {...authorization, ...this.customHeaders},
-        signal: controller.signal
-      })
+      const orsRequest = await this.fetchRequest(body, controller)
 
       if (!orsRequest.ok) {
         throw {
-          status: orsRequest.status,
-          message: orsRequest.statusText
+          status: orsRequest.errorStatus,
+          message: orsRequest.errorText,
+          body: orsRequest.body
         }
       }
-      return await orsRequest.json() || orsRequest.text
-    } catch (err) {
-      const error = new Error(err.message)
-      error.status = err.status
 
-      console.error(error)
-      throw error
+      return orsRequest.body
+    } catch (err) {
+      console.error(new Error(err.status + ' ' + err.message))
+      throw err
     } finally {
       clearTimeout(timeout)
     }
