@@ -150,7 +150,11 @@ class OrsGeocode extends OrsBase {
 
       return orsRequest.body
     } catch (err) {
-      console.error(new Error(err.status + ' ' + err.message))
+      const error = new Error(err.message)
+      error.status = err.status
+      error.body = err.body
+
+      console.error(error)
       throw err
     } finally {
       clearTimeout(timeout)
