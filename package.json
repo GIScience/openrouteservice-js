@@ -26,10 +26,6 @@
     "test:unit:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run --component -q'",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
-  "dependencies": {
-    "bluebird": "^3.7.2",
-    "superagent": "^8.0.9"
-  },
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.0",
     "@rushstack/eslint-patch": "^1.1.4",
