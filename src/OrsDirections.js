@@ -12,23 +12,6 @@ class OrsDirections extends OrsBase {
     }
   }
 
-  clear() {
-    for (const variable in this.defaultArgs) {
-      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
-    }
-  }
-
-  clearPoints() {
-    if ('coordinates' in this.defaultArgs) this.defaultArgs.coordinates.length = 0
-  }
-
-  addWaypoint(latLon) {
-    if (!('coordinates' in this.defaultArgs)) {
-      this.defaultArgs.coordinates = []
-    }
-    this.defaultArgs.coordinates.push(latLon)
-  }
-
   getBody(args) {
     if (args.options && typeof args.options !== 'object') {
       args.options = JSON.parse(args.options)

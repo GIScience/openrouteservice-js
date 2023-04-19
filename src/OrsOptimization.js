@@ -6,12 +6,6 @@ import OrsBase from "./OrsBase.js"
 const orsUtil = new OrsUtil()
 
 class OrsOptimization extends OrsBase {
-  clear() {
-    for (let variable in this.defaultArgs) {
-      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
-    }
-  }
-
   generatePayload(args) {
     let payload = {}
 

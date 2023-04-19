@@ -4,13 +4,7 @@ import Constants from './constants.js'
 import OrsBase from './OrsBase.js'
 
 const orsUtil = new OrsUtil()
-
 class OrsElevation extends OrsBase {
-  clear() {
-    for (const variable in this.defaultArgs) {
-      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
-    }
-  }
 
   generatePayload(args) {
     const payload = {}

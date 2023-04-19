@@ -61,15 +61,4 @@ describe('POI Test', () => {
       })
     })
   })
-
-  context('unused functions', () => {
-    it('clear() clears everything but API key', () => {
-      orsPois.defaultArgs = {
-        variable1: 'v1',
-        api_key: 'API key'
-      }
-      orsPois.clear()
-      expect(orsPois.defaultArgs).to.deep.equal({api_key: 'API key'})
-    })
-  })
 })

@@ -102,15 +102,4 @@ describe('Optimization Test', () => {
       })
     })
   })
-
-  context('unused functions', () => {
-    it('clear() clears everything but API key', () => {
-      orsOptimization.defaultArgs = {
-        variable1: 'v1',
-        api_key: 'API key'
-      }
-      orsOptimization.clear()
-      expect(orsOptimization.defaultArgs).to.deep.equal({api_key: 'API key'})
-    })
-  })
 })

@@ -109,39 +109,4 @@ describe('Test Directions', () => {
       })
     })
   })
-
-  context('unused functions', () => {
-    it('clear() clears everything but API key', () => {
-      orsDirections.defaultArgs = {
-        variable1: 'v1',
-        api_key: 'API key'
-      }
-      orsDirections.clear()
-      expect(orsDirections.defaultArgs).to.deep.equal({api_key: 'API key'})
-    })
-
-    it('clearPoints() clears only coordinates', () => {
-      orsDirections.defaultArgs = {
-        'coordinates': [[8.690958, 49.404662], [8.687868, 49.390139]],
-        'otherArg': [1, 2]
-      }
-      orsDirections.clearPoints()
-      expect(orsDirections.defaultArgs.coordinates.length).to.equal(0)
-      expect(orsDirections.defaultArgs.otherArg.length).to.equal(2)
-    })
-
-    context('addWaypoint', () => {
-      it('addWaypoint() adds coordinates', () => {
-        orsDirections.defaultArgs.coordinates = [[8.690958, 49.404662]]
-        orsDirections.addWaypoint([8.687868, 49.390139])
-        expect(orsDirections.defaultArgs.coordinates.length).to.equal(2)
-      })
-
-      it('addWaypoint() creates property if not existing', () => {
-        orsDirections.defaultArgs = {}
-        orsDirections.addWaypoint()
-        expect(orsDirections.defaultArgs).to.have.property('coordinates')
-      })
-    })
-  })
 })

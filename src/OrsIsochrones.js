@@ -12,13 +12,6 @@ class OrsIsochrones extends OrsBase {
     }
   }
 
-  addLocation(latlon) {
-    if (!('locations' in this.defaultArgs)) {
-      this.defaultArgs.locations = []
-    }
-    this.defaultArgs.locations.push(latlon)
-  }
-
   getBody(args) {
     const options = {}
 

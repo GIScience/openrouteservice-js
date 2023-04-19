@@ -105,12 +105,6 @@ class OrsGeocode extends OrsBase {
     }
   }
 
-  clear() {
-    for (const variable in this.defaultArgs) {
-      if (variable !== Constants.propNames.apiKey) delete this.defaultArgs[variable]
-    }
-  }
-
   getParametersAsQueryString(args) {
     let queryString = ''
     for (const key in args) {

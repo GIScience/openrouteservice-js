@@ -147,26 +147,4 @@ describe('Isochrone Test', () => {
       })
     })
   })
-
-  context('unused functions', () => {
-    context('addLocation', () => {
-      it('adds location to defaultArgs', () => {
-        const orsIsochrones = new OrsIsochrones({ api_key: key })
-        let locations = {
-          locations: [
-            [8.690958, 49.404662],
-            [8.687868, 49.390139]
-          ]}
-        orsIsochrones.defaultArgs = {...orsIsochrones.defaultArgs,...locations}
-        orsIsochrones.addLocation([8.660958, 49.414662])
-        expect(orsIsochrones.defaultArgs.locations.length).to.equal(3)
-      })
-
-      it('adds location to defaultArgs if no location property', () => {
-        const orsIsochrones = new OrsIsochrones({ api_key: key })
-        orsIsochrones.addLocation([8.660958, 49.414662])
-        expect(orsIsochrones.defaultArgs.locations.length).to.equal(1)
-      })
-    })
-  })
 })
