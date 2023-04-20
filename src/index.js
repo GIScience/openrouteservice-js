@@ -1,5 +1,3 @@
-import OrsUtil from './OrsUtil.js'
-import OrsInput from './OrsInput.js'
 import OrsGeocode from './OrsGeocode.js'
 import OrsIsochrones from './OrsIsochrones.js'
 import OrsMatrix from './OrsMatrix.js'
@@ -9,8 +7,6 @@ import OrsElevation from './OrsElevation.js'
 import OrsOptimization from './OrsOptimization.js'
 
 const Openrouteservice = {
-  Util: OrsUtil,
-  Input: OrsInput,
   Geocode: OrsGeocode,
   Isochrones: OrsIsochrones,
   Directions: OrsDirections,
