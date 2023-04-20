@@ -1,4 +1,3 @@
-import Promise from 'bluebird'
 import OrsUtil from './OrsUtil.js'
 import Constants from './constants.js'
 import OrsBase from './OrsBase.js'
@@ -17,18 +16,15 @@ class OrsElevation extends OrsBase {
     return payload
   }
 
-  elevationPromise() {
-    const that = this
-    return new Promise(function(resolve, reject) {
-      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+  async elevationPromise() {
+    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
 
-      const payload = that.generatePayload(that.requestArgs)
+    const payload = this.generatePayload(this.requestArgs)
 
-      that.createRequest(payload, resolve, reject);
-    })
+    return await this.createRequest(payload)
   }
 
-  lineElevation(reqArgs) {
+  async lineElevation(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -36,12 +32,12 @@ class OrsElevation extends OrsBase {
     if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
       this.requestArgs[Constants.propNames.service] = 'elevation/line'
     }
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    return this.elevationPromise()
+    return await this.elevationPromise()
   }
 
-  pointElevation(reqArgs) {
+  async pointElevation(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -49,9 +45,9 @@ class OrsElevation extends OrsBase {
     if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
       this.requestArgs[Constants.propNames.service] = 'elevation/point'
     }
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    return this.elevationPromise()
+    return await this.elevationPromise()
   }
 }
 

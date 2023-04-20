@@ -1,4 +1,3 @@
-import Promise from "bluebird"
 import OrsUtil from "./OrsUtil.js"
 import Constants from "./constants.js"
 import OrsBase from "./OrsBase.js"
@@ -17,19 +16,15 @@ class OrsOptimization extends OrsBase {
     return payload
   }
 
-  optimizationPromise() {
-    const that = this
+  async optimizationPromise() {
+    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
 
-    return new Promise(function(resolve, reject) {
-      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+    const payload = this.generatePayload(this.requestArgs)
 
-      const payload = that.generatePayload(that.requestArgs)
-
-      that.createRequest(payload, resolve, reject);
-    })
+    return await this.createRequest(payload)
   }
 
-  optimize(reqArgs) {
+  async optimize(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -39,7 +34,7 @@ class OrsOptimization extends OrsBase {
     }
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    return this.optimizationPromise()
+    return await this.optimizationPromise()
   }
 }
 

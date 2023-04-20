@@ -1,5 +1,3 @@
-import request from 'superagent'
-import Promise from 'bluebird';
 import OrsUtil from './OrsUtil.js'
 import Constants from './constants.js'
 
@@ -43,35 +41,46 @@ class OrsBase {
       this.customHeaders = this.requestArgs.customHeaders
       delete this.requestArgs.customHeaders
     }
+    // set default Content-type, since Postman sets Content-type to text/plain if not specified
+    if (!('Content-type' in this.customHeaders)) {
+      this.customHeaders = {...this.customHeaders, 'Content-type': 'application/json'}
+    }
   }
 
-  createRequest(body, resolve, reject) {
+  async fetchRequest(body, controller) {
     let url = orsUtil.prepareUrl(this.argsCache)
     if (this.argsCache[Constants.propNames.service] === 'pois') {
       url += url.indexOf('?') > -1 ? '&' : '?'
     }
 
-    const authorization = this.argsCache[Constants.propNames.apiKey]
-    const timeout = this.defaultArgs[Constants.propNames.timeout] || 10000
+    const authorization = {'Authorization': this.argsCache[Constants.propNames.apiKey]}
 
-    const orsRequest = request
-      .post(url)
-      .send(body)
-      .set('Authorization', authorization)
-      .timeout(timeout)
-
-    for (const key in this.customHeaders) {
-      orsRequest.set(key, this.customHeaders[key])
-    }
-    orsRequest.end(function(err, res) {
-      if (err || !res.ok) {
-        // eslint-disable-next-line no-console
-        console.error(err)
-        reject(err)
-      } else if (res) {
-        resolve(res.body || res.text)
-      }
+    return await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {...authorization, ...this.customHeaders},
+      signal: controller.signal
     })
+  }
+
+  async createRequest(body) {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort('timed out'), this.defaultArgs[Constants.propNames.timeout] || 5000)
+
+    try {
+      const orsResponse = await this.fetchRequest(body, controller)
+
+      if (!orsResponse.ok) {
+        const error = new Error(orsResponse.statusText)
+        error.status = orsResponse.status
+        error.response = orsResponse
+        throw error
+      }
+
+      return await orsResponse.json() || orsResponse.text()
+    } finally {
+      clearTimeout(timeout)
+    }
   }
 
   // is overidden in Directions and Isochrones class
@@ -79,27 +88,24 @@ class OrsBase {
     return this.httpArgs;
   }
 
-  calculate(reqArgs) {
+  async calculate(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
 
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    const that = this
-    return new Promise(function(resolve, reject) {
-      if (that.requestArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
-        that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+    if (this.requestArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
+      this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
 
-        that.httpArgs = orsUtil.prepareRequest(that.requestArgs)
-        const postBody = that.getBody(that.httpArgs)
+      this.httpArgs = orsUtil.prepareRequest(this.requestArgs)
+      const postBody = this.getBody(this.httpArgs)
 
-        that.createRequest(postBody, resolve, reject)
-      } else {
-        // eslint-disable-next-line no-console
-        console.error(Constants.useAPIV2Msg)
-      }
-    })
+      return await this.createRequest(postBody)
+    } else {
+      // eslint-disable-next-line no-console
+      console.error(Constants.useAPIV2Msg)
+    }
   }
 }
 

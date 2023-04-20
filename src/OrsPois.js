@@ -1,4 +1,3 @@
-import Promise from 'bluebird'
 import OrsUtil from './OrsUtil.js'
 import Constants from './constants.js'
 import OrsBase from './OrsBase.js'
@@ -18,11 +17,11 @@ class OrsPois extends OrsBase {
 
     for (const key in args) {
       if (
-        !(
-          Constants.baseUrlConstituents.indexOf(key) > -1 ||
-          key === Constants.propNames.apiKey ||
-          key === Constants.propNames.timeout
-        )
+          !(
+              Constants.baseUrlConstituents.indexOf(key) > -1 ||
+              key === Constants.propNames.apiKey ||
+              key === Constants.propNames.timeout
+          )
       ) {
         payload[key] = args[key]
       }
@@ -30,32 +29,29 @@ class OrsPois extends OrsBase {
     return payload
   }
 
-  poisPromise() {
+  async poisPromise() {
     // the request arg is required by the API as part of the body
     this.requestArgs.request = this.requestArgs.request || 'pois'
 
-    const that = this
-    return new Promise(function(resolve, reject) {
-      that.argsCache = orsUtil.saveArgsToCache(that.requestArgs)
+    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
 
-      if (that.requestArgs[Constants.propNames.service]) {
-        delete that.requestArgs[Constants.propNames.service]
-      }
+    if (this.requestArgs[Constants.propNames.service]) {
+      delete this.requestArgs[Constants.propNames.service]
+    }
 
-      const payload = that.generatePayload(that.requestArgs)
+    const payload = this.generatePayload(this.requestArgs)
 
-      that.createRequest(payload, resolve, reject);
-    })
+    return await this.createRequest(payload)
   }
 
-  pois(reqArgs) {
+  async pois(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
 
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    return this.poisPromise()
+    return await this.poisPromise()
   }
 }
 

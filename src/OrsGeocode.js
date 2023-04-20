@@ -1,5 +1,3 @@
-import request from 'superagent'
-import Promise from 'bluebird'
 import OrsUtil from './OrsUtil.js'
 import Constants from './constants.js'
 import OrsBase from './OrsBase.js'
@@ -116,37 +114,40 @@ class OrsGeocode extends OrsBase {
     return queryString
   }
 
-  geocodePromise() {
-    const that = this
-    return new Promise(function(resolve, reject) {
-      // Use old API via GET
-      let url = orsUtil.prepareUrl(that.requestArgs)
-      // Add url query string from args
-      url += '?' + that.getParametersAsQueryString(that.requestArgs)
+  async fetchGetRequest(controller) {
+    let url = orsUtil.prepareUrl(this.requestArgs)
+    // Add url query string from args
+    url += '?' + this.getParametersAsQueryString(this.requestArgs)
 
-      const timeout = that.defaultArgs[Constants.propNames.timeout] || 5000
-
-      // createRequest function is not applicable: GET instead of POST request
-      const orsRequest = request
-          .get(url)
-          .timeout(timeout)
-
-      for (const key in that.customHeaders) {
-        orsRequest.set(key, that.customHeaders[key])
-      }
-      orsRequest.end(function(err, res) {
-        if (err || !res.ok) {
-          // eslint-disable-next-line no-console
-          console.error(err)
-          reject(err)
-        } else if (res) {
-          resolve(res.body || res.text)
-        }
-      })
+    // createRequest function from base class is not applicable: GET instead of POST request
+    return await fetch(url, {
+      method: 'GET',
+      headers: this.customHeaders,
+      signal: controller.signal
     })
   }
 
-  geocode(reqArgs) {
+  async geocodePromise() {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort('timed out'), this.defaultArgs[Constants.propNames.timeout] || 5000)
+
+    try {
+      const orsResponse = await this.fetchGetRequest(controller)
+
+      if (!orsResponse.ok) {
+        const error = new Error(orsResponse.statusText)
+        error.status = orsResponse.status
+        error.response = orsResponse
+        throw error
+      }
+
+      return await orsResponse.json() || orsResponse.text()
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+
+  async geocode(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -154,12 +155,12 @@ class OrsGeocode extends OrsBase {
     if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
       this.requestArgs.service = 'geocode/search'
     }
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    return this.geocodePromise()
+    return await this.geocodePromise()
   }
 
-  reverseGeocode(reqArgs) {
+  async reverseGeocode(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -167,12 +168,12 @@ class OrsGeocode extends OrsBase {
     if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
       this.requestArgs.service = 'geocode/reverse'
     }
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    return this.geocodePromise()
+    return await this.geocodePromise()
   }
 
-  structuredGeocode(reqArgs) {
+  async structuredGeocode(reqArgs) {
     this.requestArgs = reqArgs
 
     this.checkHeaders()
@@ -180,9 +181,9 @@ class OrsGeocode extends OrsBase {
     if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
       this.requestArgs.service = 'geocode/search/structured'
     }
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs,this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    return this.geocodePromise()
+    return await this.geocodePromise()
   }
 }
 
