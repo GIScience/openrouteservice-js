@@ -2,6 +2,87 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/GIScience/openrouteservice-js/compare/v0.2.0...v0.3.0) (2023-04-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* removal of Openrouteservice.OrsInput and Openrouteservice.OrsUtils
+* Response object from Error changed from superagent to [fetch response type](https://developer.mozilla.org/en-US/docs/Web/API/Response)
+    that can still be consumed
+* removes clear(), clearPoints(), addWaypoint() and addLocation() functions
+
+### Features
+
+* Add development vue app ([046b90d](https://github.com/GIScience/openrouteservice-js/commit/046b90d59bc7925e352653a4d902115c90cdb827))
+* add Optimization Service support ([44d57b6](https://github.com/GIScience/openrouteservice-js/commit/44d57b68d46642669363b22e413d6b6bb7d85e5a)), closes [#38](https://github.com/GIScience/openrouteservice-js/issues/38)
+
+
+### CI
+
+* Adjust GitHub actions testing workflow ([7bb711d](https://github.com/GIScience/openrouteservice-js/commit/7bb711dcb1110c43d614fd95876e52f62017daa6))
+* trigger ci run on pushes to master as well ([e9cc2ba](https://github.com/GIScience/openrouteservice-js/commit/e9cc2ba3b176438c94d11d4c4a7bb319de16b6ba))
+
+
+### Others
+
+* Add codecov badge ([dcf6bbb](https://github.com/GIScience/openrouteservice-js/commit/dcf6bbbdea52ce891bc9ad2dab41381502f5b7cf))
+* Remove prettier ([f2d0aaf](https://github.com/GIScience/openrouteservice-js/commit/f2d0aaf454eb2836625f06bae49525f0a2c60dbc))
+* Simplify npm script commands ([5203936](https://github.com/GIScience/openrouteservice-js/commit/52039364f1aadbcc51c56b05c0e9fa60e9144ff7))
+
+
+### Styling
+
+* standardise syntax to ES6 arrow funtions ([0c57dbc](https://github.com/GIScience/openrouteservice-js/commit/0c57dbc7e46a975588d227590478d1e588e5dd88))
+
+
+### Tests
+
+* adjust and increase coverage ([f63e5ca](https://github.com/GIScience/openrouteservice-js/commit/f63e5caa4968a1cdbf20537d75df2d95dc55297c))
+* increase OrsDirections test coverage ([a08f500](https://github.com/GIScience/openrouteservice-js/commit/a08f5000e89276c2b2f93e68fc546e986960b332))
+* increase OrsElevation test coverage ([875ebe8](https://github.com/GIScience/openrouteservice-js/commit/875ebe8db6a8e2f0e67821c68d25ca2b02554bc0))
+* increase OrsGeocode test coverage ([762b010](https://github.com/GIScience/openrouteservice-js/commit/762b01091f8a296d5d6836e969c4d3c1dcf12e88))
+* increase OrsIsochrones test coverage ([935fb23](https://github.com/GIScience/openrouteservice-js/commit/935fb2307c0d90a9dcb5b018c6f86489851ea156))
+* increase OrsMatrix test coverage ([b109c38](https://github.com/GIScience/openrouteservice-js/commit/b109c38b6fc9dac831040a2c004034b59a739441))
+* increase OrsOptimization test coverage ([3aba0dc](https://github.com/GIScience/openrouteservice-js/commit/3aba0dce57123de089d489eb507a226a8b43f3d4))
+* increase OrsPOIs test coverage ([6f8f6ee](https://github.com/GIScience/openrouteservice-js/commit/6f8f6eeb22414c915777654a8bba3f9b8435968d))
+* increase OrsUtil test coverage ([09c2cac](https://github.com/GIScience/openrouteservice-js/commit/09c2cacd5f57d437089870e50432190d1900e670))
+* Remove error checking blocks ([ae8df5e](https://github.com/GIScience/openrouteservice-js/commit/ae8df5e9e8a105884473f5b679b619a8ba30b04f))
+* remove tests for removed functions ([fff7398](https://github.com/GIScience/openrouteservice-js/commit/fff7398f36a78e3c1bea1aeb8e88a704a2e053fb))
+
+
+### Docs
+
+* document Optimization Service usage ([02d3e8b](https://github.com/GIScience/openrouteservice-js/commit/02d3e8bd7eed3a736fe3bb1949d134a4a5325ecf))
+* **README:** Fix typo and linting ([d6db353](https://github.com/GIScience/openrouteservice-js/commit/d6db353f94041e6f18c6f11a69412bcc99e00d68))
+* **README:** adjust examples and add local instance example ([d2752b5](https://github.com/GIScience/openrouteservice-js/commit/d2752b55007400baa2a030ca9dd7feb422d93d6a))
+* **README:** remove clear() usage from examples ([d372680](https://github.com/GIScience/openrouteservice-js/commit/d3726800e1edb4d157d11ae060897893b749f857))
+
+
+### Build System
+
+* Add code coverage for src files ([1e9c5e9](https://github.com/GIScience/openrouteservice-js/commit/1e9c5e918d047f7e19eab1df3d5e76b253983b33))
+* Add coverage for dev_app ([15e6411](https://github.com/GIScience/openrouteservice-js/commit/15e64113c15309e32e92065efbfd436a7e964112))
+* Change API key usage ([46f338e](https://github.com/GIScience/openrouteservice-js/commit/46f338e728ddf42af40d40eefb3ff0dcca5933d8))
+* **deps:** update to latest manageable dependencies ([5f29873](https://github.com/GIScience/openrouteservice-js/commit/5f2987305489b20aa76f57af716349d5ca66f46f))
+* Move to cypress testing framework ([c57cd28](https://github.com/GIScience/openrouteservice-js/commit/c57cd28bd2a19dbfb289d4898db1586632a01ba2))
+* Move to module repository type & change bundler ([a3c2a73](https://github.com/GIScience/openrouteservice-js/commit/a3c2a732e6cd8489bdc0d2686153375fd2f29ce3))
+* remove bluebird and superagent dependencies ([ad479aa](https://github.com/GIScience/openrouteservice-js/commit/ad479aa52e97d3c51ddb2f0f5b7d95b1a3e6bc60))
+* Remove lcov.info file ([f460992](https://github.com/GIScience/openrouteservice-js/commit/f460992ce94cf0b97e39dd23124f63d869c43360))
+* Remove unused derequire dependency ([612939d](https://github.com/GIScience/openrouteservice-js/commit/612939d0dd840d265c11e556d81e62bbbd9b3cfd))
+* Rename branch master to main ([3ff1b22](https://github.com/GIScience/openrouteservice-js/commit/3ff1b220e874248cf427740aa92a9cf6ebe0deb8))
+* Use coverage upload action in GitHub workflow ([ddec0d1](https://github.com/GIScience/openrouteservice-js/commit/ddec0d1f1126d9300636a69db28a14b2db0cee13))
+
+
+### Code Refactoring
+
+* move from explicit Promises to async functions ([56d06bd](https://github.com/GIScience/openrouteservice-js/commit/56d06bd83348b5d6e0b665b202e328fbecaa850b))
+* remove setting of default vehicle when profile is 'driving-hgv' ([0b308e0](https://github.com/GIScience/openrouteservice-js/commit/0b308e0dea72d816d3d0aecdba62885a67db640c))
+* remove unused functions ([441fd38](https://github.com/GIScience/openrouteservice-js/commit/441fd3871116c9ff7a141a1d5f1ab4755b661fdd))
+* remove unused properties from library ([62d9afe](https://github.com/GIScience/openrouteservice-js/commit/62d9afecbcdc7bda46dc8dcc0108abd5064c2f90))
+* Replace apiKeyPropName with propNames.apiKey ([f324e23](https://github.com/GIScience/openrouteservice-js/commit/f324e234f3f531f06cfe7c23046757d87327c03a))
+* split createRequest parts to new fetchRequest function ([0c336ee](https://github.com/GIScience/openrouteservice-js/commit/0c336eeb730d26365ffb46b1351e41342acec339))
+
 ## [0.2.0](https://github.com/GIScience/openrouteservice-js/compare/v0.1.31...v0.2.0) (2022-06-10)
 
 

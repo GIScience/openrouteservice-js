@@ -63,19 +63,6 @@ class OrsUtil {
     return url;
   }
 }
-class OrsInput {
-  constructor(input, input2) {
-    this.setCoord(input, input2);
-  }
-  round(val, precision) {
-    if (precision === void 0)
-      precision = 1e6;
-    return Math.round(val * precision) / precision;
-  }
-  setCoord(lat, lng) {
-    this.coord = [this.round(lat), this.round(lng)];
-  }
-}
 const orsUtil$4 = new OrsUtil();
 class OrsBase {
   constructor(args) {
@@ -115,38 +102,25 @@ class OrsBase {
       url += url.indexOf("?") > -1 ? "&" : "?";
     }
     const authorization = { "Authorization": this.argsCache[constants.propNames.apiKey] };
-    const res = await fetch(url, {
+    return await fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
       headers: { ...authorization, ...this.customHeaders },
       signal: controller.signal
     });
-    return {
-      ok: res.ok,
-      errorStatus: res.status,
-      errorText: res.statusText,
-      body: await res.json() || res.text
-    };
   }
   async createRequest(body) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort("timed out"), this.defaultArgs[constants.propNames.timeout] || 5e3);
     try {
-      const orsRequest = await this.fetchRequest(body, controller);
-      if (!orsRequest.ok) {
-        throw {
-          status: orsRequest.errorStatus,
-          message: orsRequest.errorText,
-          body: orsRequest.body
-        };
+      const orsResponse = await this.fetchRequest(body, controller);
+      if (!orsResponse.ok) {
+        const error = new Error(orsResponse.statusText);
+        error.status = orsResponse.status;
+        error.response = orsResponse;
+        throw error;
       }
-      return orsRequest.body;
-    } catch (err) {
-      const error = new Error(err.message);
-      error.status = err.status;
-      error.body = err.body;
-      console.error(error);
-      throw err;
+      return await orsResponse.json() || orsResponse.text();
     } finally {
       clearTimeout(timeout);
     }
@@ -277,37 +251,24 @@ class OrsGeocode extends OrsBase {
   async fetchGetRequest(controller) {
     let url = orsUtil$3.prepareUrl(this.requestArgs);
     url += "?" + this.getParametersAsQueryString(this.requestArgs);
-    const res = await fetch(url, {
+    return await fetch(url, {
       method: "GET",
       headers: this.customHeaders,
       signal: controller.signal
     });
-    return {
-      ok: res.ok,
-      errorStatus: res.status,
-      errorText: res.statusText,
-      body: await res.json() || res.text
-    };
   }
   async geocodePromise() {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort("timed out"), this.defaultArgs[constants.propNames.timeout] || 5e3);
     try {
-      const orsRequest = await this.fetchGetRequest(controller);
-      if (!orsRequest.ok) {
-        throw {
-          status: orsRequest.errorStatus,
-          message: orsRequest.errorText,
-          body: orsRequest.body
-        };
+      const orsResponse = await this.fetchGetRequest(controller);
+      if (!orsResponse.ok) {
+        const error = new Error(orsResponse.statusText);
+        error.status = orsResponse.status;
+        error.response = orsResponse;
+        throw error;
       }
-      return orsRequest.body;
-    } catch (err) {
-      const error = new Error(err.message);
-      error.status = err.status;
-      error.body = err.body;
-      console.error(error);
-      throw err;
+      return await orsResponse.json() || orsResponse.text();
     } finally {
       clearTimeout(timeout);
     }
@@ -517,8 +478,6 @@ class OrsOptimization extends OrsBase {
   }
 }
 const Openrouteservice = {
-  Util: OrsUtil,
-  Input: OrsInput,
   Geocode: OrsGeocode,
   Isochrones: OrsIsochrones,
   Directions: OrsDirections,
