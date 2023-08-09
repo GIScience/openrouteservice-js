@@ -77,7 +77,7 @@ class OrsBase {
         throw error
       }
 
-      return await orsResponse.json() || orsResponse.text()
+      return this.argsCache?.format === 'gpx' ? await orsResponse.text() : await orsResponse.json()
     } finally {
       clearTimeout(timeout)
     }
