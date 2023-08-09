@@ -110,6 +110,7 @@ class OrsBase {
     });
   }
   async createRequest(body) {
+    var _a;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort("timed out"), this.defaultArgs[constants.propNames.timeout] || 5e3);
     try {
@@ -120,7 +121,7 @@ class OrsBase {
         error.response = orsResponse;
         throw error;
       }
-      return await orsResponse.json() || orsResponse.text();
+      return ((_a = this.argsCache) == null ? void 0 : _a.format) === "gpx" ? await orsResponse.text() : await orsResponse.json();
     } finally {
       clearTimeout(timeout);
     }
