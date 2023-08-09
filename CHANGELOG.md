@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/GIScience/openrouteservice-js/compare/v0.3.0...v0.3.1) (2023-08-09)
+
+
+### Bug Fixes
+
+* gpx response not returned correctly ([c9a3865](https://github.com/GIScience/openrouteservice-js/commit/c9a3865e0513b213912b2968691d8663cbde394d))
+
 ## [0.3.0](https://github.com/GIScience/openrouteservice-js/compare/v0.2.0...v0.3.0) (2023-04-20)
 
 
