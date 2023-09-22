@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.2](https://github.com/GIScience/openrouteservice-js/compare/v0.3.1...v0.3.2) (2023-09-22)
+
+
+### Code Refactoring
+
+* remove api_version 'v2' requirement ([51c5bb2](https://github.com/GIScience/openrouteservice-js/commit/51c5bb2987d4d7a6c0458ce72c2207cf2dcb9b8b))
+
+
+### Tests
+
+* remove tests for api_version 'v2' requirement ([caab49a](https://github.com/GIScience/openrouteservice-js/commit/caab49a3e390ed883a272df14e31bd5d48d29fb7))
+
+
+### Build System
+
+* **deps:** upgrade vite from 3.2.6 to 3.2.7 ([8395acd](https://github.com/GIScience/openrouteservice-js/commit/8395acd46f7619891dfb4f6470d72620bd7915fb))
+
 ### [0.3.1](https://github.com/GIScience/openrouteservice-js/compare/v0.3.0...v0.3.1) (2023-08-09)
 
 

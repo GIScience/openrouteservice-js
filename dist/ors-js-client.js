@@ -2,7 +2,6 @@ const constants = {
   defaultAPIVersion: "v2",
   defaultHost: "https://api.openrouteservice.org",
   missingAPIKeyMsg: "Please add your openrouteservice api_key..",
-  useAPIV2Msg: "Please use ORS API v2",
   baseUrlConstituents: ["host", "service", "api_version", "mime_type"],
   propNames: {
     apiKey: "api_key",
@@ -133,14 +132,10 @@ class OrsBase {
     this.requestArgs = reqArgs;
     this.checkHeaders();
     this.requestArgs = orsUtil$4.fillArgs(this.defaultArgs, this.requestArgs);
-    if (this.requestArgs[constants.propNames.apiVersion] === constants.defaultAPIVersion) {
-      this.argsCache = orsUtil$4.saveArgsToCache(this.requestArgs);
-      this.httpArgs = orsUtil$4.prepareRequest(this.requestArgs);
-      const postBody = this.getBody(this.httpArgs);
-      return await this.createRequest(postBody);
-    } else {
-      console.error(constants.useAPIV2Msg);
-    }
+    this.argsCache = orsUtil$4.saveArgsToCache(this.requestArgs);
+    this.httpArgs = orsUtil$4.prepareRequest(this.requestArgs);
+    const postBody = this.getBody(this.httpArgs);
+    return await this.createRequest(postBody);
   }
 }
 const orsUtil$3 = new OrsUtil();
