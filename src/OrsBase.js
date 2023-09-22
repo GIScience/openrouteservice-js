@@ -95,17 +95,12 @@ class OrsBase {
 
     this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
 
-    if (this.requestArgs[Constants.propNames.apiVersion] === Constants.defaultAPIVersion) {
-      this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
+    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
 
-      this.httpArgs = orsUtil.prepareRequest(this.requestArgs)
-      const postBody = this.getBody(this.httpArgs)
+    this.httpArgs = orsUtil.prepareRequest(this.requestArgs)
+    const postBody = this.getBody(this.httpArgs)
 
-      return await this.createRequest(postBody)
-    } else {
-      // eslint-disable-next-line no-console
-      console.error(Constants.useAPIV2Msg)
-    }
+    return await this.createRequest(postBody)
   }
 }
 
