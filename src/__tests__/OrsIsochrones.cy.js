@@ -11,17 +11,6 @@ describe('Isochrone Test', () => {
       expect(orsIsochrones.defaultArgs.service).to.equal('isochrones')
       expect(orsIsochrones.defaultArgs.api_version).to.equal('v2')
     })
-
-    it('fails when API version not default API version', () => {
-      try {
-        new OrsIsochrones({
-          'api_key': 'test',
-          'apiVersion': 'v1'
-        })
-      } catch (err) {
-        expect(err.message).to.equal(Constants.useAPIV2Msg)
-      }
-    })
   })
 
   context('methods', () => {

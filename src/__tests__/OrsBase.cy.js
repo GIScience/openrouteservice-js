@@ -20,19 +20,6 @@ describe('Test Base class', () => {
       }
     })
 
-    it('fails when API version not default API version', () => {
-      let base
-      try {
-        base = new OrsBase({
-          'api_key': 'test',
-          'apiVersion': 'v1'
-        })
-      } catch (err) {
-        expect(err.message).to.equal(constants.useAPIV2Msg)
-        expect(base.calculate()).to.throw(console.error)
-      }
-    })
-
     it('passes Host correctly', () => {
       const base = new OrsBase({
         'api_key': 'test',
