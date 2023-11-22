@@ -30,7 +30,7 @@ class OrsBase {
       this.defaultArgs[Constants.propNames.apiKey] = constructorArgs[Constants.propNames.apiKey]
     }
     else if (!constructorArgs[Constants.propNames.host]) {
-      // Do not error if a host is specified; useful for locally-run instnaces of ORS
+      // Do not error if a host is specified; useful for locally-run instances of ORS
       // eslint-disable-next-line no-console
       console.error(Constants.missingAPIKeyMsg)
       throw new Error(Constants.missingAPIKeyMsg)
