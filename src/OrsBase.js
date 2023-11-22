@@ -4,30 +4,33 @@ import Constants from './constants.js'
 const orsUtil = new OrsUtil()
 
 class OrsBase {
-  constructor(args) {
+  constructor(constructorArgs) {
     this.defaultArgs = {}
     this.requestArgs = {}
     this.argsCache = null
     this.customHeaders = {}
 
-    this._setRequestDefaults(args)
+    this._setRequestDefaults(constructorArgs)
   }
 
   /**
    * Set defaults for a request comparing with and overwriting default class arguments
    * @param {Object} args - constructor input
    */
-  _setRequestDefaults(args) {
+  _setRequestDefaults(constructorArgs) {
     this.defaultArgs[Constants.propNames.host] = Constants.defaultHost
-    if (args[Constants.propNames.host]) {
-      this.defaultArgs[Constants.propNames.host] = args[Constants.propNames.host]
+    if (constructorArgs[Constants.propNames.host]) {
+      this.defaultArgs[Constants.propNames.host] = constructorArgs[Constants.propNames.host]
     }
-    if (args[Constants.propNames.service]) {
-      this.defaultArgs[Constants.propNames.service] = args[Constants.propNames.service]
+    if (constructorArgs[Constants.propNames.service]) {
+      this.defaultArgs[Constants.propNames.service] = constructorArgs[Constants.propNames.service]
     }
-    if (Constants.propNames.apiKey in args) {
-      this.defaultArgs[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
-    } else {
+    
+    if (Constants.propNames.apiKey in constructorArgs) {
+      this.defaultArgs[Constants.propNames.apiKey] = constructorArgs[Constants.propNames.apiKey]
+    }
+    else if (!constructorArgs[Constants.propNames.host]) {
+      // Do not error if a host is specified; useful for locally-run instnaces of ORS
       // eslint-disable-next-line no-console
       console.error(Constants.missingAPIKeyMsg)
       throw new Error(Constants.missingAPIKeyMsg)
