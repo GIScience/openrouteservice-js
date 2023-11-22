@@ -27,7 +27,8 @@ class OrsBase {
     }
     if (Constants.propNames.apiKey in args) {
       this.defaultArgs[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
-    } else {
+    } else if (!args[Constants.propNames.host]) {
+      // Do not error if a host is specified; useful for locally-run instances of ORS
       console.error(Constants.missingAPIKeyMsg)
       throw new Error(Constants.missingAPIKeyMsg)
     }
