@@ -83,7 +83,7 @@ class OrsBase {
     }
   }
 
-  // is overidden in Directions and Isochrones class
+  // is overridden in Directions and Isochrones class
   getBody() {
     return this.httpArgs;
   }
