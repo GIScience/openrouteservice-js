@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
   <title>ORS-js lib examples</title>
-  <script type="module" src="../dist/ors-js-client.js"></script>
+  <script type='module' src='../dist/ors-js-client.js'></script>
 </head>
 <body>
 <div>
   <h1>ORS-js lib examples</h1>
-  <section >
+  <section>
     <h2>Optimization</h2>
-    <div id="optimization">
+    <div id='optimization'>
       <script type='module'>
         import apiKey from './apiKey.js'
         import { prettifyJson } from './utils.js'
+
         window.onload = async function() {
-          const node = document.getElementById("optimization")
+          const node = document.getElementById('optimization')
 
           const Optimization = new Openrouteservice.Optimization({
             api_key: apiKey
@@ -59,11 +60,11 @@
             })
             console.log(json)
             let response = prettifyJson(json)
-            node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
           } catch (err) {
-            console.error(err);
+            console.error(err)
             let response = prettifyJson(err)
-            node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
           }
         }
       </script>

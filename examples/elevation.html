@@ -1,43 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>ORS-js lib examples</title>
-    <script type="module" src="../dist/ors-js-client.js"></script>
-  </head>
-  <body>
-    <div>
-    <h1>ORS-js lib examples</h1>
-    <section >
-      <h2>Elevation</h2>
-      <div id="elevation">
-        <script type='module'>
-          import apiKey from './apiKey.js'
-          import { prettifyJson } from './utils.js'
-          window.onload = async function() {
-            const node = document.getElementById("elevation")
+<html lang='en'>
+<head>
+  <title>ORS-js lib examples</title>
+  <script type='module' src='../dist/ors-js-client.js'></script>
+</head>
+<body>
+<div>
+  <h1>ORS-js lib examples</h1>
+  <section>
+    <h2>Elevation</h2>
+    <div id='elevation'>
+      <script type='module'>
+        import apiKey from './apiKey.js'
+        import { prettifyJson } from './utils.js'
 
-            const Elevation = new Openrouteservice.Elevation({
-                api_key: apiKey
-              })
+        window.onload = async function() {
+          const node = document.getElementById('elevation')
 
-            try {
-              const json = await Elevation.lineElevation({
-                format_in:"encodedpolyline",
-                geometry:"u`rgFswjpAKD"
-              })
-              console.log(json);
-              let response = prettifyJson(json)
-              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-            } catch (err) {
-              console.error(err);
-              let response = prettifyJson(err)
-              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-            }
+          const Elevation = new Openrouteservice.Elevation({
+            api_key: apiKey
+          })
+
+          try {
+            const json = await Elevation.lineElevation({
+              format_in: 'encodedpolyline',
+              geometry: 'u`rgFswjpAKD'
+            })
+            console.log(json)
+            let response = prettifyJson(json)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
+          } catch (err) {
+            console.error(err)
+            let response = prettifyJson(err)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
           }
-        </script>
-      </div>
-
-    </section>
+        }
+      </script>
     </div>
-  </body>
+  </section>
+</div>
+</body>
 </html>
