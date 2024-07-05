@@ -9,13 +9,13 @@
   <h1>ORS-js lib examples</h1>
   <section>
     <h2>Snapping</h2>
-    <div id='driving-car-snap'>
+    <div id='snap'>
       <script type='module'>
         import apiKey from './apiKey.js'
         import { prettifyJson } from './utils.js'
 
         window.onload = async function() {
-          const node = document.getElementById('driving-car-snap')
+          const node = document.getElementById('snap')
 
           const Snap = new Openrouteservice.Snap({
             api_key: apiKey

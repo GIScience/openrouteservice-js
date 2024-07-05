@@ -8,15 +8,15 @@
 <div>
   <h1>ORS-js lib examples</h1>
   <section>
-    <h2>Reverse geocode Heidelberg</h2>
-    <div id='reverse-geocode-heidelberg'>
+    <h2>Reverse geocode</h2>
+    <div id='reverse-geocode'>
       <script type='module'>
         import apiKey from './apiKey.js'
         import { prettifyJson } from './utils.js'
 
         window.onload = async function() {
 
-          const node = document.getElementById('reverse-geocode-heidelberg')
+          const node = document.getElementById('reverse-geocode')
           const Geocode = new Openrouteservice.Geocode({
             api_key: apiKey
           })

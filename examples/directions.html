@@ -8,14 +8,14 @@
 <div>
   <h1>ORS-js lib examples</h1>
   <section>
-    <h2>Driving car directions</h2>
-    <div id='driving-car-directions'>
+    <h2>Directions</h2>
+    <div id='directions'>
       <script type='module'>
         import apiKey from './apiKey.js'
         import { prettifyJson } from './utils.js'
 
         window.onload = async function() {
-          const node = document.getElementById('driving-car-directions')
+          const node = document.getElementById('directions')
 
           const orsDirections = new Openrouteservice.Directions({
             api_key: apiKey

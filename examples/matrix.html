@@ -8,15 +8,15 @@
 <div>
   <h1>ORS-js lib examples</h1>
   <section>
-    <h2>Time distance matrix</h2>
-    <div id='time-distance-matrix'>
+    <h2>Matrix</h2>
+    <div id='matrix'>
       <script type='module'>
         import apiKey from './apiKey.js'
         import { prettifyJson } from './utils.js'
 
         window.onload = async function() {
 
-          const node = document.getElementById('time-distance-matrix')
+          const node = document.getElementById('matrix')
 
           const Matrix = new Openrouteservice.Matrix({
             api_key: apiKey
