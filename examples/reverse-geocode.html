@@ -12,6 +12,7 @@
       <div id="reverse-geocode-heidelberg">
         <script type='module'>
           import apiKey from './apiKey.js'
+          import { prettifyJson } from './utils.js'
           window.onload = async function() {
 
             const node = document.getElementById("reverse-geocode-heidelberg")
@@ -27,16 +28,12 @@
                 },
                 boundary_country: ["DE"]
               })
-              let response = JSON.stringify(json, null, "\t")
-              console.log(response);
-              response = response.replace(/(\n)/g, '<br>');
-              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              console.log(json);
+              let response = prettifyJson(json)
               node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
             } catch (err) {
-              let response = JSON.stringify(err, null, "\t")
-              console.log(response);
-              response = response.replace(/(\n)/g, '<br>');
-              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              console.error(err);
+              let response = prettifyJson(err)
               node.innerHTML = "<h3>Error</h3><p>" + response + "</p>";
             }
           }
