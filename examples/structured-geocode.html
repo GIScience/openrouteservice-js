@@ -12,29 +12,28 @@
       <div id="structured-geocode-heidelberg">
         <script type='module'>
           import apiKey from './apiKey.js'
-          window.onload = function() {
+          window.onload = async function() {
 
             const node = document.getElementById("structured-geocode-heidelberg");
-              const Geocode = new Openrouteservice.Geocode({
-                api_key: apiKey
+            const Geocode = new Openrouteservice.Geocode({
+              api_key: apiKey
+            })
+            try {
+              const json = await Geocode.structuredGeocode({
+                locality: "Heidelberg",
               })
-
-              Geocode.structuredGeocode({
-                  locality: "Heidelberg",
-              }).then(function(json) {
-                  let response = JSON.stringify(json, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
-                .catch(function(err) {
-                  let response = JSON.stringify(err, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
+              let response = JSON.stringify(json, null, "\t")
+              console.log(response);
+              response = response.replace(/(\n)/g, '<br>');
+              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            } catch (err) {
+              let response = JSON.stringify(err, null, "\t")
+              console.log(response);
+              response = response.replace(/(\n)/g, '<br>');
+              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            }
           }
         </script>
       </div>

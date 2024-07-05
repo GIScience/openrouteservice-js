@@ -12,34 +12,33 @@
       <div id="time-distance-matrix">
         <script type='module'>
           import apiKey from './apiKey.js'
-          window.onload = function() {
+          window.onload = async function() {
 
             const node = document.getElementById("time-distance-matrix")
 
-              const Matrix = new Openrouteservice.Matrix({
-                api_key: apiKey
-              })
+            const Matrix = new Openrouteservice.Matrix({
+              api_key: apiKey
+            })
 
-              Matrix.calculate({
+            try {
+              const json = await Matrix.calculate({
                 locations: [[8.690958, 49.404662], [8.687868, 49.390139], [8.687868, 49.390133]],
                 profile: "driving-car",
                 sources: ['all'],
                 destinations: ['all']
               })
-                .then(function(json) {
-                  let response = JSON.stringify(json, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
-                .catch(function(err) {
-                  let response = JSON.stringify(err, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
+              console.log(json)
+              let response = JSON.stringify(json, null, '\t')
+              response = response.replace(/(\n)/g, '<br>')
+              response = response.replace(/(\t)/g, '&nbsp;&nbsp;')
+              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            } catch (err) {
+              let response = JSON.stringify(err, null, "\t")
+              console.log(response);
+              response = response.replace(/(\n)/g, '<br>');
+              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            }
           }
         </script>
       </div>

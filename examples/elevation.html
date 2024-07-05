@@ -12,31 +12,30 @@
       <div id="elevation">
         <script type='module'>
           import apiKey from './apiKey.js'
-          window.onload = function() {
+          window.onload = async function() {
             const node = document.getElementById("elevation")
 
             const Elevation = new Openrouteservice.Elevation({
                 api_key: apiKey
               })
 
-              Elevation.lineElevation({
+            try {
+              const json = await Elevation.lineElevation({
                 format_in:"encodedpolyline",
                 geometry:"u`rgFswjpAKD"
               })
-                .then(function(json) {
-                  let response = JSON.stringify(json, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
-                .catch(function(err) {
-                  let response = err.message
-                  console.log(err.stack);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
+              let response = JSON.stringify(json, null, "\t")
+              console.log(response);
+              response = response.replace(/(\n)/g, '<br>');
+              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            } catch (err) {
+              let response = err.message
+              console.log(err.stack);
+              response = response.replace(/(\n)/g, '<br>');
+              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            }
           }
         </script>
       </div>

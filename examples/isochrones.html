@@ -12,34 +12,33 @@
       <div id="isochrones">
         <script type='module'>
           import apiKey from './apiKey.js'
-          window.onload = function() {
+          window.onload = async function() {
 
             const node = document.getElementById("isochrones")
 
-              const Isochrones = new Openrouteservice.Isochrones({
-                api_key: apiKey
-              })
+            const Isochrones = new Openrouteservice.Isochrones({
+              api_key: apiKey
+            })
 
-              Isochrones.calculate({
-                  profile: 'driving-car',
-                  locations:[[8.681495,49.41461],[8.686507,49.41943]],
-                  range:[300,200],
-                  area_units: 'km'
-                })
-                .then(function(json) {
-                  let response = JSON.stringify(json, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
-                .catch(function(err) {
-                  let response = JSON.stringify(err, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
+            try {
+              const json = await Isochrones.calculate({
+                profile: 'driving-car',
+                locations: [[8.681495, 49.41461], [8.686507, 49.41943]],
+                range: [300, 200],
+                area_units: 'km'
+              })
+                let response = JSON.stringify(json, null, "\t")
+                console.log(response);
+                response = response.replace(/(\n)/g, '<br>');
+                response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+                node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            } catch (err) {
+                let response = JSON.stringify(err, null, "\t")
+                console.log(response);
+                response = response.replace(/(\n)/g, '<br>');
+                response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+                node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            }
           }
         </script>
       </div>

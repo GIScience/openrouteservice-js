@@ -12,34 +12,36 @@
       <div id="geocode-heidelberg">
         <script type='module'>
           import apiKey from './apiKey.js'
-          window.onload = function() {
+          window.onload = async function() {
 
             const node = document.getElementById("geocode-heidelberg")
 
-              const Geocode = new Openrouteservice.Geocode({
-                api_key: apiKey
-              })
+            const Geocode = new Openrouteservice.Geocode({
+              api_key: apiKey
+            })
 
-              Geocode.geocode({
+            try {
+              const json = await Geocode.geocode({
                 text: "Heidelberg",
-                boundary_circle: { lat_lng: [49.412388, 8.681247], radius: 50 },
+                boundary_circle: {
+                  lat_lng: [49.412388, 8.681247],
+                  radius: 50
+                },
                 boundary_bbox: [[49.260929, 8.40063], [49.504102, 8.941707]],
                 boundary_country: ["DE"]
               })
-                .then(function(json) {
-                  let response = JSON.stringify(json, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
-                .catch(function(err) {
-                  let response = JSON.stringify(err, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Error</h3><p>" + response + "</p>";
-                });
+              let response = JSON.stringify(json, null, "\t")
+              console.log(response);
+              response = response.replace(/(\n)/g, '<br>');
+              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+            } catch (err) {
+              let response = JSON.stringify(err, null, "\t")
+              console.log(response);
+              response = response.replace(/(\n)/g, '<br>');
+              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
+              node.innerHTML = "<h3>Error</h3><p>" + response + "</p>";
+            }
           }
         </script>
       </div>
