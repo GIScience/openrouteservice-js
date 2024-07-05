@@ -9,6 +9,7 @@ This library lets you consume the openrouteservice API in *JavaScript* applicati
 - Geocoding | Reverse Geocoding | Structured Geocoding (powered by Pelias)
 - Isochrones (accessibility)
 - Time-distance matrix
+- Snap (Get the closest point on road network)
 - POIs (points of interest)
 - Elevation (linestring or point)
 - Optimization
@@ -243,6 +244,29 @@ try {
   console.error(await err.response.json())
 }
 ```
+
+### Snap example
+
+```js
+// Add your api_key here
+const Snap = new Openrouteservice.Snap({api_key: "XYZ"})
+
+try {
+  let response = await Snap.calculate({
+    locations: [[8.681495,49.51461],[8.686507,49.41943]],
+    radius: 300,
+    profile: 'driving-car',
+    format: 'json'
+  })
+  // Add your own result handling here
+  console.log("response: ", response)
+
+} catch (err) {
+  console.log("An error occurred: " + err.status)
+  console.error(await err.response.json())
+}
+```
+
 ### Optimization example
 Or consume Optimization API to solve [vehicle routing problems](https://en.wikipedia.org/wiki/Vehicle_routing_problem)
 

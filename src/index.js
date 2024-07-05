@@ -5,6 +5,7 @@ import OrsDirections from './OrsDirections.js'
 import OrsPois from './OrsPois.js'
 import OrsElevation from './OrsElevation.js'
 import OrsOptimization from './OrsOptimization.js'
+import OrsSnap from './OrsSnap.js';
 
 const Openrouteservice = {
   Geocode: OrsGeocode,
@@ -13,7 +14,8 @@ const Openrouteservice = {
   Matrix: OrsMatrix,
   Pois: OrsPois,
   Elevation: OrsElevation,
-  Optimization: OrsOptimization
+  Optimization: OrsOptimization,
+  Snap: OrsSnap
 }
 
 // Define Openrouteservice for Node module pattern loaders, including Browserify
