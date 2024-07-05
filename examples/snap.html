@@ -1,51 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <title>ORS-js lib examples</title>
-    <script type="module" src="../dist/ors-js-client.js"></script>
+  <title>ORS-js lib examples</title>
+  <script type='module' src='../dist/ors-js-client.js'></script>
 </head>
 <body>
 <div>
-    <h1>ORS-js lib examples</h1>
-    <section>
-        <h2>Driving car snapping</h2>
-        <div id="driving-car-snap">
-            <script type='module'>
-                import apiKey from './apiKey.js'
-                window.onload = function() {
-                    const node = document.getElementById("driving-car-snap")
+  <h1>ORS-js lib examples</h1>
+  <section>
+    <h2>Snapping</h2>
+    <div id='snap'>
+      <script type='module'>
+        import apiKey from './apiKey.js'
+        import { prettifyJson } from './utils.js'
 
-                    const Snap = new Openrouteservice.Snap({
-                        api_key: apiKey
-                    })
+        window.onload = async function() {
+          const node = document.getElementById('snap')
 
-                    Snap.calculate({
-                        locations: [[8.690958, 49.404662], [8.687868, 49.390139]],
-                        radius: 300,
-                        profile: "driving-car",
-                        format: "json",
-                        api_version: 'v2',
-                    })
-                        .then(function(json) {
-                            // Add your own result handling here
-                            let response = JSON.stringify(json, null, "\t")
-                            console.log(response);
-                            response = response.replace(/(\n)/g, '<br>');
-                            response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                            node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                        })
-                        .catch(function(err) {
-                            let response = JSON.stringify(err, null, "\t")
-                            console.error(response);
-                            response = response.replace(/(\n)/g, '<br>');
-                            response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                            node.innerHTML = "<h3>Error</h3><p>" + response + "</p>";
-                        })
-                }
-            </script>
-        </div>
+          const Snap = new Openrouteservice.Snap({
+            api_key: apiKey
+          })
 
-    </section>
+          try {
+            let json = await Snap.calculate({
+              locations: [[8.681495, 49.51461], [8.686507, 49.41943]],
+              radius: 300,
+              profile: 'driving-car',
+              format: 'json'
+            })
+            // Add your own result handling here
+            console.log(json)
+            let response = prettifyJson(json)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
+          } catch (err) {
+            console.error(err)
+            let response = prettifyJson(err)
+            node.innerHTML = '<h3>Error</h3><p>' + response + '</p>'
+          }
+        }
+      </script>
+    </div>
+  </section>
 </div>
 </body>
 </html>

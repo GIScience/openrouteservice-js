@@ -1,50 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>ORS-js lib examples</title>
-    <script type="module" src="../dist/ors-js-client.js"></script>
-  </head>
-  <body>
-    <div>
-    <h1>ORS-js lib examples</h1>
-    <section >
-      <h2>Isochrones</h2>
-      <div id="isochrones">
-        <script type='module'>
-          import apiKey from './apiKey.js'
-          window.onload = function() {
+<html lang='en'>
+<head>
+  <title>ORS-js lib examples</title>
+  <script type='module' src='../dist/ors-js-client.js'></script>
+</head>
+<body>
+<div>
+  <h1>ORS-js lib examples</h1>
+  <section>
+    <h2>Isochrones</h2>
+    <div id='isochrones'>
+      <script type='module'>
+        import apiKey from './apiKey.js'
+        import { prettifyJson } from './utils.js'
 
-            const node = document.getElementById("isochrones")
+        window.onload = async function() {
 
-              const Isochrones = new Openrouteservice.Isochrones({
-                api_key: apiKey
-              })
+          const node = document.getElementById('isochrones')
 
-              Isochrones.calculate({
-                  profile: 'driving-car',
-                  locations:[[8.681495,49.41461],[8.686507,49.41943]],
-                  range:[300,200],
-                  area_units: 'km'
-                })
-                .then(function(json) {
-                  let response = JSON.stringify(json, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
-                .catch(function(err) {
-                  let response = JSON.stringify(err, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
+          const Isochrones = new Openrouteservice.Isochrones({
+            api_key: apiKey
+          })
+
+          try {
+            const json = await Isochrones.calculate({
+              profile: 'driving-car',
+              locations: [[8.681495, 49.41461], [8.686507, 49.41943]],
+              range: [300, 200],
+              area_units: 'km'
+            })
+            console.log(json)
+            let response = prettifyJson(json)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
+          } catch (err) {
+            console.error(err)
+            let response = prettifyJson(err)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
           }
-        </script>
-      </div>
-
-    </section>
+        }
+      </script>
     </div>
-  </body>
+  </section>
+</div>
+</body>
 </html>

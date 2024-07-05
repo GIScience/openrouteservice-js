@@ -1,76 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
   <title>ORS-js lib examples</title>
-  <script type="module" src="../dist/ors-js-client.js"></script>
+  <script type='module' src='../dist/ors-js-client.js'></script>
 </head>
 <body>
 <div>
   <h1>ORS-js lib examples</h1>
-  <section >
+  <section>
     <h2>Optimization</h2>
-    <div id="optimization">
+    <div id='optimization'>
       <script type='module'>
         import apiKey from './apiKey.js'
-        window.onload = function() {
-          const node = document.getElementById("optimization")
+        import { prettifyJson } from './utils.js'
+
+        window.onload = async function() {
+          const node = document.getElementById('optimization')
 
           const Optimization = new Openrouteservice.Optimization({
             api_key: apiKey
           })
-
-          Optimization.optimize({
-            jobs: [
-              {
-                id: 1,
-                service: 200,
-                amount: [1],
-                location: [1.98935, 47.701],
-                skills: [1],
-                time_windows: [[32400, 36000]]
-              },
-              {
-                id: 2,
-                service: 200,
-                amount: [1],
-                location: [2.03655, 47.61128],
-                skills: [1]
-              },
-              {
-                id: 3,
-                service: 200,
-                amount: [1],
-                location: [2.39719, 48.07611],
-                skills: [14]
-              }
-            ],
-            vehicles: [
-              {
-                id: 1,
-                profile: 'cycling-regular',
-                start: [2.35044, 47.71764],
-                end: [2.35044, 47.71764],
-                capacity: [4],
-                skills: [1, 14],
-                time_window: [28800, 43200]
-              }
-            ]
-          })
-            .then(function(json) {
-              console.log(json)
-              let response = JSON.stringify(json, null, "\t")
-              console.log(response);
-              response = response.replace(/(\n)/g, '<br>');
-              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
+          try {
+            const json = await Optimization.optimize({
+              jobs: [
+                {
+                  id: 1,
+                  service: 200,
+                  amount: [1],
+                  location: [1.98935, 47.701],
+                  skills: [1],
+                  time_windows: [[32400, 36000]]
+                },
+                {
+                  id: 2,
+                  service: 200,
+                  amount: [1],
+                  location: [2.03655, 47.61128],
+                  skills: [1]
+                },
+                {
+                  id: 3,
+                  service: 200,
+                  amount: [1],
+                  location: [2.39719, 48.07611],
+                  skills: [14]
+                }
+              ],
+              vehicles: [
+                {
+                  id: 1,
+                  profile: 'cycling-regular',
+                  start: [2.35044, 47.71764],
+                  end: [2.35044, 47.71764],
+                  capacity: [4],
+                  skills: [1, 14],
+                  time_window: [28800, 43200]
+                }
+              ]
             })
-            .catch(function(err) {
-              let response = err.message
-              console.log(err.stack);
-              response = response.replace(/(\n)/g, '<br>');
-              response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-              node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-            })
+            console.log(json)
+            let response = prettifyJson(json)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
+          } catch (err) {
+            console.error(err)
+            let response = prettifyJson(err)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
+          }
         }
       </script>
     </div>

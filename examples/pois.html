@@ -1,54 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>ORS-js lib examples</title>
-    <script type="module" src="../dist/ors-js-client.js"></script>
-  </head>
-  <body>
-    <div>
-    <h1>ORS-js lib examples</h1>
-    <section >
-      <h2>POIs</h2>
-      <div id="pois">
-        <script type='module'>
-          import apiKey from './apiKey.js'
-          window.onload = function() {
+<html lang='en'>
+<head>
+  <title>ORS-js lib examples</title>
+  <script type='module' src='../dist/ors-js-client.js'></script>
+</head>
+<body>
+<div>
+  <h1>ORS-js lib examples</h1>
+  <section>
+    <h2>POIs</h2>
+    <div id='pois'>
+      <script type='module'>
+        import apiKey from './apiKey.js'
+        import { prettifyJson } from './utils.js'
 
-            const node = document.getElementById("pois")
-              const Pois = new Openrouteservice.Pois({
-                api_key: apiKey
-              })
+        window.onload = async function() {
 
-              Pois.pois({
-                geometry: {
-                  bbox:[[8.8034,53.0756],[8.7834,53.0456]],
-                  geojson:{
-                    type:"Point",
-                    coordinates:[8.8034,53.0756]
-                  },
-                  buffer:250
+          const node = document.getElementById('pois')
+          const Pois = new Openrouteservice.Pois({
+            api_key: apiKey
+          })
+          try {
+            const json = await Pois.pois({
+              geometry: {
+                bbox: [[8.8034, 53.0756], [8.7834, 53.0456]],
+                geojson: {
+                  type: 'Point',
+                  coordinates: [8.8034, 53.0756]
                 },
-                timeout: 20000
-              })
-                .then(function(json) {
-                  let response = JSON.stringify(json, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
-                .catch(function(err) {
-                  let response = JSON.stringify(err, null, "\t")
-                  console.log(response);
-                  response = response.replace(/(\n)/g, '<br>');
-                  response = response.replace(/(\t)/g, '&nbsp;&nbsp;');
-                  node.innerHTML = "<h3>Response</h3><p>" + response + "</p>";
-                })
+                buffer: 250
+              },
+              timeout: 20000
+            })
+            console.log(json)
+            let response = prettifyJson(json)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
+          } catch (err) {
+            console.error(err)
+            let response = prettifyJson(err)
+            node.innerHTML = '<h3>Response</h3><p>' + response + '</p>'
           }
-        </script>
-      </div>
-
-    </section>
+        }
+      </script>
     </div>
-  </body>
+  </section>
+</div>
+</body>
 </html>

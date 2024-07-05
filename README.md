@@ -207,7 +207,7 @@ try {
 const Matrix = new Openrouteservice.Matrix({ api_key: "XYZ"})
 
 try {
-  let response = Matrix.calculate({
+  let response = await Matrix.calculate({
   locations: [[8.690958, 49.404662], [8.687868, 49.390139], [8.687868, 49.390133]],
   profile: "driving-car",
   sources: ['all'],
@@ -228,7 +228,7 @@ try {
 const Elevation = new Openrouteservice.Elevation({api_key: "XYZ"})
 
 try {
-  let response = Elevation.lineElevation({
+  let response = await Elevation.lineElevation({
   format_in: 'geojson',
   format_out: 'geojson',
   geometry: {
@@ -275,7 +275,7 @@ Or consume Optimization API to solve [vehicle routing problems](https://en.wikip
 let Optimization = new openrouteservice.Optimization({api_key: "XYZ"});
 
 try {
-  let response = Optimization.optimize({
+  let response = await Optimization.optimize({
   jobs: [
     {
       id: 1,
