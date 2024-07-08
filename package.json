@@ -24,11 +24,12 @@
     "test:e2e:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run -q'",
     "test:unit": "cypress open --component",
     "test:unit:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run --component -q'",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+    "lint": "eslint . --fix"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.12.40",
-    "@rushstack/eslint-patch": "^1.10.3",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.6.0",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "babel-plugin-istanbul": "^7.0.0",
@@ -38,8 +39,9 @@
     "cz-conventional-changelog": "^3.3.0",
     "dotenv": "^16.4.5",
     "eslint": "^9.6.0",
-    "eslint-plugin-cypress": "^2.15.2",
+    "eslint-plugin-cypress": "^3.3.0",
     "eslint-plugin-vue": "^9.27.0",
+    "globals": "^15.8.0",
     "leaflet": "^1.9.4",
     "nyc": "^17.0.0",
     "standard-version": "^9.5.0",
