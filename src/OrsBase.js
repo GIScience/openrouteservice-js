@@ -28,7 +28,6 @@ class OrsBase {
     if (Constants.propNames.apiKey in args) {
       this.defaultArgs[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else {
-      // eslint-disable-next-line no-console
       console.error(Constants.missingAPIKeyMsg)
       throw new Error(Constants.missingAPIKeyMsg)
     }

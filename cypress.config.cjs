@@ -14,7 +14,7 @@ module.exports = defineConfig({
       api_key: process.env.VITE_ORS_API_KEY,
       codeCoverage: {
         exclude: ['cypress/**/*.*']
-      },
+      }
     },
     setupNodeEvents(on, config) {
       require('@cypress/code-coverage/task')(on, config)
