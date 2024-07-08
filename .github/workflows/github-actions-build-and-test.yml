@@ -8,12 +8,12 @@ jobs:
   install-test-coverage:
     runs-on: ubuntu-latest
     timeout-minutes: 7
-    container: cypress/browsers:node18.6.0-chrome105-ff104
+    container: cypress/browsers:node-20.14.0-chrome-126.0.6478.114-1-ff-127.0.1-edge-126.0.2592.61-1
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cypress install
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v6
         with:
           runTests: false
       - name: Cypress info
@@ -23,7 +23,7 @@ jobs:
       - name: Run tests
         run: npm run test:ci
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           # fix for https://github.com/codecov/codecov-action/issues/598 / https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
           token: ${{ secrets.CODECOV_TOKEN }}
