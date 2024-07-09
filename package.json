@@ -19,7 +19,7 @@
     "release": "standard-version",
     "pretest:ci": "rimraf .nyc_output coverage",
     "test": "cypress open",
-    "test:ci": "CYPRESS_COVERAGE=true start-server-and-test dev http://localhost:5173/ 'cypress run -q && cypress run --component -q'",
+    "test:ci": "CYPRESS_COVERAGE=true start-server-and-test 'npx vite --host' http://localhost:5173/ 'cypress run -q && cypress run --component -q'",
     "test:e2e": "cypress open --e2e",
     "test:e2e:ci": "start-server-and-test dev http://localhost:5173/ 'cypress run -q'",
     "test:unit": "cypress open --component",
