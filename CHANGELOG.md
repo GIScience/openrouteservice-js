@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/GIScience/openrouteservice-js/compare/v0.3.2...v0.4.0) (2024-07-11)
+
+
+### Features
+
+* add snapping functionality ([b625597](https://github.com/GIScience/openrouteservice-js/commit/b62559736535a88b9717c1a915ae568711ad80a4))
+* add html example for snap ([634eab6](https://github.com/GIScience/openrouteservice-js/commit/634eab64f2bbaf4cae00ae9523786ffdd4d0d0ac))
+* avoid needing api-key for defined host ([659fe90](https://github.com/GIScience/openrouteservice-js/commit/659fe90ecedd6f321b130d8d992ec75a17b19559))
+* add dev_app components & maps for services ([eee14a7](https://github.com/GIScience/openrouteservice-js/commit/eee14a7d80b9a437c7875ca40995a9030e7a4988))
+
+
+### Bug Fixes
+
+* **eslint:** leftover linting issues ([5a7cd33](https://github.com/GIScience/openrouteservice-js/commit/5a7cd3318f5603c9e7a366a36baedaebda01908b))
+
+
+### Docs
+
+* **README:** add snap example ([2839ae6](https://github.com/GIScience/openrouteservice-js/commit/2839ae6aa3809aab517110d8ab31d7b1ee768be7))
+* **README:** fix missing await in examples ([b375cb2](https://github.com/GIScience/openrouteservice-js/commit/b375cb232ce9e6a3673af1ff6129e9abda90dd4e))
+
+
+### Styling
+
+* reformat html examples ([21e72f1](https://github.com/GIScience/openrouteservice-js/commit/21e72f191100e02c2ec0aba1860d9b430c4e9f94))
+
+
+### Code Refactoring
+
+* **examples:** use try/catch with async/await syntax ([2ba8aa4](https://github.com/GIScience/openrouteservice-js/commit/2ba8aa4c19b3f4e088ab23fc10e89905666cc174))
+
+
+### Build System
+
+* add leaflet dependencies ([114dc42](https://github.com/GIScience/openrouteservice-js/commit/114dc421c8df1d54671d8c9157e4ba54387571f0))
+* **deps:** upgrade eslint & plugins ([62eac28](https://github.com/GIScience/openrouteservice-js/commit/62eac28aa42f317c6c88e1b82694627bad263db5))
+* update dependencies ([aeb48c0](https://github.com/GIScience/openrouteservice-js/commit/aeb48c059c2b87353dc3c44de3be42cd4f0f4c93))
+
+
+### CI
+
+* add user id for ff testing ([6f5296b](https://github.com/GIScience/openrouteservice-js/commit/6f5296b0675b4d8f75622d992434502eab51eca4))
+* update actions & container image ([f1cbac1](https://github.com/GIScience/openrouteservice-js/commit/f1cbac194d0d25326c839730eb78d91ec6aebd50))
+* use --host for ci test run for gh-actions to work ([eb907d5](https://github.com/GIScience/openrouteservice-js/commit/eb907d5d35a0350b7447ec893f56a3de4e66a5b1))
+
+
+### Tests
+
+* add IsochronesApp component test ([5997dbd](https://github.com/GIScience/openrouteservice-js/commit/5997dbd374b5218ae0a002b558fde9a28fc468f1))
+* add test for other parameters ([fe8fd0a](https://github.com/GIScience/openrouteservice-js/commit/fe8fd0a2559b773cb77723cf78f9a042fe0d5825))
+* e2e test for route services in dev-app ([4c74a1d](https://github.com/GIScience/openrouteservice-js/commit/4c74a1de81cd5ee00d7d78129509adbd8d6631c6))
+* snapping functionality ([fa2bead](https://github.com/GIScience/openrouteservice-js/commit/fa2bead8dff5d9f6c5559d459c7d3a5fe6a9d19f))
+* verify OrsBase works for defined host without api_key ([7fdd364](https://github.com/GIScience/openrouteservice-js/commit/7fdd364302b6b2ca1b3b66346be1d7f29d2a93d2))
+
 ### [0.3.2](https://github.com/GIScience/openrouteservice-js/compare/v0.3.1...v0.3.2) (2023-09-22)
 
 
