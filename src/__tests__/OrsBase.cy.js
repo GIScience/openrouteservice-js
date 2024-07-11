@@ -22,7 +22,6 @@ describe('Test Base class', () => {
 
     it('passes Host correctly', () => {
       const base = new OrsBase({
-        'api_key': 'test',
         'host': 'localhost:8080'
       })
       expect(base.defaultArgs, 'Base instance').to.haveOwnProperty('host')
