@@ -92,6 +92,20 @@ describe('Test Directions', () => {
           expect(req.headers).to.include({'Accept': 'application/json'})
         })
       })
+
+      it('can use other object parameters', async () => {
+        let json = await orsDirections.calculate({
+          coordinates: [[8.690958, 49.404662], [8.687868, 49.390139]],
+          profile: 'foot-walking',
+          alternative_routes: {
+            target_count: 2,
+            weight_factor: 1.4,
+            share_factor: 0.5
+          }
+        })
+        expect(json['routes']).to.have.length(2)
+        expect(json['metadata']['query']['alternative_routes']).to.be.a('Object')
+      })
     })
   })
 })
