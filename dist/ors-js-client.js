@@ -41,6 +41,11 @@ class OrsUtil {
     delete args[constants.propNames.timeout];
     return { ...args };
   }
+  /**
+   * Prepare the request url based on url constituents
+   * @param {Object} args
+   * @return {string} url
+   */
   prepareUrl(args) {
     let url = args[constants.propNames.host];
     let urlPathParts = [
@@ -71,6 +76,10 @@ class OrsBase {
     this.customHeaders = {};
     this._setRequestDefaults(args);
   }
+  /**
+   * Set defaults for a request comparing with and overwriting default class arguments
+   * @param {Object} args - constructor input
+   */
   _setRequestDefaults(args) {
     this.defaultArgs[constants.propNames.host] = constants.defaultHost;
     if (args[constants.propNames.host]) {
@@ -81,7 +90,7 @@ class OrsBase {
     }
     if (constants.propNames.apiKey in args) {
       this.defaultArgs[constants.propNames.apiKey] = args[constants.propNames.apiKey];
-    } else {
+    } else if (!args[constants.propNames.host]) {
       console.error(constants.missingAPIKeyMsg);
       throw new Error(constants.missingAPIKeyMsg);
     }
@@ -125,6 +134,7 @@ class OrsBase {
       clearTimeout(timeout);
     }
   }
+  // is overridden in Directions and Isochrones class
   getBody() {
     return this.httpArgs;
   }
@@ -476,30 +486,12 @@ class OrsOptimization extends OrsBase {
 class OrsSnap extends OrsBase {
   constructor(args) {
     super(args);
-    if (!this.defaultArgs[constants.propNames.service]) {
+    if (!this.defaultArgs[constants.propNames.service] && !this.requestArgs[constants.propNames.service]) {
       this.defaultArgs[constants.propNames.service] = "snap";
     }
     if (!args[constants.propNames.apiVersion]) {
       this.defaultArgs.api_version = constants.defaultAPIVersion;
     }
-  }
-  getBody(args) {
-    if (args.options && typeof args.options !== "object") {
-      args.options = JSON.parse(args.options);
-    }
-    if (args.restrictions) {
-      args.options = args.options || {};
-      args.options.profile_params = {
-        restrictions: { ...args.restrictions }
-      };
-      delete args.restrictions;
-    }
-    if (args.avoidables) {
-      args.options = args.options || {};
-      args.options.avoid_features = [...args.avoidables];
-      delete args.avoidables;
-    }
-    return args;
   }
 }
 const Openrouteservice = {
