@@ -1,6 +1,6 @@
 {
   "name": "openrouteservice-js",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A Javascript client for openrouteservice services.",
   "author": "Openrouteservice Community",
   "license": "Apache-2.0",
