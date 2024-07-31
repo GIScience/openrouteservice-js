@@ -88,6 +88,9 @@ class OrsBase {
     if (args[constants.propNames.service]) {
       this.defaultArgs[constants.propNames.service] = args[constants.propNames.service];
     }
+    if (args[constants.propNames.timeout]) {
+      this.defaultArgs[constants.propNames.timeout] = args[constants.propNames.timeout];
+    }
     if (constants.propNames.apiKey in args) {
       this.defaultArgs[constants.propNames.apiKey] = args[constants.propNames.apiKey];
     } else if (!args[constants.propNames.host]) {
@@ -120,7 +123,7 @@ class OrsBase {
   async createRequest(body) {
     var _a;
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort("timed out"), this.defaultArgs[constants.propNames.timeout] || 5e3);
+    const timeout = setTimeout(() => controller.abort(), this.defaultArgs[constants.propNames.timeout] || 5e3);
     try {
       const orsResponse = await this.fetchRequest(body, controller);
       if (!orsResponse.ok) {
@@ -265,7 +268,7 @@ class OrsGeocode extends OrsBase {
   }
   async geocodePromise() {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort("timed out"), this.defaultArgs[constants.propNames.timeout] || 5e3);
+    const timeout = setTimeout(() => controller.abort(), this.defaultArgs[constants.propNames.timeout] || 5e3);
     try {
       const orsResponse = await this.fetchGetRequest(controller);
       if (!orsResponse.ok) {
