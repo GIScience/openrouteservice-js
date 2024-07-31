@@ -129,7 +129,7 @@ class OrsGeocode extends OrsBase {
 
   async geocodePromise() {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort('timed out'), this.defaultArgs[Constants.propNames.timeout] || 5000)
+    const timeout = setTimeout(() => controller.abort(), this.defaultArgs[Constants.propNames.timeout] || 5000)
 
     try {
       const orsResponse = await this.fetchGetRequest(controller)
