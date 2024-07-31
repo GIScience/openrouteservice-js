@@ -25,6 +25,9 @@ class OrsBase {
     if (args[Constants.propNames.service]) {
       this.defaultArgs[Constants.propNames.service] = args[Constants.propNames.service]
     }
+    if (args[Constants.propNames.timeout]) {
+      this.defaultArgs[Constants.propNames.timeout] = args[Constants.propNames.timeout]
+    }
     if (Constants.propNames.apiKey in args) {
       this.defaultArgs[Constants.propNames.apiKey] = args[Constants.propNames.apiKey]
     } else if (!args[Constants.propNames.host]) {
@@ -32,7 +35,6 @@ class OrsBase {
       console.error(Constants.missingAPIKeyMsg)
       throw new Error(Constants.missingAPIKeyMsg)
     }
-
   }
 
   checkHeaders() {
@@ -65,7 +67,7 @@ class OrsBase {
 
   async createRequest(body) {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort('timed out'), this.defaultArgs[Constants.propNames.timeout] || 5000)
+    const timeout = setTimeout(() => controller.abort(), this.defaultArgs[Constants.propNames.timeout] || 5000)
 
     try {
       const orsResponse = await this.fetchRequest(body, controller)
