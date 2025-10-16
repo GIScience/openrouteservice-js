@@ -332,6 +332,11 @@ Start the dev_app for debugging when working with source files:
 # runs the app at http://localhost:5173
 vite
 ```
+or with 
+```shell
+npm run dev
+```
+
 
 Now you can either use the devtools of your browser to set breakpoints (e.g. in `OrsGeocode`)
 or create a `JavaScript Debug` configuration to debug with WebStorm:
