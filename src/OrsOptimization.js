@@ -1,41 +1,44 @@
-import OrsUtil from "./OrsUtil.js"
-import Constants from "./constants.js"
-import OrsBase from "./OrsBase.js"
+import OrsUtil from "./OrsUtil.js";
+import Constants from "./constants.js";
+import OrsBase from "./OrsBase.js";
 
-const orsUtil = new OrsUtil()
+const orsUtil = new OrsUtil();
 
 class OrsOptimization extends OrsBase {
   generatePayload(args) {
-    let payload = {}
+    let payload = {};
 
     for (const key in args) {
       if (Constants.baseUrlConstituents.indexOf(key) <= -1) {
-        payload[key] = args[key]
+        payload[key] = args[key];
       }
     }
-    return payload
+    return payload;
   }
 
   async optimizationPromise() {
-    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
+    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs);
 
-    const payload = this.generatePayload(this.requestArgs)
+    const payload = this.generatePayload(this.requestArgs);
 
-    return await this.createRequest(payload)
+    return await this.createRequest(payload);
   }
 
   async optimize(reqArgs) {
-    this.requestArgs = reqArgs
+    this.requestArgs = reqArgs;
 
-    this.checkHeaders()
+    this.checkHeaders();
 
-    if (!this.defaultArgs[Constants.propNames.service] && !reqArgs[Constants.propNames.service]) {
-      reqArgs[Constants.propNames.service] = 'optimization'
+    if (
+      !this.defaultArgs[Constants.propNames.service] &&
+      !reqArgs[Constants.propNames.service]
+    ) {
+      reqArgs[Constants.propNames.service] = "vroom/v0";
     }
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs);
 
-    return await this.optimizationPromise()
+    return await this.optimizationPromise();
   }
 }
 
-export default OrsOptimization
+export default OrsOptimization;
