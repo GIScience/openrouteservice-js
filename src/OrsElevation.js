@@ -1,54 +1,61 @@
-import OrsUtil from './OrsUtil.js'
-import Constants from './constants.js'
-import OrsBase from './OrsBase.js'
+import OrsUtil from "./OrsUtil.js";
+import Constants from "./constants.js";
+import OrsBase from "./OrsBase.js";
 
-const orsUtil = new OrsUtil()
+const orsUtil = new OrsUtil();
 class OrsElevation extends OrsBase {
-
   generatePayload(args) {
-    const payload = {}
+    const payload = {};
 
     for (const key in args) {
       if (Constants.baseUrlConstituents.indexOf(key) <= -1) {
-        payload[key] = args[key]
+        payload[key] = args[key];
       }
     }
-    return payload
+    return payload;
   }
 
   async elevationPromise() {
-    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs)
+    this.argsCache = orsUtil.saveArgsToCache(this.requestArgs);
 
-    const payload = this.generatePayload(this.requestArgs)
+    const payload = this.generatePayload(this.requestArgs);
 
-    return await this.createRequest(payload)
+    return await this.createRequest(payload);
   }
 
   async lineElevation(reqArgs) {
-    this.requestArgs = reqArgs
+    this.requestArgs = reqArgs;
 
-    this.checkHeaders()
+    this.checkHeaders();
 
-    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
-      this.requestArgs[Constants.propNames.service] = 'elevation/line'
+    if (
+      !this.defaultArgs[Constants.propNames.service] &&
+      !this.requestArgs[Constants.propNames.service]
+    ) {
+      this.requestArgs[Constants.propNames.service] =
+        "openelevationservice/v0/line";
     }
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs);
 
-    return await this.elevationPromise()
+    return await this.elevationPromise();
   }
 
   async pointElevation(reqArgs) {
-    this.requestArgs = reqArgs
+    this.requestArgs = reqArgs;
 
-    this.checkHeaders()
+    this.checkHeaders();
 
-    if (!this.defaultArgs[Constants.propNames.service] && !this.requestArgs[Constants.propNames.service]) {
-      this.requestArgs[Constants.propNames.service] = 'elevation/point'
+    if (
+      !this.defaultArgs[Constants.propNames.service] &&
+      !this.requestArgs[Constants.propNames.service]
+    ) {
+      this.requestArgs[Constants.propNames.service] =
+        "openelevationservice/v0/point";
     }
-    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs)
+    this.requestArgs = orsUtil.fillArgs(this.defaultArgs, this.requestArgs);
 
-    return await this.elevationPromise()
+    return await this.elevationPromise();
   }
 }
 
-export default OrsElevation
+export default OrsElevation;
